@@ -21,6 +21,7 @@ import {
   ChartBarIcon,
   LinkIcon,
   EnvelopeIcon,
+  CircleStackIcon,
 } from '@heroicons/react/24/outline';
 
 export default function HomePage() {
@@ -47,6 +48,11 @@ export default function HomePage() {
       title: 'Quản lý Tasks',
       description: 'Tạo task, chia nhỏ thành subtasks, theo dõi tiến độ. Hệ thống tự động tính phần trăm hoàn thành dựa trên subtasks.',
       icon: CheckCircleIcon,
+    },
+    {
+      title: 'Quản lý Thu Nhập',
+      description: 'Quản lí và kiểm soát dòng tiền vào từ các tasks đã hoàn thành và từ các dịch vụ bán ra.',
+      icon: CircleStackIcon,
     },
     {
       title: 'Team Collaboration',
@@ -159,10 +165,10 @@ export default function HomePage() {
             Hành tinh của riêng bạn.
           </h1>
           <p className="text-lg sm:text-xl text-secondary mb-4 max-w-2xl mx-auto">
-            Mọi thứ ở một chỗ. Tiện nghi. Tiện lợi.
+            Mọi thứ cần thiết đều ở một chỗ.
           </p>
           <p className="text-base text-muted mb-10 max-w-2xl mx-auto">
-            Mọi thứ bạn cần đều có — hoặc sẽ có.
+            Những gì bạn cần đều có — hoặc sẽ có.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
@@ -189,7 +195,7 @@ export default function HomePage() {
             Trên hành tinh này có gì?
           </h2>
           <p className="text-secondary text-center mb-12 max-w-xl mx-auto">
-            Tụi mình gom tất cả công cụ cần thiết vào một chỗ để các bạn không phải nhảy qua lại giữa nhiều app.
+            Tụi mình đã và đang cố gắng gom tất cả công cụ cần thiết vào một chỗ để các bạn không phải nhảy qua lại giữa nhiều nền tảng khác nhau.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature) => (
@@ -212,7 +218,7 @@ export default function HomePage() {
             Đang phát triển
           </h2>
           <p className="text-secondary text-center mb-10 max-w-xl mx-auto">
-            Tụi mình đang xây dựng thêm nhiều tính năng. Có ý tưởng gì muốn thêm? Gửi mail cho tụi mình!
+            Tụi mình đang cố gắng xây dựng thêm nhiều tính năng. Nếu bạn có ý tưởng gì muốn thêm, hãy gửi mail cho tụi mình nhenn!
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             {comingSoon.map((item) => (
@@ -232,7 +238,7 @@ export default function HomePage() {
             Về Planex
           </h2>
           <div className="space-y-6 text-secondary leading-relaxed">
-            <p>Tụi mình là những freelancer.</p>
+            <p>Tụi mình là những freelancers.</p>
 
             <p>
               Mỗi ngày, tụi mình phải nhảy qua lại giữa hàng loạt công cụ: Trello cho tasks, Notion cho notes,
@@ -240,17 +246,17 @@ export default function HomePage() {
               mỗi thứ một tài khoản, mỗi thứ một cách hoạt động khác nhau.
             </p>
 
-            <p className="text-primary font-medium">Mệt lắm.</p>
+            <p className="text-primary font-medium">Mệt lắm luôn.</p>
 
             <p>
-              Rồi một ngày tụi mình tự hỏi: <span className="text-primary">"Tại sao không gom tất cả lại một chỗ?"</span>
+              Rồi một ngày tụi mình tự hỏi: <span className="text-primary">"Tại sao không gom tất cả lại một chỗ ha?"</span>
             </p>
 
-            <p>Vậy là Planex ra đời.</p>
+            <p>Vậy là <span className="text-primary">Planex</span> ra đời.</p>
 
             <p>
-              Không phải startup to lớn. Không phải sản phẩm của công ty nào.
-              Chỉ là một công cụ mà tụi mình tự xây để xài, thấy hay nên chia sẻ cho mọi người dùng miễn phí.
+              Không phải startup to lớn, cũng không phải sản phẩm của công ty nào,
+              Planex chỉ là một hành tinh mà tụi mình tự xây để mang đem mọi thứ về một ngôi nhà chung, và thật tiếc nếu tụi mình chỉ giữ nó làm của riêng đúng không nè.
             </p>
 
             <p>
@@ -259,8 +265,9 @@ export default function HomePage() {
             </p>
 
             <p>
-              Planex không hoàn hảo. Tụi mình vẫn đang học, đang xây, đang cải thiện mỗi ngày.
+              Planex hiện tại chưa hoàn hảo, và tụi mình vẫn đang học, đang xây, đang cải thiện mỗi ngày.
               Nhưng tụi mình hứa sẽ luôn lắng nghe feedback từ các bạn để làm cho hành tinh này ngày càng tốt hơn.
+              Mỗi feedback của các bạn là một viên gạch giúp hành tinh này vững chắc và vững mạnh hơn 💝.
             </p>
 
             <p className="text-primary font-medium pt-4">
@@ -274,16 +281,13 @@ export default function HomePage() {
       <section className="py-16 sm:py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-4">
-            Sẵn sàng thử chưa?
+            Bạn đã sẵn sàng thử chưaaaaaa?
           </h2>
-          <p className="text-secondary mb-8">
-            Không cần thẻ tín dụng. Không cần cài đặt.
-          </p>
           <Link
             href="/register"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent text-page font-bold text-lg hover:opacity-90 transition-all"
           >
-            Bắt đầu miễn phí
+            Bắt đầu ngay thôi nào!
             <ArrowRightIcon className="w-5 h-5" />
           </Link>
         </div>
@@ -297,17 +301,17 @@ export default function HomePage() {
             <div className="md:col-span-2">
               <PlanexLogo size="sm" showText />
               <p className="text-secondary text-sm mt-4 max-w-sm">
-                Hành tinh của riêng bạn. Mọi thứ ở một chỗ.
+                Hành tinh của công việc, nơi tiện nghi đặt lên hàng đầu.
               </p>
             </div>
 
             {/* Links */}
             <div>
-              <h4 className="font-medium text-primary mb-4">Sản phẩm</h4>
+              <h4 className="font-medium text-primary mb-4"> </h4>
               <ul className="space-y-2">
-                <li><a href="#features" className="text-secondary text-sm hover:text-primary transition-colors">Tính năng</a></li>
-                <li><a href="#tools" className="text-secondary text-sm hover:text-primary transition-colors">Roadmap</a></li>
-                <li><a href="#story" className="text-secondary text-sm hover:text-primary transition-colors">Câu chuyện</a></li>
+                <li><a href="#features" className="text-secondary text-sm hover:text-primary transition-colors"> </a></li>
+                <li><a href="#tools" className="text-secondary text-sm hover:text-primary transition-colors"> </a></li>
+                <li><a href="#story" className="text-secondary text-sm hover:text-primary transition-colors"> </a></li>
               </ul>
             </div>
 
@@ -327,7 +331,7 @@ export default function HomePage() {
           {/* Bottom */}
           <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-muted text-sm">
-              Xây dựng bởi những freelancer như bạn.
+
             </p>
             <p className="text-muted text-sm">
               © 2024 Planex. All rights reserved.
