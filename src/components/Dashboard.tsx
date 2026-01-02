@@ -160,6 +160,7 @@ export default function Dashboard() {
             <main className="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar">
                 {/* Header */}
                 <header className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 bg-surface border-b border-border">
+                    {/* Left: Mobile menu + Title */}
                     <div className="flex items-center gap-3">
                         {/* Mobile hamburger menu */}
                         <button
@@ -183,49 +184,50 @@ export default function Dashboard() {
                                 </p>
                             )}
                         </div>
+                    </div>
 
-                        <div className="flex items-center gap-4">
-                            {activeView === 'tasks' && (
-                                <>
-                                    {/* Search */}
-                                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-page border border-border">
-                                        <MagnifyingGlassIcon className="w-5 h-5 text-secondary" />
-                                        <input
-                                            type="text"
-                                            placeholder="Tìm kiếm..."
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            className="bg-transparent border-none outline-none text-sm text-primary w-40 placeholder:text-muted"
-                                        />
-                                    </div>
-
-                                    {/* Create Button */}
-                                    <button
-                                        onClick={() => setIsCreateModalOpen(true)}
-                                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm bg-accent text-page hover:opacity-90 transition-all cursor-pointer"
-                                    >
-                                        <PlusIcon className="w-5 h-5" />
-                                        <span className="hidden sm:inline">Tạo Task</span>
-                                    </button>
-                                </>
-                            )}
-
-                            {/* Notifications */}
-                            <NotificationPanel />
-
-                            {/* Avatar */}
-                            {user?.avatar_url ? (
-                                <img
-                                    src={user.avatar_url}
-                                    alt={user.username}
-                                    className="w-8 h-8 rounded-full object-cover"
-                                />
-                            ) : (
-                                <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center font-medium text-sm text-page">
-                                    {user?.username?.charAt(0).toUpperCase() || 'U'}
+                    {/* Right: Search + Create + Notification + Avatar */}
+                    <div className="flex items-center gap-3 ml-auto">
+                        {activeView === 'tasks' && (
+                            <>
+                                {/* Search */}
+                                <div className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-lg bg-page border border-border">
+                                    <MagnifyingGlassIcon className="w-5 h-5 text-secondary" />
+                                    <input
+                                        type="text"
+                                        placeholder="Tìm kiếm..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="bg-transparent border-none outline-none text-sm text-primary w-40 placeholder:text-muted"
+                                    />
                                 </div>
-                            )}
-                        </div>
+
+                                {/* Create Button */}
+                                <button
+                                    onClick={() => setIsCreateModalOpen(true)}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm bg-accent text-page hover:opacity-90 transition-all cursor-pointer"
+                                >
+                                    <PlusIcon className="w-5 h-5" />
+                                    <span className="hidden sm:inline">Tạo Task</span>
+                                </button>
+                            </>
+                        )}
+
+                        {/* Notifications */}
+                        <NotificationPanel />
+
+                        {/* Avatar */}
+                        {user?.avatar_url ? (
+                            <img
+                                src={user.avatar_url}
+                                alt={user.username}
+                                className="w-8 h-8 rounded-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center font-medium text-sm text-page">
+                                {user?.username?.charAt(0).toUpperCase() || 'U'}
+                            </div>
+                        )}
                     </div>
                 </header>
 
