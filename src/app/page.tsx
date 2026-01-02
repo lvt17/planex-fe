@@ -331,7 +331,7 @@ export default function HomePage() {
 
             </p>
             <p className="text-muted text-sm">
-              © 2024 Planex. All rights reserved.
+              © 2026 Planex. All rights reserved.
             </p>
           </div>
         </div>
