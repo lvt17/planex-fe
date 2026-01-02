@@ -35,6 +35,18 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const lastNotificationId = useRef<number>(0);
+    const bellButtonRef = useRef<HTMLButtonElement>(null);
+    const [popupPosition, setPopupPosition] = useState({ top: 60, right: 20 });
+
+    useEffect(() => {
+        if (isOpen && bellButtonRef.current) {
+            const rect = bellButtonRef.current.getBoundingClientRect();
+            setPopupPosition({
+                top: rect.bottom + 8, // 8px below the bell
+                right: window.innerWidth - rect.right
+            });
+        }
+    }, [isOpen]);
 
     const fetchNotifications = useCallback(async () => {
         try {
@@ -150,6 +162,7 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
         <div className="relative">
             {/* Bell Icon */}
             <button
+                ref={bellButtonRef}
                 onClick={() => setIsOpen(!isOpen)}
                 className="relative p-2 rounded-xl hover:bg-hover transition-colors cursor-pointer"
                 title="Thông báo"
@@ -162,15 +175,15 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
                 )}
             </button>
 
-            {/* Dropdown Panel - Fixed positioning to overlay everything */}
+            {/* Dropdown Panel - Fixed positioning relative to bell */}
             {isOpen && (
                 <>
                     <div className="fixed inset-0 z-[9998]" onClick={() => setIsOpen(false)} />
                     <div
                         className="fixed w-[380px] max-h-[480px] bg-surface border border-border rounded-2xl shadow-2xl z-[9999] overflow-hidden animate-fade-in"
                         style={{
-                            top: '60px',
-                            right: '20px'
+                            top: `${popupPosition.top}px`,
+                            right: `${popupPosition.right}px`
                         }}
                     >
                         {/* Header */}
