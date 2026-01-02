@@ -49,6 +49,7 @@ export default function Dashboard() {
     const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
     const [chatTeamId, setChatTeamId] = useState<number | null>(null);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
     useEffect(() => {
         if (activeView === 'income') {
@@ -190,7 +191,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-3 ml-auto">
                         {activeView === 'tasks' && (
                             <>
-                                {/* Search */}
+                                {/* Search - Desktop inline, Mobile icon button */}
                                 <div className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-lg bg-page border border-border">
                                     <MagnifyingGlassIcon className="w-5 h-5 text-secondary" />
                                     <input
@@ -201,6 +202,15 @@ export default function Dashboard() {
                                         className="bg-transparent border-none outline-none text-sm text-primary w-40 placeholder:text-muted"
                                     />
                                 </div>
+
+                                {/* Mobile Search Icon */}
+                                <button
+                                    onClick={() => setIsSearchModalOpen(true)}
+                                    className="lg:hidden p-2 rounded-lg hover:bg-hover transition-colors cursor-pointer"
+                                    title="Tìm kiếm"
+                                >
+                                    <MagnifyingGlassIcon className="w-5 h-5 text-secondary" />
+                                </button>
 
                                 {/* Create Button */}
                                 <button
@@ -398,6 +408,33 @@ export default function Dashboard() {
                     )}
                 </div>
             </main>
+
+            {/* Mobile Search Modal */}
+            {isSearchModalOpen && (
+                <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 px-4 bg-black/50 backdrop-blur-sm" onClick={() => setIsSearchModalOpen(false)}>
+                    <div className="w-full max-w-md bg-surface border border-border rounded-2xl shadow-2xl animate-fade-in" onClick={(e) => e.stopPropagation()}>
+                        <div className="p-4">
+                            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-page border border-border">
+                                <MagnifyingGlassIcon className="w-5 h-5 text-secondary flex-shrink-0" />
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm tasks..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="flex-1 bg-transparent border-none outline-none text-base text-primary placeholder:text-muted"
+                                    autoFocus
+                                />
+                            </div>
+                            <button
+                                onClick={() => setIsSearchModalOpen(false)}
+                                className="w-full mt-3 py-2 text-sm text-secondary hover:text-primary transition-colors"
+                            >
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Create Task Modal */}
             {isCreateModalOpen && (

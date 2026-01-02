@@ -87,11 +87,15 @@ function LoginContent() {
 
     const handleGoogleResponse = async (response: any) => {
         try {
+            console.log('Google login initiated');
             await googleLogin(response.credential);
+            console.log('Google login successful');
             toast.success('Đăng nhập Google thành công!');
             router.push(nextPath || '/dashboard');
-        } catch (error) {
-            toast.error('Lỗi xác thực Google với hệ thống');
+        } catch (error: any) {
+            console.error('Google login error:', error);
+            toast.error(error.response?.data?.error || error.message || 'Lỗi xác thực Google với hệ thống');
+            // Don't redirect on error - stay on login page
         }
     };
 
