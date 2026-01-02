@@ -148,17 +148,17 @@ export default function LoginPage() {
             </div>
 
             {/* Right side - Login form */}
-            <div className="flex-1 flex items-center justify-center p-8">
+            <div className="flex-1 flex items-center justify-center p-4 sm:p-8 overflow-y-auto">
                 <div className="w-full max-w-md">
-                    <div className="lg:hidden flex justify-center mb-8">
-                        <PlanexLogo size="md" showText />
+                    <div className="lg:hidden flex justify-center mb-6 sm:mb-8">
+                        <PlanexLogo size="sm" showText />
                     </div>
 
-                    <div className="bg-surface border border-border rounded-2xl p-8 shadow-lg">
-                        <h2 className="text-2xl font-bold text-primary text-center mb-2">
+                    <div className="bg-surface border border-border rounded-2xl p-5 sm:p-8 shadow-lg">
+                        <h2 className="text-xl sm:text-2xl font-bold text-primary text-center mb-2">
                             Đăng nhập
                         </h2>
-                        <p className="text-secondary text-center mb-6">
+                        <p className="text-secondary text-center text-sm sm:text-base mb-4 sm:mb-6">
                             Chào mừng trở lại!
                         </p>
 
