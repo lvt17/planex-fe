@@ -74,11 +74,7 @@ export default function HomePage() {
       description: 'Bảng tính với đầy đủ công thức. Quản lý data, track ngân sách, tính toán.',
       icon: TableCellsIcon,
     },
-    {
-      title: 'Notifications',
-      description: 'Không bỏ lỡ deadline, không miss tin nhắn. Mọi cập nhật quan trọng đều được thông báo kịp thời.',
-      icon: BellIcon,
-    },
+
   ];
 
   const comingSoon = [
