@@ -264,35 +264,35 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     return (
         <div className="h-full flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-primary flex items-center gap-2">
-                        <ShoppingBagIcon className="w-7 h-7 text-accent" />
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary flex items-center gap-2">
+                        <ShoppingBagIcon className="w-6 h-6 sm:w-7 sm:h-7 text-accent" />
                         Bán hàng
                     </h1>
-                    <p className="text-secondary text-sm mt-1">Quản lý danh mục, sản phẩm và bán hàng</p>
+                    <p className="text-secondary text-xs sm:text-sm mt-1">Quản lý danh mục, sản phẩm và bán hàng</p>
                 </div>
                 <button
                     onClick={onBack}
-                    className="px-4 py-2 rounded-lg text-sm font-medium border border-border text-primary hover:bg-hover transition-colors cursor-pointer"
+                    className="px-3 py-2 rounded-lg text-sm font-medium border border-border text-primary hover:bg-hover transition-colors cursor-pointer self-start sm:self-auto"
                 >
                     Quay lại
                 </button>
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-1 bg-surface p-1 rounded-xl mb-6 w-fit">
+            <div className="flex gap-1 bg-surface p-1 rounded-xl mb-4 sm:mb-6 w-full sm:w-fit overflow-x-auto">
                 {tabs.map(tab => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${activeTab === tab.id
+                        className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer whitespace-nowrap flex-1 sm:flex-initial justify-center sm:justify-start ${activeTab === tab.id
                             ? 'bg-accent text-page shadow-sm'
                             : 'text-secondary hover:text-primary hover:bg-hover'
                             }`}
                     >
                         <tab.icon className="w-4 h-4" />
-                        {tab.label}
+                        <span className="hidden xs:inline sm:inline">{tab.label}</span>
                     </button>
                 ))}
             </div>
@@ -307,7 +307,7 @@ export default function SalesPage({ onBack }: SalesPageProps) {
                     {activeTab === 'sales' && (
                         <div>
                             {/* Search & Filter */}
-                            <div className="flex gap-4 mb-6">
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
                                 <div className="flex-1 relative">
                                     <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
                                     <input
@@ -315,13 +315,13 @@ export default function SalesPage({ onBack }: SalesPageProps) {
                                         placeholder="Tìm kiếm sản phẩm..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border text-primary focus:border-accent focus:outline-none"
+                                        className="w-full pl-10 pr-4 py-2 sm:py-2.5 rounded-xl bg-surface border border-border text-primary text-sm focus:border-accent focus:outline-none"
                                     />
                                 </div>
                                 <select
                                     value={filterCategory || ''}
                                     onChange={(e) => setFilterCategory(e.target.value ? parseInt(e.target.value) : null)}
-                                    className="px-4 py-2.5 rounded-xl bg-surface border border-border text-primary focus:border-accent focus:outline-none cursor-pointer"
+                                    className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface border border-border text-primary text-sm focus:border-accent focus:outline-none cursor-pointer"
                                 >
                                     <option value="">Tất cả danh mục</option>
                                     {categories.map(cat => (

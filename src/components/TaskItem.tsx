@@ -89,7 +89,7 @@ export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDele
 
     return (
         <div
-            className={`group p-3 rounded-lg cursor-pointer transition-all ${isSelected ? 'bg-elevated border-accent' : 'bg-surface border-border hover:border-accent/50'} border ${task.is_done ? 'opacity-70' : ''}`}
+            className={`group p-2.5 sm:p-3 rounded-lg cursor-pointer transition-all ${isSelected ? 'bg-elevated border-accent' : 'bg-surface border-border hover:border-accent/50'} border ${task.is_done ? 'opacity-70' : ''}`}
             onClick={onSelect}
         >
             <div className="flex items-start gap-3">
@@ -171,7 +171,7 @@ export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDele
                 {/* Actions */}
                 <div className="relative flex-shrink-0">
                     <button
-                        className="p-1 rounded opacity-0 group-hover:opacity-100 text-secondary hover:text-primary transition-all cursor-pointer"
+                        className="p-1 rounded opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-secondary hover:text-primary transition-all cursor-pointer"
                         onClick={(e) => {
                             e.stopPropagation();
                             setShowMenu(!showMenu);
