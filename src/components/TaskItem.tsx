@@ -153,9 +153,17 @@ export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDele
                     {!task.is_done && (
                         <div className="mt-2" onClick={(e) => e.stopPropagation()}>
                             {subtaskCount > 0 ? (
-                                <div className="flex items-center justify-between text-xs">
-                                    <span className="text-muted">Progress (auto from subtasks)</span>
-                                    <span className="font-medium text-syntax-green">{Math.round(localState)}%</span>
+                                <div className="space-y-1">
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-muted">Auto-progress from subtasks</span>
+                                        <span className="font-bold text-syntax-green">{Math.round(localState)}%</span>
+                                    </div>
+                                    <div className="h-2 bg-border rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-syntax-green to-accent transition-all duration-300 rounded-full"
+                                            style={{ width: `${localState}%` }}
+                                        />
+                                    </div>
                                 </div>
                             ) : (
                                 <input
