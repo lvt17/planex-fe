@@ -162,7 +162,9 @@ export default function HomePage() {
       <section className="py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary mb-6 leading-tight">
-            "HÀNH TINH CÔNG VIỆC" của riêng bạn
+            "HÀNH TINH CÔNG VIỆC"
+            <br />
+            của riêng bạn
           </h1>
           <p className="text-lg sm:text-xl text-secondary mb-4 max-w-2xl mx-auto">
             Mọi thứ cần thiết cho công việc của bạn đều ở một chỗ.
