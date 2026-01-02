@@ -54,8 +54,11 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
         fetchTeams();
     }, []);
 
+    const [creatingTeam, setCreatingTeam] = useState(false);
+
     const createTeam = async () => {
-        if (!newTeamName.trim()) return;
+        if (!newTeamName.trim() || creatingTeam) return;
+        setCreatingTeam(true);
         try {
             const res = await api.post('/api/teams', { name: newTeamName });
             setTeams(prev => [...prev, res.data]);
@@ -65,6 +68,8 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
             setActiveView('team');
         } catch (e) {
             // Error handling
+        } finally {
+            setCreatingTeam(false);
         }
     };
 
@@ -205,8 +210,10 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
                                 onKeyDown={e => e.key === 'Enter' && createTeam()}
                             />
                             <div className="flex gap-2">
-                                <button onClick={() => setShowCreateTeam(false)} className="flex-1 py-1.5 text-xs text-secondary border border-border rounded-lg hover:bg-hover cursor-pointer">Hủy</button>
-                                <button onClick={createTeam} className="flex-1 py-1.5 text-xs bg-accent text-page rounded-lg font-bold hover:opacity-90 cursor-pointer">Tạo</button>
+                                <button onClick={() => setShowCreateTeam(false)} disabled={creatingTeam} className="flex-1 py-1.5 text-xs text-secondary border border-border rounded-lg hover:bg-hover cursor-pointer disabled:opacity-50">Hủy</button>
+                                <button onClick={createTeam} disabled={creatingTeam || !newTeamName.trim()} className="flex-1 py-1.5 text-xs bg-accent text-page rounded-lg font-bold hover:opacity-90 cursor-pointer disabled:opacity-50">
+                                    {creatingTeam ? 'Đang tạo...' : 'Tạo'}
+                                </button>
                             </div>
                         </div>
                     )}
