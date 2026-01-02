@@ -34,11 +34,18 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
     }, [isOpen, taskId]);
 
     const fetchSubtasks = async () => {
+        if (!taskId) {
+            console.error('TaskId is missing:', taskId);
+            return;
+        }
+
         setLoading(true);
         try {
+            console.log('Fetching subtasks for task:', taskId);
             const res = await api.get(`/api/tasks/${taskId}/subtasks`);
             setSubtasks(res.data);
-        } catch (error) {
+        } catch (error: any) {
+            console.error('Subtask fetch error:', error.response || error);
             toast.error('Failed to load subtasks');
         } finally {
             setLoading(false);

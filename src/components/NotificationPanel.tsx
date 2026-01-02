@@ -164,8 +164,8 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
             {/* Dropdown Panel */}
             {isOpen && (
                 <>
-                    <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-                    <div className="absolute right-0 top-12 w-[380px] max-h-[480px] bg-surface border border-border rounded-2xl shadow-2xl z-50 overflow-hidden animate-fade-in">
+                    <div className="fixed inset-0 z-[9998]" onClick={() => setIsOpen(false)} />
+                    <div className="absolute right-0 top-12 w-[380px] max-h-[480px] bg-surface border border-border rounded-2xl shadow-2xl z-[9999] overflow-hidden animate-fade-in">
                         {/* Header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-page/50">
                             <h3 className="font-bold text-primary">Thông báo</h3>
