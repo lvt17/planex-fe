@@ -56,16 +56,24 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
         const subtask = subtasks.find(s => s.id === id);
         if (!subtask) return;
 
+        // Optimistic UI update - update immediately
+        setSubtasks(prev => prev.map(s =>
+            s.id === id ? { ...s, is_completed: !s.is_completed } : s
+        ));
+        onSubtaskChange?.(); // Notify parent to refresh progress immediately
+
+        // Then sync with backend
         try {
             await api.put(`/api/subtasks/${id}`, {
                 is_completed: !subtask.is_completed
             });
-            setSubtasks(prev => prev.map(s =>
-                s.id === id ? { ...s, is_completed: !s.is_completed } : s
-            ));
-            onSubtaskChange?.(); // Notify parent to refresh progress
         } catch (error) {
-            toast.error('Failed to update subtask');
+            // Rollback on error
+            setSubtasks(prev => prev.map(s =>
+                s.id === id ? { ...s, is_completed: subtask.is_completed } : s
+            ));
+            onSubtaskChange?.(); // Revert progress
+            console.error('Failed to update subtask:', error);
         }
     };
 
@@ -80,9 +88,8 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
             setSubtasks(prev => [...prev, res.data]);
             setNewSubtaskTitle('');
             onSubtaskChange?.();
-            toast.success('Subtask added');
         } catch (error) {
-            toast.error('Failed to add subtask');
+            console.error('Failed to add subtask:', error);
         } finally {
             setAdding(false);
         }
@@ -91,13 +98,20 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
     const deleteSubtask = async (id: number) => {
         if (!confirm('Delete this subtask?')) return;
 
+        // Optimistic delete
+        const deletedSubtask = subtasks.find(s => s.id === id);
+        setSubtasks(prev => prev.filter(s => s.id !== id));
+        onSubtaskChange?.();
+
         try {
             await api.delete(`/api/subtasks/${id}`);
-            setSubtasks(prev => prev.filter(s => s.id !== id));
-            onSubtaskChange?.();
-            toast.success('Subtask deleted');
         } catch (error) {
-            toast.error('Failed to delete subtask');
+            // Rollback on error
+            if (deletedSubtask) {
+                setSubtasks(prev => [...prev, deletedSubtask]);
+                onSubtaskChange?.();
+            }
+            console.error('Failed to delete subtask:', error);
         }
     };
 
