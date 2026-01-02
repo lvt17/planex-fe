@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Task } from '@/types';
+import api from '@/utils/api';
 import {
     CheckCircleIcon as CheckOutline,
     CalendarIcon,
@@ -214,9 +215,18 @@ export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDele
                                 taskId={task.id}
                                 isOpen={showSubtasks}
                                 onToggle={() => setShowSubtasks(!showSubtasks)}
-                                onSubtaskChange={() => {
-                                    // Refresh task to get updated progress
-                                    onReceived?.();
+                                onSubtaskChange={async () => {
+                                    // Fetch updated task data to get new progress
+                                    try {
+                                        const response = await api.get(`/api/tasks/${task.id}`);
+                                        const updatedTask = response.data;
+                                        setLocalState(updatedTask.state || 0);
+                                        setSubtaskCount(updatedTask.subtask_count || 0);
+                                        // Notify parent to refresh the task list
+                                        onUpdated({ state: updatedTask.state });
+                                    } catch (error) {
+                                        console.error('Failed to refresh task:', error);
+                                    }
                                 }}
                             />
                         </div>
