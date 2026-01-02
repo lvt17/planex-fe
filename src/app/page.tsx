@@ -166,8 +166,8 @@ export default function HomePage() {
             <span className="font-elegant">hành tinh của công việc</span>
             <span className="font-handwriting text-accent"> "</span>
           </h1>
-          <h2>
-            <span className="font-sans">của riêng bạn</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-6 leading-tight">
+            <span className="font-script">của riêng bạn</span>
           </h2>
           <p className="text-lg sm:text-xl text-secondary mb-4 max-w-2xl mx-auto">
             Mọi thứ cần thiết cho công việc của bạn đều ở một chỗ.
@@ -240,7 +240,7 @@ export default function HomePage() {
       <section id="story" className="py-16 sm:py-20 px-4 sm:px-6 bg-surface">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary text-center mb-10">
-            Về Planex
+            <span className="font-script">Về Planex</span>
           </h2>
           <div className="space-y-6 text-secondary leading-relaxed">
             <p>Tụi mình là những freelancers.</p>

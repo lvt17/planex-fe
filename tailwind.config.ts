@@ -48,7 +48,8 @@ const config: Config = {
         sans: ["var(--font-inter)", "Inter", "sans-serif"],
         mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
         handwriting: ["var(--font-handwriting)", "Nanum Brush Script", "cursive"],
-        elegant: ["var(--font-elegant)", "Playfair Display", "serif"],
+        elegant: ["var(--font-elegant)", "Bad Script", "cursive"],
+        script: ["var(--font-script)", "Dancing Script", "cursive"],
       },
       animation: {
         "fade-in": "fadeIn 0.3s ease-out",

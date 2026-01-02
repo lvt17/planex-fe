@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Nanum_Brush_Script, Playfair_Display } from "next/font/google";
+import { Inter, JetBrains_Mono, Nanum_Brush_Script, Bad_Script, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
@@ -13,15 +13,21 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
-const caveat = Nanum_Brush_Script({
+const nanumBrush = Nanum_Brush_Script({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-handwriting",
 });
 
-const playfair = Playfair_Display({
+const badScript = Bad_Script({
+  weight: "400",
   subsets: ["latin"],
   variable: "--font-elegant",
+});
+
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-script",
 });
 
 export const metadata: Metadata = {
@@ -43,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} ${caveat.variable} ${playfair.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} ${nanumBrush.variable} ${badScript.variable} ${dancingScript.variable} font-sans antialiased`}>
         {children}
         <Toaster
           position="top-right"
