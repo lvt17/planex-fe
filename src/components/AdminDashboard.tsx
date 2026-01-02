@@ -57,16 +57,14 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
 
     const handleExportExcel = async () => {
         try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/feedback/admin/surveys/export`,
-                {
-                    headers: { 'X-Admin-Token': token }
-                }
-            );
+            const response = await api.get('/api/feedback/admin/surveys/export', {
+                headers: { 'X-Admin-Token': token },
+                responseType: 'blob'
+            });
 
-            if (!response.ok) throw new Error('Export failed');
-
-            const blob = await response.blob();
+            const blob = new Blob([response.data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -77,8 +75,9 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
             window.URL.revokeObjectURL(url);
 
             toast.success('Exported successfully!');
-        } catch (error) {
-            toast.error('Export failed');
+        } catch (error: any) {
+            console.error('Export error:', error);
+            toast.error(error.response?.data?.error || 'Export failed');
         }
     };
 
