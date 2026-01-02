@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import PlanexLogo from '@/components/PlanexLogo';
@@ -15,9 +15,14 @@ declare global {
     }
 }
 
-export default function LoginPage() {
+import { Suspense } from 'react';
+
+function LoginContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const nextPath = searchParams.get('next');
     const { user, login, googleLogin, loading } = useAuth();
+    // ... existing state and effects ...
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -35,9 +40,9 @@ export default function LoginPage() {
     // Redirect if already logged in
     useEffect(() => {
         if (user) {
-            router.push('/dashboard');
+            router.push(nextPath || '/dashboard');
         }
-    }, [user, router]);
+    }, [user, router, nextPath]);
 
     // Initialize Google Sign-In
     useEffect(() => {
@@ -52,7 +57,6 @@ export default function LoginPage() {
 
                 const buttonDiv = document.getElementById('google-button');
                 if (buttonDiv) {
-                    // Get container width for responsive sizing
                     const containerWidth = Math.min(buttonDiv.offsetWidth || 300, 400);
                     window.google.accounts.id.renderButton(buttonDiv, {
                         type: 'standard',
@@ -82,20 +86,12 @@ export default function LoginPage() {
     }, []);
 
     const handleGoogleResponse = async (response: any) => {
-        console.log('Google response received:', response);
         try {
             await googleLogin(response.credential);
             toast.success('Đăng nhập Google thành công!');
-            router.push('/dashboard');
+            router.push(nextPath || '/dashboard');
         } catch (error) {
-            console.error('Google login error:', error);
             toast.error('Lỗi xác thực Google với hệ thống');
-        }
-    };
-
-    const handleGoogleButtonClick = () => {
-        if (window.google) {
-            window.google.accounts.id.prompt();
         }
     };
 
@@ -110,7 +106,6 @@ export default function LoginPage() {
         try {
             await login(email, password);
 
-            // Save or clear remembered email
             if (rememberMe) {
                 tokenStorage.setRememberedEmail(email);
             } else {
@@ -118,7 +113,7 @@ export default function LoginPage() {
             }
 
             toast.success('Đăng nhập thành công!');
-            router.push('/dashboard');
+            router.push(nextPath || '/dashboard');
         } catch (error: any) {
             toast.error(error.response?.data?.error || 'Lỗi đăng nhập');
         } finally {
@@ -136,7 +131,6 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen flex bg-page">
-            {/* Left side - Branding */}
             <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-accent/20 to-syntax-purple/20 items-center justify-center p-12">
                 <div className="max-w-md text-center">
                     <PlanexLogo size="lg" showText className="justify-center mb-8" />
@@ -149,7 +143,6 @@ export default function LoginPage() {
                 </div>
             </div>
 
-            {/* Right side - Login form */}
             <div className="flex-1 flex items-center justify-center p-4 sm:p-8 overflow-y-auto">
                 <div className="w-full max-w-md">
                     <div className="lg:hidden flex justify-center mb-6 sm:mb-8">
@@ -175,7 +168,6 @@ export default function LoginPage() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full px-4 py-3 rounded-xl bg-page border border-border text-primary focus:border-accent focus:outline-none transition-colors"
                                     placeholder="you@example.com"
-                                    autoComplete="email"
                                 />
                             </div>
 
@@ -194,7 +186,6 @@ export default function LoginPage() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="w-full px-4 py-3 rounded-xl bg-page border border-border text-primary focus:border-accent focus:outline-none transition-colors"
                                     placeholder="••••••••"
-                                    autoComplete="current-password"
                                 />
                             </div>
 
@@ -249,5 +240,17 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center bg-page">
+                <div className="w-8 h-8 border-2 rounded-full animate-spin border-accent border-t-transparent" />
+            </div>
+        }>
+            <LoginContent />
+        </Suspense>
     );
 }
