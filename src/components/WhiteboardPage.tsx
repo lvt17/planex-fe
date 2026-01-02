@@ -161,11 +161,18 @@ export default function WhiteboardPage({ onBack }: WhiteboardPageProps) {
                     ? JSON.parse(selectedWhiteboard.data)
                     : selectedWhiteboard.data;
 
+                // Validate snapshot has required structure for tldraw
                 if (snapshot && typeof snapshot === 'object' && Object.keys(snapshot).length > 0) {
-                    editor.loadSnapshot(snapshot);
+                    // Check if snapshot has the required structure
+                    if (snapshot.document || snapshot.store) {
+                        editor.loadSnapshot(snapshot);
+                    } else {
+                        console.warn('Snapshot missing required structure (document or store), skipping load');
+                    }
                 }
             } catch (e) {
                 console.error('Failed to load snapshot:', e);
+                // Don't crash the app, just log the error
             }
         }
     };
