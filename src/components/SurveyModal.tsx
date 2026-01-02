@@ -104,25 +104,25 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-[60] p-4 bg-page/80 backdrop-blur-md">
-            <div className="w-full max-w-lg bg-surface border border-border rounded-3xl overflow-hidden shadow-2xl animate-fade-in">
+        <div className="fixed inset-0 flex items-center justify-center z-[60] p-2 sm:p-4 bg-page/80 backdrop-blur-md">
+            <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-surface border border-border rounded-2xl sm:rounded-3xl shadow-2xl animate-fade-in">
                 {/* Progress Bar */}
-                <div className="h-1.5 w-full bg-elevated">
+                <div className="h-1 sm:h-1.5 w-full bg-elevated sticky top-0">
                     <div
                         className="h-full bg-accent transition-all duration-500 ease-out"
                         style={{ width: `${(step / 3) * 100}%` }}
                     />
                 </div>
 
-                <div className="p-8">
+                <div className="p-4 sm:p-8">
                     {/* Step 1: Job */}
                     {step === 1 && (
                         <div className="animate-slide-in">
-                            <div className="w-12 h-12 rounded-2xl bg-syntax-cyan/20 flex items-center justify-center mb-6">
-                                <BriefcaseIcon className="w-6 h-6 text-syntax-cyan" />
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-syntax-cyan/20 flex items-center justify-center mb-4 sm:mb-6">
+                                <BriefcaseIcon className="w-5 h-5 sm:w-6 sm:h-6 text-syntax-cyan" />
                             </div>
-                            <h2 className="text-2xl font-bold text-primary mb-2">Công việc của bạn là gì?</h2>
-                            <p className="text-secondary mb-8">Hãy cho chúng tôi biết để Planex có thể điều chỉnh trải nghiệm phù hợp nhất.</p>
+                            <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">Công việc của bạn là gì?</h2>
+                            <p className="text-secondary text-sm sm:text-base mb-4 sm:mb-8">Hãy cho chúng tôi biết để Planex có thể điều chỉnh trải nghiệm phù hợp nhất.</p>
 
                             <div className="grid grid-cols-1 gap-3">
                                 {JOB_OPTIONS.map((job) => (
@@ -166,11 +166,11 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
                     {/* Step 2: Tools */}
                     {step === 2 && (
                         <div className="animate-slide-in">
-                            <div className="w-12 h-12 rounded-2xl bg-syntax-purple/20 flex items-center justify-center mb-6">
-                                <WrenchScrewdriverIcon className="w-6 h-6 text-syntax-purple" />
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-syntax-purple/20 flex items-center justify-center mb-4 sm:mb-6">
+                                <WrenchScrewdriverIcon className="w-5 h-5 sm:w-6 sm:h-6 text-syntax-purple" />
                             </div>
-                            <h2 className="text-2xl font-bold text-primary mb-2">Công cụ bạn hay dùng?</h2>
-                            <p className="text-secondary mb-8">Chọn các công cụ bạn sử dụng hàng ngày để quản lý công việc.</p>
+                            <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">Công cụ bạn hay dùng?</h2>
+                            <p className="text-secondary text-sm sm:text-base mb-4 sm:mb-8">Chọn các công cụ bạn sử dụng hàng ngày để quản lý công việc.</p>
 
                             <div className="grid grid-cols-2 gap-3 mb-4">
                                 {TOOL_OPTIONS.map((tool) => (
@@ -201,13 +201,13 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
                     {/* Step 3: Desires */}
                     {step === 3 && (
                         <div className="animate-slide-in">
-                            <div className="w-12 h-12 rounded-2xl bg-syntax-green/20 flex items-center justify-center mb-6">
-                                <SparklesIcon className="w-6 h-6 text-syntax-green" />
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-syntax-green/20 flex items-center justify-center mb-4 sm:mb-6">
+                                <SparklesIcon className="w-5 h-5 sm:w-6 sm:h-6 text-syntax-green" />
                             </div>
-                            <h2 className="text-2xl font-bold text-primary mb-2">Bạn mong đợi gì ở Planex?</h2>
-                            <p className="text-secondary mb-8">Chọn các mục tiêu hoặc mong muốn của bạn khi sử dụng ứng dụng.</p>
+                            <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">Bạn mong đợi gì ở Planex?</h2>
+                            <p className="text-secondary text-sm sm:text-base mb-4 sm:mb-8">Chọn các mục tiêu hoặc mong muốn của bạn khi sử dụng ứng dụng.</p>
 
-                            <div className="grid grid-cols-1 gap-2 mb-6 max-h-[220px] overflow-y-auto custom-scrollbar pr-2">
+                            <div className="grid grid-cols-1 gap-2 mb-4 sm:mb-6 max-h-[180px] sm:max-h-[220px] overflow-y-auto custom-scrollbar pr-2">
                                 {DESIRE_OPTIONS.map((desire) => (
                                     <button
                                         key={desire}
@@ -233,7 +233,7 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
                     )}
 
                     {/* Navigation */}
-                    <div className="flex items-center justify-between mt-12 pt-6 border-t border-border">
+                    <div className="flex items-center justify-between mt-6 sm:mt-12 pt-4 sm:pt-6 border-t border-border">
                         <button
                             onClick={() => step > 1 && setStep(step - 1)}
                             disabled={step === 1}
