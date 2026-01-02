@@ -47,6 +47,8 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "sans-serif"],
         mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
+        handwriting: ["var(--font-handwriting)", "Caveat", "cursive"],
+        elegant: ["var(--font-elegant)", "Playfair Display", "serif"],
       },
       animation: {
         "fade-in": "fadeIn 0.3s ease-out",
