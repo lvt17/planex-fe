@@ -230,7 +230,7 @@ export default function Dashboard() {
                 </header>
 
                 {/* Content */}
-                <div className="flex-1 p-6 overflow-auto">
+                <div className={`flex-1 ${activeView === 'chat' ? 'p-0 sm:p-6' : 'p-6'} overflow-auto`}>
                     {activeView === 'tasks' ? (
                         loading ? (
                             <div className="flex items-center justify-center py-20">

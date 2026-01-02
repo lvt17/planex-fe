@@ -81,7 +81,7 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
         { id: 'spreadsheets', label: 'Bảng tính', icon: TableCellsIcon },
         { id: 'storage', label: 'Tài khoản', icon: LockClosedIcon },
         { id: 'whiteboard', label: 'Bảng trắng', icon: Square2StackIcon },
-        { id: 'settings', label: 'Cài đặt', icon: Cog6ToothIcon },
+        { id: 'settings', label: 'Profile', icon: Cog6ToothIcon },
     ];
 
     const handleNavClick = (id: string) => {

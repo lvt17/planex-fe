@@ -35,6 +35,7 @@ export default function ChatPage({ teamId, onBack }: ChatPageProps) {
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [sending, setSending] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const [teamName, setTeamName] = useState('');
     const chatEndRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -62,6 +63,13 @@ export default function ChatPage({ teamId, onBack }: ChatPageProps) {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 640);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         fetchMessages();
@@ -243,14 +251,16 @@ export default function ChatPage({ teamId, onBack }: ChatPageProps) {
                     />
                     <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="p-2.5 rounded-xl text-secondary hover:text-accent hover:bg-accent/10 transition-all flex-shrink-0"
+                        className="p-2 sm:p-2.5 rounded-xl text-secondary hover:text-accent hover:bg-accent/10 transition-all flex-shrink-0"
                         title="Gửi ảnh"
                     >
-                        <PhotoIcon className="w-6 h-6" />
+                        <PhotoIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                     </button>
-                    <button className="p-2.5 rounded-xl text-secondary hover:text-accent hover:bg-accent/10 transition-all flex-shrink-0">
-                        <FaceSmileIcon className="w-6 h-6" />
-                    </button>
+                    {!isMobile && (
+                        <button className="p-2.5 rounded-xl text-secondary hover:text-accent hover:bg-accent/10 transition-all flex-shrink-0">
+                            <FaceSmileIcon className="w-6 h-6" />
+                        </button>
+                    )}
                     <input
                         type="text"
                         value={newMessage}
@@ -267,7 +277,7 @@ export default function ChatPage({ teamId, onBack }: ChatPageProps) {
                     <button
                         onClick={handleSendMessage}
                         disabled={sending || !newMessage.trim()}
-                        className={`p-2.5 rounded-xl bg-accent text-page transition-all flex-shrink-0 shadow-lg shadow-accent/20 ${sending || !newMessage.trim() ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:scale-105 active:scale-95'
+                        className={`p-2 sm:p-2.5 rounded-xl bg-accent text-page transition-all flex-shrink-0 shadow-lg shadow-accent/20 ${sending || !newMessage.trim() ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:scale-105 active:scale-95'
                             }`}
                     >
                         <PaperAirplaneIcon className="w-5 h-5" />
