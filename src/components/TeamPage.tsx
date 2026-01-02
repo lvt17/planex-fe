@@ -672,6 +672,23 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                         ))}
                                     </div>
                                 </div>
+
+                                {/* Danger Zone - Only for owner */}
+                                {team?.my_role === 'owner' && (
+                                    <div className="p-4 bg-syntax-red/5 rounded-2xl border border-syntax-red/20">
+                                        <h4 className="text-sm font-bold text-syntax-red mb-2">Vùng nguy hiểm</h4>
+                                        <p className="text-xs text-secondary mb-4">
+                                            Giải tán team sẽ xóa tất cả dữ liệu, dự án, và thành viên. Hành động này không thể hoàn tác.
+                                        </p>
+                                        <button
+                                            onClick={dissolveTeam}
+                                            className="px-4 py-2 rounded-xl bg-syntax-red text-white text-sm font-bold hover:opacity-90 transition-all cursor-pointer flex items-center gap-2"
+                                        >
+                                            <TrashIcon className="w-4 h-4" />
+                                            Giải tán Team
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ) : null}
                     </div>
