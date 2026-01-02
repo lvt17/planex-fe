@@ -24,7 +24,14 @@ export default function JoinTeamPage() {
                 const res = await api.get(`/api/teams/join/${token}`);
                 setTeamInfo(res.data);
             } catch (error: any) {
-                toast.error(error.response?.data?.error || 'Link mời không hợp lệ hoặc đã hết hạn');
+                console.error("DEBUG: Join Team Error:", error);
+                if (error.response) {
+                    toast.error(error.response.data.error || 'Link mời không hợp lệ hoặc đã hết hạn');
+                } else if (error.request) {
+                    toast.error('Không thể kết nối tới server. Vui lòng kiểm tra cấu hình API URL.');
+                } else {
+                    toast.error('Đã xảy ra lỗi khi tham gia Team.');
+                }
                 setTimeout(() => router.push('/dashboard'), 3000);
             } finally {
                 setLoading(false);
