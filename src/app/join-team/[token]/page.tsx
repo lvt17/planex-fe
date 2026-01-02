@@ -26,7 +26,8 @@ export default function JoinTeamPage() {
             } catch (error: any) {
                 console.error("DEBUG: Join Team Error:", error);
                 if (error.response) {
-                    toast.error(error.response.data.error || 'Link mời không hợp lệ hoặc đã hết hạn');
+                    const msg = error.response.data.message || error.response.data.error || 'Link mời không hợp lệ hoặc đã hết hạn';
+                    toast.error(msg);
                 } else if (error.request) {
                     toast.error('Không thể kết nối tới server. Vui lòng kiểm tra cấu hình API URL.');
                 } else {
