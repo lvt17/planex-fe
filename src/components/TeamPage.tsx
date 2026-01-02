@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import {
     UsersIcon,
@@ -30,8 +29,7 @@ import {
 import { StarIcon as StarIconSolid, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { requestNotificationPermission, showNotification } from '@/utils/notifications';
 import { useAuth } from '@/hooks/useAuth';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+import api, { API_URL } from '@/utils/api';
 
 interface Team {
     id: number;
@@ -93,23 +91,19 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const lastMessageId = useRef<number>(0);
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const fetchTeamData = useCallback(async () => {
         try {
             const [teamRes, tasksRes, messagesRes, projectsRes] = await Promise.all([
-                axios.get(`${API_URL}/api/teams/${teamId}`, { headers: getAuthHeader() }),
-                axios.get(`${API_URL}/api/teams/${teamId}/tasks`, { headers: getAuthHeader() }),
-                axios.get(`${API_URL}/api/teams/${teamId}/chat`, { headers: getAuthHeader() }),
-                axios.get(`${API_URL}/api/teams/${teamId}/projects`, { headers: getAuthHeader() })
+                api.get(`/api/teams/${teamId}`),
+                api.get(`/api/teams/${teamId}/tasks`),
+                api.get(`/api/teams/${teamId}/chat`),
+                api.get(`/api/teams/${teamId}/projects`)
             ]);
             setTeam(teamRes.data);
             setTasks(tasksRes.data);
             setMessages(messagesRes.data);
             setProjects(projectsRes.data);
+            setEditingTeamName(teamRes.data.name);
             if (messagesRes.data.length > 0) {
                 lastMessageId.current = messagesRes.data[messagesRes.data.length - 1].id;
             } else {
@@ -125,16 +119,11 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     useEffect(() => {
         fetchTeamData();
         requestNotificationPermission();
-    }, [fetchTeamData]);
 
-    useEffect(() => {
         const pollInterval = setInterval(async () => {
             if (lastMessageId.current === 0) return;
             try {
-                const res = await axios.get(
-                    `${API_URL}/api/teams/${teamId}/chat?after=${lastMessageId.current}`,
-                    { headers: getAuthHeader() }
-                );
+                const res = await api.get(`/api/teams/${teamId}/chat?after=${lastMessageId.current}`);
                 if (res.data.length > 0) {
                     setMessages(prev => {
                         const existingIds = new Set(prev.map((m: any) => m.id));
@@ -142,14 +131,13 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                         if (newMessages.length === 0) return prev;
 
                         // Show notifications for new messages from others
-                        newMessages.forEach((m: any) => {
-                            if (m.username !== team?.owner_name) { // Simple check, should probably use current user id
-                                showNotification(`Tin nhắn mới từ ${m.username}`, {
-                                    body: m.content,
-                                    tag: `team-chat-${teamId}`
-                                });
-                            }
-                        });
+                        if (newMessages.some((m: any) => m.user_id !== currentUser?.id)) {
+                            const lastMsg = newMessages[newMessages.length - 1];
+                            showNotification(`Tin nhắn mới từ ${lastMsg.username}`, {
+                                body: lastMsg.content,
+                                tag: `team-chat-${teamId}`
+                            });
+                        }
 
                         return [...prev, ...newMessages];
                     });
@@ -158,7 +146,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
             } catch (e) { }
         }, 3000);
         return () => clearInterval(pollInterval);
-    }, [teamId]);
+    }, [teamId, fetchTeamData, currentUser?.id]);
 
     // Scroll to bottom only when user sends a new message (not on initial load or polling)
     const scrollToBottom = () => {
@@ -169,7 +157,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
         if (!newMessage.trim() || sendingMessage) return;
         setSendingMessage(true);
         try {
-            const res = await axios.post(`${API_URL}/api/teams/${teamId}/chat`, { content: newMessage }, { headers: getAuthHeader() });
+            const res = await api.post(`/api/teams/${teamId}/chat`, { content: newMessage });
             setMessages(prev => [...prev, res.data]);
             setNewMessage('');
             lastMessageId.current = res.data.id;
@@ -182,14 +170,15 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     };
 
     const sendImage = async (file: File) => {
+        if (sendingMessage) return;
         setSendingMessage(true);
         const formData = new FormData();
         formData.append('image', file);
         try {
-            const res = await axios.post(
-                `${API_URL}/api/teams/${teamId}/chat/image`,
+            const res = await api.post(
+                `/api/teams/${teamId}/chat/image`,
                 formData,
-                { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } }
+                { headers: { 'Content-Type': 'multipart/form-data' } }
             );
             setMessages(prev => [...prev, res.data]);
             lastMessageId.current = res.data.id;
@@ -205,7 +194,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
         if (!inviteEmail.trim()) return;
         setInviting(true);
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/invite`, { username: inviteEmail }, { headers: getAuthHeader() });
+            await api.post(`/api/teams/${teamId}/invite`, { username: inviteEmail });
             toast.success('Đã gửi lời mời!');
             setInviteEmail('');
             setShowInviteModal(false);
@@ -219,7 +208,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
 
     const generateInviteLink = async () => {
         try {
-            const res = await axios.post(`${API_URL}/api/teams/${teamId}/invite-link`, {}, { headers: getAuthHeader() });
+            const res = await api.post(`/api/teams/${teamId}/invite-link`);
             const fullLink = `${window.location.origin}/join-team/${res.data.token}`;
             setInviteLink(fullLink);
         } catch (error: any) {
@@ -235,7 +224,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
 
     const handleApprove = async (requestId: number) => {
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/requests/${requestId}/approve`, {}, { headers: getAuthHeader() });
+            await api.post(`/api/teams/${teamId}/requests/${requestId}/approve`);
             toast.success('Đã duyệt yêu cầu!');
             fetchTeamData();
         } catch (error) {
@@ -245,18 +234,18 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
 
     const handleReject = async (requestId: number) => {
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/requests/${requestId}/reject`, {}, { headers: getAuthHeader() });
+            await api.post(`/api/teams/${teamId}/requests/${requestId}/reject`);
             toast.success('Đã từ chối yêu cầu');
             fetchTeamData();
         } catch (error) {
-            toast.error('Không thể từ chối');
+            toast.error('Không thể từ chối yêu cầu');
         }
     };
 
     const leaveTeam = async () => {
-        if (!confirm('Bạn chắc chắn muốn rời team?')) return;
+        if (!confirm('Bạn có chắc muốn rời team này?')) return;
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/leave`, {}, { headers: getAuthHeader() });
+            await api.post(`/api/teams/${teamId}/leave`);
             toast.success('Đã rời team');
             onBack();
         } catch (error: any) {
@@ -267,7 +256,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     const dissolveTeam = async () => {
         if (!confirm('GIẢ TÁN TEAM? Thao tác này không thể hoàn tác!')) return;
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/dissolve`, {}, { headers: getAuthHeader() });
+            await api.post(`/api/teams/${teamId}/dissolve`);
             toast.success('Đã giải tán team');
             onBack();
         } catch (error: any) {
@@ -276,20 +265,20 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     };
 
     const removeMember = async (memberId: number, username: string) => {
-        if (!confirm(`Xóa ${username} khỏi team?`)) return;
+        if (!confirm(`Bạn có chắc muốn xóa ${username} khỏi team?`)) return;
         try {
-            await axios.delete(`${API_URL}/api/teams/${teamId}/members/${memberId}`, { headers: getAuthHeader() });
+            await api.delete(`/api/teams/${teamId}/members/${memberId}`);
             toast.success('Đã xóa thành viên');
             fetchTeamData();
         } catch (error: any) {
-            toast.error(error.response?.data?.error || 'Không thể xóa');
+            toast.error(error.response?.data?.error || 'Không thể xóa thành viên');
         }
     };
 
     const updateTeam = async () => {
         if (!editingTeamName.trim()) return;
         try {
-            await axios.put(`${API_URL}/api/teams/${teamId}`, { name: editingTeamName }, { headers: getAuthHeader() });
+            await api.put(`/api/teams/${teamId}`, { name: editingTeamName });
             toast.success('Đã cập nhật tên team!');
             fetchTeamData();
         } catch (error: any) {
@@ -306,9 +295,8 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
 
         setUploadingAvatar(true);
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/avatar`, formData, {
+            await api.post(`${API_URL}/api/teams/${teamId}/avatar`, formData, {
                 headers: {
-                    ...getAuthHeader(),
                     'Content-Type': 'multipart/form-data',
                 },
             });
@@ -323,7 +311,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
 
     const changeRole = async (memberId: number, newRole: 'member' | 'admin') => {
         try {
-            await axios.put(`${API_URL}/api/teams/${teamId}/members/${memberId}/role`, { role: newRole }, { headers: getAuthHeader() });
+            await api.put(`/api/teams/${teamId}/members/${memberId}/role`, { role: newRole });
             toast.success('Đã cập nhật vai trò!');
             fetchTeamData();
         } catch (error: any) {
@@ -333,7 +321,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
 
     const fetchLeaderboard = async () => {
         try {
-            const res = await axios.get(`${API_URL}/api/teams/${teamId}/ratings`, { headers: getAuthHeader() });
+            const res = await api.get(`/api/teams/${teamId}/ratings`);
             setLeaderboard(res.data);
         } catch (e) { }
     };
@@ -341,9 +329,8 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     const rateMember = async () => {
         if (!ratingMember) return;
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/ratings/${ratingMember.user_id}`,
-                { score: ratingScore, comment: ratingComment },
-                { headers: getAuthHeader() }
+            await api.post(`/api/teams/${teamId}/members/${ratingMember.user_id}/ratings`,
+                { score: ratingScore, comment: ratingComment }
             );
             toast.success('Đã đánh giá!');
             setRatingMember(null);
@@ -358,7 +345,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     const createProject = async () => {
         if (!projectName.trim()) return;
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/projects`, { name: projectName }, { headers: getAuthHeader() });
+            await api.post(`/api/teams/${teamId}/projects`, { name: projectName });
             toast.success('Đã tạo project!');
             setProjectName('');
             setShowProjectModal(false);
@@ -369,23 +356,28 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     };
 
     const createTask = async () => {
-        if (!taskName.trim() || !selectedProject || isCreatingTask) return;
+        if (!taskName.trim() || !selectedProject || !taskAssignee) {
+            toast.error('Vui lòng điền đủ thông tin');
+            return;
+        }
         setIsCreatingTask(true);
         try {
-            await axios.post(`${API_URL}/api/teams/${teamId}/projects/${selectedProject.id}/tasks`, {
+            await api.post(`/api/tasks`, {
                 name: taskName,
                 content: taskContent,
                 deadline: taskDeadline,
-                assigned_to: taskAssignee || null,
-                price: taskPrice ? parseInt(taskPrice) : 0
-            }, { headers: getAuthHeader() });
-            toast.success('Đã tạo và giao task!');
-            setShowTaskModal(false);
+                user_id: parseInt(taskAssignee),
+                project_id: selectedProject.id,
+                team_id: teamId,
+                price: parseFloat(taskPrice) || 0
+            });
+            toast.success('Đã tạo task');
             setTaskName('');
             setTaskContent('');
             setTaskDeadline('');
             setTaskAssignee('');
             setTaskPrice('');
+            setShowTaskModal(false);
             fetchTeamData();
         } catch (error: any) {
             toast.error(error.response?.data?.error || 'Không thể tạo task');
@@ -503,7 +495,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                             <button
                                                 onClick={async () => {
                                                     try {
-                                                        const res = await axios.get(`${API_URL}/api/teams/${teamId}/members/${m.user_id}/tasks`, { headers: getAuthHeader() });
+                                                        const res = await api.get(`/api/teams/${teamId}/members/${m.user_id}/tasks`);
                                                         setViewingMemberTasks({ member: m, tasks: res.data });
                                                     } catch (e) {
                                                         toast.error('Không thể tải tasks');
@@ -684,6 +676,23 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                         ))}
                                     </div>
                                 </div>
+
+                                {/* Danger Zone - Only for owner */}
+                                {team?.my_role === 'owner' && (
+                                    <div className="p-4 bg-syntax-red/5 rounded-2xl border border-syntax-red/20">
+                                        <h4 className="text-sm font-bold text-syntax-red mb-2">Vùng nguy hiểm</h4>
+                                        <p className="text-xs text-secondary mb-4">
+                                            Giải tán team sẽ xóa tất cả dữ liệu, dự án, và thành viên. Hành động này không thể hoàn tác.
+                                        </p>
+                                        <button
+                                            onClick={dissolveTeam}
+                                            className="px-4 py-2 rounded-xl bg-syntax-red text-white text-sm font-bold hover:opacity-90 transition-all cursor-pointer flex items-center gap-2"
+                                        >
+                                            <TrashIcon className="w-4 h-4" />
+                                            Giải tán Team
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ) : null}
                     </div>
@@ -842,10 +851,10 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                             />
                             <button
                                 onClick={() => fileInputRef.current?.click()}
-                                className="p-2.5 rounded-xl bg-page border border-border text-muted hover:text-accent hover:border-accent transition-all cursor-pointer mb-0.5"
+                                className="p-2 sm:p-2.5 rounded-xl bg-page border border-border text-muted hover:text-accent hover:border-accent transition-all cursor-pointer mb-0.5"
                                 title="Gửi ảnh"
                             >
-                                <PhotoIcon className="w-5 h-5" />
+                                <PhotoIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                             </button>
                             <div className="flex-1 flex items-end gap-2 bg-page border border-border rounded-2xl p-2 focus-within:border-accent transition-all">
                                 <textarea
@@ -869,7 +878,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                 <button
                                     onClick={sendMessage}
                                     disabled={sendingMessage || !newMessage.trim()}
-                                    className="p-2.5 rounded-xl bg-accent text-page hover:opacity-90 disabled:opacity-50 transition-all cursor-pointer mb-0.5"
+                                    className="p-2 sm:p-2.5 rounded-xl bg-accent text-page hover:opacity-90 disabled:opacity-50 transition-all cursor-pointer mb-0.5"
                                 >
                                     <PaperAirplaneIcon className="w-5 h-5" />
                                 </button>
