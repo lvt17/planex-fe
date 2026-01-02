@@ -75,6 +75,7 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     const [categoryForm, setCategoryForm] = useState({ name: '', description: '' });
     const [productForm, setProductForm] = useState({ name: '', price: '', category_id: '', image_url: '' });
     const [uploading, setUploading] = useState(false);
+    const [saving, setSaving] = useState(false);
 
     // Handle image upload to Cloudinary
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,10 +178,12 @@ export default function SalesPage({ onBack }: SalesPageProps) {
 
     // Product CRUD
     const handleSaveProduct = async () => {
+        if (saving) return;
         if (!productForm.name.trim() || !productForm.price) {
             toast.error('Vui lòng nhập tên và giá sản phẩm');
             return;
         }
+        setSaving(true);
         try {
             const data = {
                 name: productForm.name,
@@ -201,6 +204,8 @@ export default function SalesPage({ onBack }: SalesPageProps) {
             fetchProducts();
         } catch (error) {
             toast.error('Lỗi khi lưu sản phẩm');
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -689,9 +694,10 @@ export default function SalesPage({ onBack }: SalesPageProps) {
                             </button>
                             <button
                                 onClick={handleSaveProduct}
-                                className="px-4 py-2 rounded-lg text-sm font-bold bg-accent text-page hover:opacity-90 cursor-pointer"
+                                disabled={saving}
+                                className="px-4 py-2 rounded-lg text-sm font-bold bg-accent text-page hover:opacity-90 cursor-pointer disabled:opacity-50"
                             >
-                                Lưu
+                                {saving ? 'Đang lưu...' : 'Lưu'}
                             </button>
                         </div>
                     </div>
