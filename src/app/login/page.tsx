@@ -52,6 +52,8 @@ export default function LoginPage() {
 
                 const buttonDiv = document.getElementById('google-button');
                 if (buttonDiv) {
+                    // Get container width for responsive sizing
+                    const containerWidth = Math.min(buttonDiv.offsetWidth || 300, 400);
                     window.google.accounts.id.renderButton(buttonDiv, {
                         type: 'standard',
                         theme: 'outline',
@@ -59,7 +61,7 @@ export default function LoginPage() {
                         text: 'signin_with',
                         shape: 'rectangular',
                         logo_alignment: 'left',
-                        width: '382', // Match common input width
+                        width: containerWidth.toString(),
                     });
                 }
             }
