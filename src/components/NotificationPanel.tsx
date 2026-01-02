@@ -151,21 +151,28 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
             {/* Bell Icon */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative p-2 rounded-xl text-secondary hover:text-primary hover:bg-hover transition-all cursor-pointer"
+                className="relative p-2 rounded-xl hover:bg-hover transition-colors cursor-pointer"
+                title="Thông báo"
             >
-                <BellIcon className="w-6 h-6" />
+                <BellIcon className="w-6 h-6 text-secondary" />
                 {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-syntax-red text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-syntax-red text-page text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
                         {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                 )}
             </button>
 
-            {/* Dropdown Panel */}
+            {/* Dropdown Panel - Fixed positioning to overlay everything */}
             {isOpen && (
                 <>
                     <div className="fixed inset-0 z-[9998]" onClick={() => setIsOpen(false)} />
-                    <div className="absolute right-0 top-12 w-[380px] max-h-[480px] bg-surface border border-border rounded-2xl shadow-2xl z-[9999] overflow-hidden animate-fade-in">
+                    <div
+                        className="fixed w-[380px] max-h-[480px] bg-surface border border-border rounded-2xl shadow-2xl z-[9999] overflow-hidden animate-fade-in"
+                        style={{
+                            top: '60px',
+                            right: '20px'
+                        }}
+                    >
                         {/* Header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-page/50">
                             <h3 className="font-bold text-primary">Thông báo</h3>
