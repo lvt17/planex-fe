@@ -169,9 +169,6 @@ export default function HomePage() {
             <span className="font-script">của riêng bạn</span>
           </h1>
           <p className="text-lg sm:text-xl text-secondary mb-4 max-w-2xl mx-auto">
-            Mọi thứ cần thiết cho công việc của bạn đều ở một chỗ.
-          </p>
-          <p className="text-base text-muted mb-10 max-w-2xl mx-auto">
             Những gì bạn cần đều có — hoặc sẽ có.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
