@@ -162,8 +162,8 @@ export default function HomePage() {
       <section className="py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary mb-6 leading-tight">
-            <span className="font-handwriting text-accent">"</span>
-            <span className="font-elegant">HÀNH TINH CÔNG VIỆC</span>
+            <span className="font-handwriting text-accent">" </span>
+            <span className="font-elegant">hành tinh của công việc</span>
             <span className="font-handwriting text-accent">"</span>
             <br />
             <span className="font-sans">của riêng bạn</span>
