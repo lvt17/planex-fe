@@ -13,7 +13,8 @@ import {
     ClipboardDocumentCheckIcon,
     BugAntIcon,
     ArrowLeftOnRectangleIcon,
-    MagnifyingGlassIcon
+    MagnifyingGlassIcon,
+    DocumentArrowDownIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 import api from '@/utils/api';
@@ -51,6 +52,33 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
             console.error('Failed to fetch admin data', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleExportExcel = async () => {
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/feedback/admin/surveys/export`,
+                {
+                    headers: { 'X-Admin-Token': token }
+                }
+            );
+
+            if (!response.ok) throw new Error('Export failed');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `planex_survey_${Date.now()}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            toast.success('Exported successfully!');
+        } catch (error) {
+            toast.error('Export failed');
         }
     };
 
@@ -260,9 +288,16 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
 
                 {activeTab === 'surveys' && (
                     <div className="max-w-6xl mx-auto animate-fade-in">
-                        <div className="flex items-center gap-4 mb-8">
-                            <PresentationChartBarIcon className="w-8 h-8 text-accent" />
-                            <h2 className="text-2xl font-bold text-primary">Phân tích khảo sát người dùng</h2>
+                        {/* Header with Export Button */}
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-2xl font-bold text-primary">Survey Analytics</h2>
+                            <button
+                                onClick={handleExportExcel}
+                                className="flex items-center gap-2 px-4 py-2 bg-syntax-green text-page rounded-xl font-medium hover:opacity-90 transition-all cursor-pointer shadow-lg shadow-syntax-green/20"
+                            >
+                                <DocumentArrowDownIcon className="w-5 h-5" />
+                                Export to Excel
+                            </button>
                         </div>
 
                         {/* Overview Stats */}

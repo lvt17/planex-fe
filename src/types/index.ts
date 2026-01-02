@@ -16,6 +16,8 @@ export interface Task {
     team_name?: string;
     project_id?: number;
     creator_id?: number;
+    subtask_count?: number;
+    comment_count?: number;
 }
 
 export interface User {

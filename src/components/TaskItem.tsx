@@ -10,8 +10,12 @@ import {
     PencilIcon,
     BanknotesIcon,
     UsersIcon,
+    ChevronDownIcon,
+    ChatBubbleLeftIcon,
 } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckSolid } from '@heroicons/react/24/solid';
+import SubtaskDropdown from './SubtaskDropdown';
+import CommentSection from './CommentSection';
 
 interface TaskItemProps {
     task: Task;
@@ -25,6 +29,10 @@ interface TaskItemProps {
 export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDeleted, onReceived }: TaskItemProps) {
     const [showMenu, setShowMenu] = useState(false);
     const [localState, setLocalState] = useState(task.state || 0);
+    const [showSubtasks, setShowSubtasks] = useState(false);
+    const [showComments, setShowComments] = useState(false);
+    const [subtaskCount, setSubtaskCount] = useState(task.subtask_count || 0);
+    const [commentCount, setCommentCount] = useState(task.comment_count || 0);
     const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
     // Sync local state when task prop changes (but not during active dragging)
@@ -141,22 +149,75 @@ export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDele
                         )}
                     </div>
 
-                    {/* Progress Slider */}
+                    {/* Progress Display */}
                     {!task.is_done && (
                         <div className="mt-2" onClick={(e) => e.stopPropagation()}>
-                            <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                value={localState}
-                                onChange={(e) => handleStateChange(parseInt(e.target.value))}
-                                className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer"
-                                style={{
-                                    backgroundSize: `${localState}% 100%`,
-                                    backgroundImage: 'linear-gradient(to right, #7EE787, #7EE787)',
-                                    backgroundRepeat: 'no-repeat',
+                            {subtaskCount > 0 ? (
+                                <div className="flex items-center justify-between text-xs">
+                                    <span className="text-muted">Progress (auto from subtasks)</span>
+                                    <span className="font-medium text-syntax-green">{Math.round(localState)}%</span>
+                                </div>
+                            ) : (
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={localState}
+                                    onChange={(e) => handleStateChange(parseInt(e.target.value))}
+                                    className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer"
+                                    style={{
+                                        backgroundSize: `${localState}% 100%`,
+                                        backgroundImage: 'linear-gradient(to right, #7EE787, #7EE787)',
+                                        backgroundRepeat: 'no-repeat',
+                                    }}
+                                />
+                            )}
+                        </div>
+                    )}
+
+                    {/* Subtask & Comment Buttons */}
+                    <div className="flex items-center gap-2 mt-2">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowSubtasks(!showSubtasks);
+                            }}
+                            className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-secondary hover:bg-hover transition-colors cursor-pointer"
+                        >
+                            <ChevronDownIcon className={`w-3 h-3 transition-transform ${showSubtasks ? 'rotate-180' : ''}`} />
+                            {subtaskCount > 0 ? `${subtaskCount} subtasks` : 'Add subtask'}
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowComments(!showComments);
+                            }}
+                            className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-secondary hover:bg-hover transition-colors cursor-pointer"
+                        >
+                            <ChatBubbleLeftIcon className="w-3 h-3" />
+                            {commentCount > 0 && <span>{commentCount}</span>}
+                        </button>
+                    </div>
+
+                    {/* Subtask Dropdown */}
+                    {showSubtasks && (
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <SubtaskDropdown
+                                taskId={task.id}
+                                isOpen={showSubtasks}
+                                onToggle={() => setShowSubtasks(!showSubtasks)}
+                                onSubtaskChange={() => {
+                                    // Refresh task to get updated progress
+                                    onReceived?.();
                                 }}
                             />
+                        </div>
+                    )}
+
+                    {/* Comment Section */}
+                    {showComments && (
+                        <div onClick={(e) => e.stopPropagation()} className="mt-3 p-3 bg-page rounded-xl border border-border">
+                            <CommentSection taskId={task.id} type="task" />
                         </div>
                     )}
 
