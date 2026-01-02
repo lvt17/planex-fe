@@ -28,8 +28,8 @@ export default function TaskList({ tasks, onSelectTask, selectedTaskId, onTaskUp
                 </span>
             </div>
             <div className="space-y-2">
-                {taskList.map((task, index) => (
-                    <div key={task.id} className="animate-slide-in" style={{ animationDelay: `${index * 0.03}s` }}>
+                {taskList.map((task) => (
+                    <div key={task.id} className="animate-slide-in">
                         <TaskItem
                             task={task}
                             isSelected={selectedTaskId === task.id}

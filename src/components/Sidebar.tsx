@@ -52,7 +52,11 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
             }
         };
         fetchTeams();
-    }, []);
+
+        // Refetch teams every 30 seconds to catch approvals
+        const interval = setInterval(fetchTeams, 30000);
+        return () => clearInterval(interval);
+    }, [activeView]); // Refetch when view changes
 
     const [creatingTeam, setCreatingTeam] = useState(false);
 

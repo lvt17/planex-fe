@@ -34,10 +34,12 @@ export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDele
 
     const handleStateChange = (newVal: number) => {
         setLocalState(newVal);
+        // Only trigger parent update after debounce
         if (debounceTimer.current) clearTimeout(debounceTimer.current);
         debounceTimer.current = setTimeout(() => {
+            // "Silent" update: parent will update the tasks list, but we manage localState to feel instant
             onUpdated({ state: newVal });
-        }, 300); // 300ms debounce
+        }, 500); // 500ms debounce for smoother dragging
     };
 
     const getStatusBadge = () => {
@@ -148,7 +150,12 @@ export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDele
                                 max="100"
                                 value={localState}
                                 onChange={(e) => handleStateChange(parseInt(e.target.value))}
-                                className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer accent-syntax-orange"
+                                className="w-full h-1.5 bg-border rounded-full appearance-none cursor-pointer"
+                                style={{
+                                    backgroundSize: `${localState}% 100%`,
+                                    backgroundImage: 'linear-gradient(to right, #7EE787, #7EE787)',
+                                    backgroundRepeat: 'no-repeat',
+                                }}
                             />
                         </div>
                     )}

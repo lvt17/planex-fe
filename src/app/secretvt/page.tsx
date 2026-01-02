@@ -39,7 +39,7 @@ export default function SecretvtPage() {
                         <LockClosedIcon className="w-10 h-10 text-accent" />
                     </div>
                     <h1 className="text-3xl font-bold text-primary mb-2 italic tracking-tighter">SECRET<span className="text-accent underline">VT</span></h1>
-                    <p className="text-secondary">Vùng cấm địa. Vui lòng nhập mã để tiếp tục.</p>
+                    <p className="text-secondary">Đi ra chổ khác chơi đi, chổ này không dành cho bro!!!</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-6">

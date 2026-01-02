@@ -87,6 +87,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     const [taskPrice, setTaskPrice] = useState('');
     const [isCreatingTask, setIsCreatingTask] = useState(false);
     const [viewingMemberTasks, setViewingMemberTasks] = useState<{ member: any, tasks: any[] } | null>(null);
+    const [processingRequests, setProcessingRequests] = useState<Set<number>>(new Set());
     const chatEndRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const lastMessageId = useRef<number>(0);
@@ -223,22 +224,40 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     };
 
     const handleApprove = async (requestId: number) => {
+        if (processingRequests.has(requestId)) return;
+
+        setProcessingRequests(prev => new Set(prev).add(requestId));
         try {
             await api.post(`/api/teams/${teamId}/requests/${requestId}/approve`);
             toast.success('Đã duyệt yêu cầu!');
             fetchTeamData();
         } catch (error) {
             toast.error('Không thể duyệt yêu cầu');
+        } finally {
+            setProcessingRequests(prev => {
+                const updated = new Set(prev);
+                updated.delete(requestId);
+                return updated;
+            });
         }
     };
 
     const handleReject = async (requestId: number) => {
+        if (processingRequests.has(requestId)) return;
+
+        setProcessingRequests(prev => new Set(prev).add(requestId));
         try {
             await api.post(`/api/teams/${teamId}/requests/${requestId}/reject`);
             toast.success('Đã từ chối yêu cầu');
             fetchTeamData();
         } catch (error) {
             toast.error('Không thể từ chối yêu cầu');
+        } finally {
+            setProcessingRequests(prev => {
+                const updated = new Set(prev);
+                updated.delete(requestId);
+                return updated;
+            });
         }
     };
 
@@ -258,7 +277,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
         try {
             await api.post(`/api/teams/${teamId}/dissolve`);
             toast.success('Đã giải tán team');
-            onBack();
+            window.location.href = '/dashboard'; // Force reload to dashboard
         } catch (error: any) {
             toast.error(error.response?.data?.error || 'Không thể giải tán team');
         }
@@ -440,10 +459,22 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                             <span className="font-medium text-primary">{r.username}</span>
                                         </div>
                                         <div className="flex gap-2">
-                                            <button onClick={() => handleApprove(r.id)} className="p-2 rounded-lg bg-syntax-green/10 text-syntax-green hover:bg-syntax-green/20 cursor-pointer">
-                                                <CheckIcon className="w-4 h-4" />
+                                            <button
+                                                onClick={() => handleApprove(r.id)}
+                                                disabled={processingRequests.has(r.id)}
+                                                className="p-2 rounded-lg bg-syntax-green/10 text-syntax-green hover:bg-syntax-green/20 cursor-pointer disabled:opacity-50"
+                                            >
+                                                {processingRequests.has(r.id) ? (
+                                                    <div className="w-4 h-4 border-2 border-syntax-green border-t-transparent rounded-full animate-spin" />
+                                                ) : (
+                                                    <CheckIcon className="w-4 h-4" />
+                                                )}
                                             </button>
-                                            <button onClick={() => handleReject(r.id)} className="p-2 rounded-lg bg-syntax-red/10 text-syntax-red hover:bg-syntax-red/20 cursor-pointer">
+                                            <button
+                                                onClick={() => handleReject(r.id)}
+                                                disabled={processingRequests.has(r.id)}
+                                                className="p-2 rounded-lg bg-syntax-red/10 text-syntax-red hover:bg-syntax-red/20 cursor-pointer disabled:opacity-50"
+                                            >
                                                 <XMarkIcon className="w-4 h-4" />
                                             </button>
                                         </div>
@@ -680,7 +711,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                 {/* Danger Zone - Only for owner */}
                                 {team?.my_role === 'owner' && (
                                     <div className="p-4 bg-syntax-red/5 rounded-2xl border border-syntax-red/20">
-                                        <h4 className="text-sm font-bold text-syntax-red mb-2">Vùng nguy hiểm</h4>
+                                        <h4 className="text-sm font-bold text-syntax-red mb-2">Giải tán team</h4>
                                         <p className="text-xs text-secondary mb-4">
                                             Giải tán team sẽ xóa tất cả dữ liệu, dự án, và thành viên. Hành động này không thể hoàn tác.
                                         </p>
@@ -689,7 +720,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                             className="px-4 py-2 rounded-xl bg-syntax-red text-white text-sm font-bold hover:opacity-90 transition-all cursor-pointer flex items-center gap-2"
                                         >
                                             <TrashIcon className="w-4 h-4" />
-                                            Giải tán Team
+                                            Giải tán
                                         </button>
                                     </div>
                                 )}

@@ -295,45 +295,109 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                         </div>
 
                         {/* Tools Breakdown */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                            <div className="lg:col-span-2 bg-surface border border-border rounded-2xl p-6">
+                                <h3 className="font-bold text-primary mb-4 flex items-center justify-between">
+                                    Thống kê công cụ được chọn
+                                    <span className="text-xs font-normal text-muted">Phổ biến nhất</span>
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {(() => {
+                                        const toolCount: Record<string, number> = {};
+                                        surveys.forEach((s: any) => s.tools?.forEach((t: string) => toolCount[t] = (toolCount[t] || 0) + 1));
+                                        return Object.entries(toolCount).sort((a, b) => b[1] - a[1]).map(([tool, count]) => (
+                                            <div key={tool} className="flex items-center gap-2 px-3 py-2 bg-page rounded-xl border border-border hover:border-accent/40 transition-colors">
+                                                <span className="font-medium text-primary text-sm">{tool}</span>
+                                                <span className="px-2 py-0.5 bg-accent/10 text-accent rounded-lg text-xs font-bold">{count}</span>
+                                            </div>
+                                        ));
+                                    })()}
+                                </div>
+                            </div>
+
+                            <div className="bg-surface border border-border rounded-2xl p-6">
+                                <h3 className="font-bold text-primary mb-4">Top nhu cầu</h3>
+                                <div className="space-y-3">
+                                    {(() => {
+                                        // Simple keyword extraction for "What you want"
+                                        const keywords = ["tự động", "nhanh", "giao diện", "quản lý", "team", "chat", "app", "mobile", "thống kê"];
+                                        const keywordCount: Record<string, number> = {};
+                                        surveys.forEach((s: any) => {
+                                            keywords.forEach(k => {
+                                                if (s.desires?.toLowerCase().includes(k)) {
+                                                    keywordCount[k] = (keywordCount[k] || 0) + 1;
+                                                }
+                                            });
+                                        });
+                                        return Object.entries(keywordCount).sort((a, b) => b[1] - a[1]).map(([word, count]) => (
+                                            <div key={word} className="flex items-center justify-between text-sm">
+                                                <span className="text-secondary capitalize">{word}</span>
+                                                <div className="flex items-center gap-3 flex-1 px-4">
+                                                    <div className="h-1.5 flex-1 bg-page rounded-full overflow-hidden">
+                                                        <div className="h-full bg-accent" style={{ width: `${(count / surveys.length) * 100}%` }} />
+                                                    </div>
+                                                </div>
+                                                <span className="font-bold text-primary">{count}</span>
+                                            </div>
+                                        ));
+                                    })()}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Recent Highlight Desires */}
                         <div className="bg-surface border border-border rounded-2xl p-6 mb-8">
-                            <h3 className="font-bold text-primary mb-4">Thống kê công cụ được chọn</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {(() => {
-                                    const toolCount: Record<string, number> = {};
-                                    surveys.forEach((s: any) => s.tools?.forEach((t: string) => toolCount[t] = (toolCount[t] || 0) + 1));
-                                    return Object.entries(toolCount).sort((a, b) => b[1] - a[1]).map(([tool, count]) => (
-                                        <div key={tool} className="flex items-center gap-2 px-3 py-2 bg-page rounded-xl border border-border">
-                                            <span className="font-medium text-primary text-sm">{tool}</span>
-                                            <span className="px-2 py-0.5 bg-accent/10 text-accent rounded-lg text-xs font-bold">{count}</span>
+                            <h3 className="font-bold text-primary mb-6 flex items-center gap-2">
+                                <div className="w-1.5 h-6 bg-accent rounded-full" />
+                                "Bạn muốn gì ở Planex?" — Ý kiến từ người dùng
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {surveys.filter(s => s.desires && s.desires.length > 10).slice(-6).reverse().map((s, idx) => (
+                                    <div key={idx} className="relative p-5 rounded-2xl bg-page border border-border/60 hover:border-accent/30 transition-all group">
+                                        <div className="absolute top-4 right-4 text-accent/20 group-hover:text-accent/40 transition-colors">
+                                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017V14H17.017C15.9124 14 15.017 13.1046 15.017 12V10C15.017 8.89543 15.9124 8 17.017 8H21.017V21H14.017ZM3.01697 21L3.01697 18C3.01697 16.8954 3.9124 16 5.01697 16H8.01697V14H6.01697C4.9124 14 4.01697 13.1046 4.01697 12V10C4.01697 8.89543 4.9124 8 6.01697 8H10.017V21H3.01697Z" /></svg>
                                         </div>
-                                    ));
-                                })()}
+                                        <p className="text-sm text-primary leading-relaxed relative z-10 italic">
+                                            {s.desires}
+                                        </p>
+                                        <div className="mt-4 pt-4 border-t border-border/40 flex items-center justify-between">
+                                            <span className="text-[10px] font-bold text-muted uppercase tracking-wider">{s.user_email.split('@')[0]}</span>
+                                            <span className="text-[10px] text-muted italic">{s.job}</span>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
                         {/* Grouped by Job */}
-                        <h3 className="font-bold text-primary text-lg mb-4">Phân loại theo ngành nghề</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="font-bold text-primary text-lg">Phân loại theo ngành nghề</h3>
+                            <span className="text-xs text-muted">Nhấn để xem chi tiết từng nhóm</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
                             {Object.entries(getGroupedSurveys()).map(([key, list]: [string, any]) => (
-                                <div key={key} className="bg-surface border border-border rounded-2xl p-6 shadow-sm">
+                                <div key={key} className="bg-surface border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
                                     <h3 className="text-lg font-bold text-primary mb-4 flex items-center justify-between">
-                                        {key}
-                                        <span className="px-3 py-1 bg-accent/10 text-accent rounded-lg text-xs">{list.length} responses</span>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-accent" />
+                                            {key}
+                                        </div>
+                                        <span className="px-3 py-1 bg-accent/10 text-accent rounded-full text-[10px] font-bold uppercase tracking-tight">{list.length} phản hồi</span>
                                     </h3>
-                                    <div className="space-y-4 max-h-80 overflow-auto custom-scrollbar">
+                                    <div className="space-y-4 max-h-80 overflow-auto custom-scrollbar pr-2">
                                         {list.map((s: any) => (
-                                            <div key={s.id} className="p-4 rounded-xl bg-page border border-border/50">
+                                            <div key={s.id} className="p-4 rounded-xl bg-page border border-border/50 hover:bg-hover/50 transition-colors">
                                                 <div className="flex items-center gap-2 mb-2">
-                                                    <span className="text-xs font-bold text-secondary uppercase">{s.user_email}</span>
+                                                    <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{s.user_email}</span>
                                                 </div>
-                                                <div className="flex flex-wrap gap-1.5 mb-2">
+                                                <div className="flex flex-wrap gap-1 mb-3">
                                                     {s.tools.map((t: string) => (
-                                                        <span key={t} className="px-2 py-0.5 rounded-md bg-syntax-purple/10 text-syntax-purple text-[10px] font-medium border border-syntax-purple/20">
+                                                        <span key={t} className="px-1.5 py-0.5 rounded-md bg-syntax-purple/10 text-syntax-purple text-[9px] font-bold border border-syntax-purple/10">
                                                             {t}
                                                         </span>
                                                     ))}
                                                 </div>
-                                                <p className="text-sm text-primary leading-relaxed italic">"{s.desires}"</p>
+                                                <p className="text-xs text-primary leading-relaxed line-clamp-3">{s.desires}</p>
                                             </div>
                                         ))}
                                     </div>
