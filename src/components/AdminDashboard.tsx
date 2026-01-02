@@ -1,0 +1,438 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import PlanexLogo from './PlanexLogo';
+import {
+    PresentationChartBarIcon,
+    LockClosedIcon,
+    LockOpenIcon,
+    TrashIcon,
+    XMarkIcon,
+    ClockIcon,
+    UsersIcon,
+    ClipboardDocumentCheckIcon,
+    BugAntIcon,
+    ArrowLeftOnRectangleIcon,
+    MagnifyingGlassIcon
+} from '@heroicons/react/24/outline';
+import { toast } from 'react-hot-toast';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+
+interface AdminDashboardProps {
+    token: string;
+    onLogout: () => void;
+}
+
+export default function AdminDashboard({ token, onLogout }: AdminDashboardProps) {
+    const [activeTab, setActiveTab] = useState<'users' | 'surveys' | 'reports'>('users');
+    const [users, setUsers] = useState<any[]>([]);
+    const [surveys, setSurveys] = useState<any[]>([]);
+    const [reports, setReports] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedUser, setSelectedUser] = useState<any>(null);
+    const [showLockModal, setShowLockModal] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [lockDuration, setLockDuration] = useState<'hour' | 'day' | 'permanent'>('hour');
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const config = { headers: { 'X-Admin-Token': token } };
+            const [usersRes, surveysRes, reportsRes] = await Promise.all([
+                axios.get(`${API_URL}/api/feedback/admin/users`, config),
+                axios.get(`${API_URL}/api/feedback/admin/surveys`, config),
+                axios.get(`${API_URL}/api/feedback/admin/reports`, config)
+            ]);
+            setUsers(usersRes.data);
+            setSurveys(surveysRes.data);
+            setReports(reportsRes.data);
+        } catch (error) {
+            console.error('Failed to fetch admin data', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+
+        // Auto-refresh every 10 seconds for real-time updates
+        const interval = setInterval(() => {
+            fetchData();
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [token]);
+
+    const getGroupedSurveys = () => {
+        // Simple thematic grouping logic
+        const groups: { [key: string]: any[] } = {};
+        surveys.forEach(s => {
+            const key = s.job || 'Unspecified';
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(s);
+        });
+        return groups;
+    };
+
+    const handleLockUser = async () => {
+        if (!selectedUser) return;
+        try {
+            await axios.post(`${API_URL}/api/feedback/admin/users/${selectedUser.id}/lock`,
+                { duration: lockDuration },
+                { headers: { 'X-Admin-Token': token } }
+            );
+            toast.success('Đã khoá tài khoản thành công');
+            setShowLockModal(false);
+            fetchData();
+        } catch (error) {
+            toast.error('Failed to lock user');
+        }
+    };
+
+    const handleUnlockUser = async (user: any) => {
+        try {
+            await axios.post(`${API_URL}/api/feedback/admin/users/${user.id}/unlock`,
+                {},
+                { headers: { 'X-Admin-Token': token } }
+            );
+            toast.success('Đã mở khoá tài khoản');
+            fetchData();
+        } catch (error) {
+            toast.error('Failed to unlock user');
+        }
+    };
+
+    const handleDeleteUser = async () => {
+        if (!selectedUser) return;
+        try {
+            await axios.delete(`${API_URL}/api/feedback/admin/users/${selectedUser.id}`,
+                { headers: { 'X-Admin-Token': token } }
+            );
+            toast.success('Đã xoá tài khoản vĩnh viễn');
+            setShowDeleteConfirm(false);
+            fetchData();
+        } catch (error) {
+            toast.error('Failed to delete user');
+        }
+    };
+
+    return (
+        <div className="flex flex-col h-screen bg-page">
+            {/* Header */}
+            <header className="h-16 bg-surface border-b border-border flex items-center justify-between px-6 shrink-0">
+                <div className="flex items-center gap-4">
+                    <PlanexLogo size="md" />
+                    <div className="h-4 w-px bg-border" />
+                    <nav className="flex items-center gap-1">
+                        {[
+                            { id: 'users', label: 'Người dùng', icon: UsersIcon },
+                            { id: 'surveys', label: 'Khảo sát', icon: ClipboardDocumentCheckIcon },
+                            { id: 'reports', label: 'Báo cáo lỗi', icon: BugAntIcon }
+                        ].map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as any)}
+                                className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-accent text-page' : 'text-secondary hover:text-primary hover:bg-hover'
+                                    }`}
+                            >
+                                <tab.icon className="w-4 h-4" />
+                                {tab.label}
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={fetchData}
+                        className="p-2 text-secondary hover:text-primary transition-colors cursor-pointer"
+                        title="Tải lại dữ liệu"
+                    >
+                        <svg className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </button>
+                    <button
+                        onClick={onLogout}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-syntax-red/10 text-syntax-red text-sm font-bold hover:bg-syntax-red/20 transition-all cursor-pointer"
+                    >
+                        <ArrowLeftOnRectangleIcon className="w-4 h-4" />
+                        Thoát
+                    </button>
+                </div>
+            </header>
+
+            {/* Main Content */}
+            <main className="flex-1 overflow-auto p-8">
+                {activeTab === 'users' && (
+                    <div className="max-w-6xl mx-auto animate-fade-in">
+                        <div className="flex items-center justify-between mb-8">
+                            <h2 className="text-2xl font-bold text-primary">Quản lý người dùng ({users.length})</h2>
+                            <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-surface border border-border w-80">
+                                <MagnifyingGlassIcon className="w-5 h-5 text-secondary" />
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm user..."
+                                    value={searchQuery}
+                                    onChange={e => setSearchQuery(e.target.value)}
+                                    className="bg-transparent border-none outline-none text-sm text-primary w-full"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
+                            <table className="w-full text-left">
+                                <thead className="bg-page/50 border-b border-border">
+                                    <tr>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">User</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Email</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Ngày tham gia</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Trạng thái</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider text-right">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-border">
+                                    {users.filter(u => u.username.includes(searchQuery) || u.email.includes(searchQuery)).map(u => (
+                                        <tr key={u.id} className="hover:bg-page/30 transition-colors">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-xs font-bold text-page">
+                                                        {u.username[0].toUpperCase()}
+                                                    </div>
+                                                    <span className="font-medium text-primary">{u.username}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-secondary">{u.email}</td>
+                                            <td className="px-6 py-4 text-sm text-secondary">{new Date(u.created_at).toLocaleDateString()}</td>
+                                            <td className="px-6 py-4">
+                                                {u.is_locked ? (
+                                                    <div className="flex flex-col">
+                                                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-syntax-red/10 text-syntax-red border border-syntax-red/20 inline-block w-fit">
+                                                            Locked
+                                                        </span>
+                                                        <span className="text-[9px] text-muted mt-1 whitespace-nowrap">
+                                                            Đến: {new Date(u.locked_until).toLocaleString()}
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-syntax-green/10 text-syntax-green border border-syntax-green/20">
+                                                        Active
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4 text-right">
+                                                <div className="flex justify-end gap-2">
+                                                    {u.is_locked ? (
+                                                        <button
+                                                            onClick={() => handleUnlockUser(u)}
+                                                            className="p-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-all cursor-pointer"
+                                                            title="Mở khoá"
+                                                        >
+                                                            <LockOpenIcon className="w-4 h-4" />
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => { setSelectedUser(u); setShowLockModal(true); }}
+                                                            className="p-1.5 rounded-lg bg-syntax-red/10 text-syntax-red hover:bg-syntax-red/20 transition-all cursor-pointer"
+                                                            title="Khoá tài khoản"
+                                                        >
+                                                            <LockClosedIcon className="w-4 h-4" />
+                                                        </button>
+                                                    )}
+                                                    <button
+                                                        onClick={() => { setSelectedUser(u); setShowDeleteConfirm(true); }}
+                                                        className="p-1.5 rounded-lg bg-page hover:bg-syntax-red/10 text-muted hover:text-syntax-red transition-all cursor-pointer border border-border"
+                                                        title="Xoá vĩnh viễn"
+                                                    >
+                                                        <TrashIcon className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'surveys' && (
+                    <div className="max-w-6xl mx-auto animate-fade-in">
+                        <div className="flex items-center gap-4 mb-8">
+                            <PresentationChartBarIcon className="w-8 h-8 text-accent" />
+                            <h2 className="text-2xl font-bold text-primary">Phân tích khảo sát người dùng</h2>
+                        </div>
+
+                        {/* Overview Stats */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                            <div className="bg-surface border border-border rounded-2xl p-5">
+                                <p className="text-xs text-muted uppercase mb-1">Tổng khảo sát</p>
+                                <p className="text-3xl font-bold text-primary">{surveys.length}</p>
+                            </div>
+                            <div className="bg-surface border border-border rounded-2xl p-5">
+                                <p className="text-xs text-muted uppercase mb-1">Số ngành nghề</p>
+                                <p className="text-3xl font-bold text-accent">{Object.keys(getGroupedSurveys()).length}</p>
+                            </div>
+                            <div className="bg-surface border border-border rounded-2xl p-5">
+                                <p className="text-xs text-muted uppercase mb-1">Công cụ phổ biến</p>
+                                <p className="text-lg font-bold text-syntax-green">
+                                    {(() => {
+                                        const toolCount: Record<string, number> = {};
+                                        surveys.forEach((s: any) => s.tools?.forEach((t: string) => toolCount[t] = (toolCount[t] || 0) + 1));
+                                        const sorted = Object.entries(toolCount).sort((a, b) => b[1] - a[1]);
+                                        return sorted[0]?.[0] || 'N/A';
+                                    })()}
+                                </p>
+                            </div>
+                            <div className="bg-surface border border-border rounded-2xl p-5">
+                                <p className="text-xs text-muted uppercase mb-1">Avg. Tools/User</p>
+                                <p className="text-3xl font-bold text-syntax-purple">
+                                    {surveys.length > 0 ? (surveys.reduce((sum: number, s: any) => sum + (s.tools?.length || 0), 0) / surveys.length).toFixed(1) : 0}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Tools Breakdown */}
+                        <div className="bg-surface border border-border rounded-2xl p-6 mb-8">
+                            <h3 className="font-bold text-primary mb-4">Thống kê công cụ được chọn</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {(() => {
+                                    const toolCount: Record<string, number> = {};
+                                    surveys.forEach((s: any) => s.tools?.forEach((t: string) => toolCount[t] = (toolCount[t] || 0) + 1));
+                                    return Object.entries(toolCount).sort((a, b) => b[1] - a[1]).map(([tool, count]) => (
+                                        <div key={tool} className="flex items-center gap-2 px-3 py-2 bg-page rounded-xl border border-border">
+                                            <span className="font-medium text-primary text-sm">{tool}</span>
+                                            <span className="px-2 py-0.5 bg-accent/10 text-accent rounded-lg text-xs font-bold">{count}</span>
+                                        </div>
+                                    ));
+                                })()}
+                            </div>
+                        </div>
+
+                        {/* Grouped by Job */}
+                        <h3 className="font-bold text-primary text-lg mb-4">Phân loại theo ngành nghề</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {Object.entries(getGroupedSurveys()).map(([key, list]: [string, any]) => (
+                                <div key={key} className="bg-surface border border-border rounded-2xl p-6 shadow-sm">
+                                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center justify-between">
+                                        {key}
+                                        <span className="px-3 py-1 bg-accent/10 text-accent rounded-lg text-xs">{list.length} responses</span>
+                                    </h3>
+                                    <div className="space-y-4 max-h-80 overflow-auto custom-scrollbar">
+                                        {list.map((s: any) => (
+                                            <div key={s.id} className="p-4 rounded-xl bg-page border border-border/50">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <span className="text-xs font-bold text-secondary uppercase">{s.user_email}</span>
+                                                </div>
+                                                <div className="flex flex-wrap gap-1.5 mb-2">
+                                                    {s.tools.map((t: string) => (
+                                                        <span key={t} className="px-2 py-0.5 rounded-md bg-syntax-purple/10 text-syntax-purple text-[10px] font-medium border border-syntax-purple/20">
+                                                            {t}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <p className="text-sm text-primary leading-relaxed italic">"{s.desires}"</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'reports' && (
+                    <div className="max-w-6xl mx-auto animate-fade-in">
+                        <div className="flex items-center justify-between mb-8">
+                            <h2 className="text-2xl font-bold text-primary">Báo cáo lỗi ({reports.length})</h2>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-4">
+                            {reports.map(r => (
+                                <div key={r.id} className="bg-surface border border-border rounded-2xl p-6 shadow-sm flex items-start gap-4 hover:border-syntax-red/30 transition-all">
+                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${r.status === 'open' ? 'bg-syntax-red/10 animate-pulse' : 'bg-syntax-green/10'
+                                        }`}>
+                                        <BugAntIcon className={`w-6 h-6 ${r.status === 'open' ? 'text-syntax-red' : 'text-syntax-green'}`} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h3 className="font-bold text-primary">{r.title}</h3>
+                                            <span className="text-xs text-muted">{new Date(r.created_at).toLocaleString()}</span>
+                                        </div>
+                                        <p className="text-sm text-secondary leading-relaxed mb-4">{r.description}</p>
+                                        <div className="flex items-center gap-4">
+                                            <span className="text-xs font-medium text-muted">Bởi: <span className="text-primary">{r.user_email}</span></span>
+                                            <div className="h-3 w-px bg-border" />
+                                            <span className={`text-[10px] font-bold uppercase ${r.status === 'open' ? 'text-syntax-red' : 'text-syntax-green'
+                                                }`}>{r.status}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </main>
+
+            {/* Lock Modal */}
+            {showLockModal && (
+                <div className="fixed inset-0 bg-page/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="w-full max-w-sm bg-surface border border-border rounded-2xl p-6 shadow-2xl animate-fade-in">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-lg font-bold text-primary">Khoá tài khoản</h2>
+                            <button onClick={() => setShowLockModal(false)} className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-hover cursor-pointer">
+                                <XMarkIcon className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <p className="text-sm text-secondary mb-6">
+                            Chọn thời gian khoá cho tài khoản <span className="font-bold text-primary">@{selectedUser?.username}</span>:
+                        </p>
+                        <div className="space-y-2 mb-8">
+                            {[
+                                { id: 'hour', label: '1 giờ', icon: ClockIcon },
+                                { id: 'day', label: '1 ngày', icon: ClockIcon },
+                                { id: 'permanent', label: 'Vĩnh viễn', icon: LockClosedIcon }
+                            ].map(opt => (
+                                <button
+                                    key={opt.id}
+                                    onClick={() => setLockDuration(opt.id as any)}
+                                    className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${lockDuration === opt.id ? 'bg-accent/10 border-accent text-accent' : 'bg-page border-border text-primary hover:border-accent/30'}`}
+                                >
+                                    <opt.icon className="w-5 h-5" />
+                                    <span className="font-medium">{opt.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex gap-3">
+                            <button onClick={() => setShowLockModal(false)} className="flex-1 py-2.5 rounded-xl border border-border text-secondary font-bold hover:bg-hover transition-all cursor-pointer">Huỷ</button>
+                            <button onClick={handleLockUser} className="flex-1 py-2.5 rounded-xl bg-syntax-red text-page font-bold hover:opacity-90 transition-all cursor-pointer text-sm">Xác nhận khoá</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 bg-page/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="w-full max-w-sm bg-surface border border-border rounded-2xl p-6 shadow-2xl animate-fade-in text-center">
+                        <div className="w-16 h-16 rounded-full bg-syntax-red/10 flex items-center justify-center mx-auto mb-4">
+                            <TrashIcon className="w-8 h-8 text-syntax-red" />
+                        </div>
+                        <h2 className="text-xl font-bold text-primary mb-2">Xoá vĩnh viễn?</h2>
+                        <p className="text-sm text-secondary mb-8">
+                            Bạn có chắc muốn xoá tài khoản <span className="font-bold text-primary">@{selectedUser?.username}</span>? Hành động này không thể hoàn tác và toàn bộ dữ liệu sẽ bị mất.
+                        </p>
+                        <div className="flex gap-3">
+                            <button onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-2.5 rounded-xl border border-border text-secondary font-bold hover:bg-hover transition-all cursor-pointer">Huỷ</button>
+                            <button onClick={handleDeleteUser} className="flex-1 py-2.5 rounded-xl bg-syntax-red text-page font-bold hover:opacity-90 transition-all cursor-pointer">Xoá ngay</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

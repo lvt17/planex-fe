@@ -1,0 +1,251 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useAuth } from '@/hooks/useAuth';
+import PlanexLogo from '@/components/PlanexLogo';
+import { toast } from 'react-hot-toast';
+
+import { tokenStorage } from '@/utils/tokenStorage';
+
+declare global {
+    interface Window {
+        google: any;
+    }
+}
+
+export default function LoginPage() {
+    const router = useRouter();
+    const { user, login, googleLogin, loading } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+
+    // Load remembered email on mount
+    useEffect(() => {
+        const remembered = tokenStorage.getRememberedEmail();
+        if (remembered) {
+            setEmail(remembered);
+            setRememberMe(true);
+        }
+    }, []);
+
+    // Redirect if already logged in
+    useEffect(() => {
+        if (user) {
+            router.push('/dashboard');
+        }
+    }, [user, router]);
+
+    // Initialize Google Sign-In
+    useEffect(() => {
+        const initializeGoogleSignIn = () => {
+            if (window.google) {
+                window.google.accounts.id.initialize({
+                    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+                    callback: handleGoogleResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true,
+                });
+
+                const buttonDiv = document.getElementById('google-button');
+                if (buttonDiv) {
+                    window.google.accounts.id.renderButton(buttonDiv, {
+                        type: 'standard',
+                        theme: 'outline',
+                        size: 'large',
+                        text: 'signin_with',
+                        shape: 'rectangular',
+                        logo_alignment: 'left',
+                        width: '382', // Match common input width
+                    });
+                }
+            }
+        };
+
+        const scriptId = 'google-gsi-client';
+        if (!document.getElementById(scriptId)) {
+            const script = document.createElement('script');
+            script.id = scriptId;
+            script.src = 'https://accounts.google.com/gsi/client';
+            script.async = true;
+            script.defer = true;
+            script.onload = initializeGoogleSignIn;
+            document.head.appendChild(script);
+        } else {
+            initializeGoogleSignIn();
+        }
+    }, []);
+
+    const handleGoogleResponse = async (response: any) => {
+        console.log('Google response received:', response);
+        try {
+            await googleLogin(response.credential);
+            toast.success('Đăng nhập Google thành công!');
+            router.push('/dashboard');
+        } catch (error) {
+            console.error('Google login error:', error);
+            toast.error('Lỗi xác thực Google với hệ thống');
+        }
+    };
+
+    const handleGoogleButtonClick = () => {
+        if (window.google) {
+            window.google.accounts.id.prompt();
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email || !password) {
+            toast.error('Vui lòng nhập email và mật khẩu');
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            await login(email, password);
+
+            // Save or clear remembered email
+            if (rememberMe) {
+                tokenStorage.setRememberedEmail(email);
+            } else {
+                tokenStorage.clearRememberedEmail();
+            }
+
+            toast.success('Đăng nhập thành công!');
+            router.push('/dashboard');
+        } catch (error: any) {
+            toast.error(error.response?.data?.error || 'Lỗi đăng nhập');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-page">
+                <div className="w-8 h-8 border-2 rounded-full animate-spin border-accent border-t-transparent" />
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen flex bg-page">
+            {/* Left side - Branding */}
+            <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-accent/20 to-syntax-purple/20 items-center justify-center p-12">
+                <div className="max-w-md text-center">
+                    <PlanexLogo size="lg" showText className="justify-center mb-8" />
+                    <h1 className="text-3xl font-bold text-primary mb-4">
+                        Quản lý công việc thông minh
+                    </h1>
+                    <p className="text-secondary text-lg">
+                        Tổ chức tasks, theo dõi tiến độ, và tăng năng suất làm việc cùng Planex.
+                    </p>
+                </div>
+            </div>
+
+            {/* Right side - Login form */}
+            <div className="flex-1 flex items-center justify-center p-8">
+                <div className="w-full max-w-md">
+                    <div className="lg:hidden flex justify-center mb-8">
+                        <PlanexLogo size="md" showText />
+                    </div>
+
+                    <div className="bg-surface border border-border rounded-2xl p-8 shadow-lg">
+                        <h2 className="text-2xl font-bold text-primary text-center mb-2">
+                            Đăng nhập
+                        </h2>
+                        <p className="text-secondary text-center mb-6">
+                            Chào mừng trở lại!
+                        </p>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-secondary mb-1.5">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-xl bg-page border border-border text-primary focus:border-accent focus:outline-none transition-colors"
+                                    placeholder="you@example.com"
+                                    autoComplete="email"
+                                />
+                            </div>
+
+                            <div>
+                                <div className="flex items-center justify-between mb-1.5">
+                                    <label className="block text-sm font-medium text-secondary">
+                                        Mật khẩu
+                                    </label>
+                                    <Link href="/forgot-password" className="text-sm text-accent hover:underline">
+                                        Quên mật khẩu?
+                                    </Link>
+                                </div>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-xl bg-page border border-border text-primary focus:border-accent focus:outline-none transition-colors"
+                                    placeholder="••••••••"
+                                    autoComplete="current-password"
+                                />
+                            </div>
+
+                            <div className="flex items-center">
+                                <input
+                                    id="remember-me"
+                                    type="checkbox"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    className="h-4 w-4 text-accent border-border rounded focus:ring-accent accent-accent cursor-pointer"
+                                />
+                                <label htmlFor="remember-me" className="ml-2 block text-sm text-secondary cursor-pointer">
+                                    Ghi nhớ đăng nhập
+                                </label>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={submitting}
+                                className="w-full py-3 rounded-xl bg-accent text-page font-bold hover:opacity-90 transition-all disabled:opacity-50 cursor-pointer"
+                            >
+                                {submitting ? (
+                                    <div className="w-5 h-5 border-2 rounded-full animate-spin border-page border-t-transparent mx-auto" />
+                                ) : (
+                                    'Đăng nhập'
+                                )}
+                            </button>
+                        </form>
+
+                        <div className="relative my-6">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-border"></div>
+                            </div>
+                            <div className="relative flex justify-center text-sm">
+                                <span className="px-4 bg-surface text-muted">hoặc tiếp tục với</span>
+                            </div>
+                        </div>
+
+                        <div className="p-[1px] rounded-xl bg-gradient-to-r from-border via-accent/30 to-border hover:from-accent/50 hover:via-border hover:to-accent/50 transition-all duration-500 shadow-sm">
+                            <div className="bg-surface rounded-xl overflow-hidden flex justify-center">
+                                <div id="google-button" className="w-full flex justify-center py-0.5"></div>
+                            </div>
+                        </div>
+
+                        <p className="text-center text-secondary mt-6">
+                            Chưa có tài khoản?{' '}
+                            <Link href="/register" className="text-accent font-semibold hover:underline">
+                                Đăng ký
+                            </Link>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
