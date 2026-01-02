@@ -175,15 +175,16 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
                 )}
             </button>
 
-            {/* Dropdown Panel - Fixed positioning relative to bell */}
+            {/* Dropdown Panel - Responsive positioning */}
             {isOpen && (
                 <>
                     <div className="fixed inset-0 z-[9998]" onClick={() => setIsOpen(false)} />
                     <div
-                        className="fixed w-[380px] max-h-[480px] bg-surface border border-border rounded-2xl shadow-2xl z-[9999] overflow-hidden animate-fade-in"
+                        className="fixed w-[calc(100vw-2rem)] sm:w-[380px] max-h-[480px] bg-surface border border-border rounded-2xl shadow-2xl z-[9999] overflow-hidden animate-fade-in"
                         style={{
                             top: `${popupPosition.top}px`,
-                            right: `${popupPosition.right}px`
+                            right: window.innerWidth < 640 ? '1rem' : `${popupPosition.right}px`,
+                            left: window.innerWidth < 640 ? '1rem' : 'auto'
                         }}
                     >
                         {/* Header */}
