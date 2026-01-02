@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
 import {
     PlusIcon,
     TrashIcon,
@@ -14,8 +13,7 @@ import {
     ShieldCheckIcon,
     ComputerDesktopIcon,
 } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
+import api from '@/utils/api';
 
 interface Account {
     id: number;
@@ -78,7 +76,7 @@ const PlatformLogo = ({ platform, size = 24 }: { platform: string; size?: number
         zalo: (
             <svg viewBox="0 0 48 48" width={size} height={size}>
                 <path fill="#2196F3" d="M24,4C12.954,4,4,12.954,4,24c0,11.046,8.954,20,20,20c11.046,0,20-8.954,20-20C44,12.954,35.046,4,24,4z" />
-                <path fill="#FFF" d="M32.5,16h-17c-0.828,0-1.5,0.671-1.5,1.5v1c0,0.829,0.672,1.5,1.5,1.5h10.394L14.5,31.95 c-0.415,0.415-0.54,1.039-0.317,1.583C14.406,34.077,14.935,34.5,15.5,34.5h17c0.828,0,1.5-0.671,1.5-1.5v-1 c0-0.829-0.672-1.5-1.5-1.5H21.895L33.5,18.55c0.415-0.415,0.54-1.039,0.317-1.583C33.594,16.423,33.065,16,32.5,16z" />
+                <path fill="#FFF" d="M32.5,16h-17c-0.828,0-1.5,0.671-1.5,1.5v1c0,0.829,0.672,1.5,1.5,1.5h10.394L14.5,31.95 c-0.415,0.415-0.54,1.039-0.317,1.583C14.406,34.077,14.935,34.5,15.5,34.5h17c0.828,0,1.5-0.671,1.5-1.5v1c0-0.829-0.672-1.5-1.5-1.5H21.895L33.5,18.55c0.415-0.415,0.54-1.039,0.317-1.583C33.594,16.423,33.065,16,32.5,16z" />
             </svg>
         ),
         whatsapp: (
@@ -148,17 +146,10 @@ export default function AccountPage({ onBack }: AccountPageProps) {
         noted: ''
     });
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const fetchAccounts = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/api/accounts`, {
-                headers: getAuthHeader()
-            });
+            const response = await api.get('/api/accounts');
             setAccounts(response.data);
         } catch (error) {
             console.error('Failed to fetch accounts:', error);
@@ -181,15 +172,13 @@ export default function AccountPage({ onBack }: AccountPageProps) {
         }
 
         try {
-            await axios.post(`${API_URL}/api/accounts`, {
+            await api.post('/api/accounts', {
                 platform,
                 username: newAccount.username,
                 password: newAccount.password,
                 content: newAccount.content,
                 passkey: newAccount.passkey,
                 noted: newAccount.noted
-            }, {
-                headers: getAuthHeader()
             });
             toast.success('Đã thêm tài khoản mới!');
             setShowAddModal(false);
@@ -212,10 +201,7 @@ export default function AccountPage({ onBack }: AccountPageProps) {
         if (!selectedAccount || !passkey) return;
 
         try {
-            const response = await axios.post(`${API_URL}/api/accounts/${selectedAccount.id}/decrypt`,
-                { passkey },
-                { headers: getAuthHeader() }
-            );
+            const response = await api.post(`/api/accounts/${selectedAccount.id}/decrypt`, { passkey });
             setDecryptedData({
                 password: response.data.password,
                 content: response.data.content
@@ -229,9 +215,7 @@ export default function AccountPage({ onBack }: AccountPageProps) {
     const deleteAccount = async (id: number) => {
         if (!confirm('Bạn có chắc muốn xóa tài khoản này?')) return;
         try {
-            await axios.delete(`${API_URL}/api/accounts/${id}`, {
-                headers: getAuthHeader()
-            });
+            await api.delete(`/api/accounts/${id}`);
             toast.success('Đã xóa tài khoản');
             fetchAccounts();
         } catch (error) {

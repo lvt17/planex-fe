@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
+import api from '@/utils/api';
 import {
     BriefcaseIcon,
     WrenchScrewdriverIcon,
@@ -11,8 +11,6 @@ import {
     ChevronLeftIcon,
     CheckIcon
 } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
 const JOB_OPTIONS = [
     'Developer / Software Engineer',
@@ -57,11 +55,6 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
         customDesire: ''
     });
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const toggleTool = (tool: string) => {
         if (formData.tools.includes(tool)) {
             setFormData({ ...formData, tools: formData.tools.filter(t => t !== tool) });
@@ -88,11 +81,11 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
             const finalDesires = [...formData.desires];
             if (formData.customDesire) finalDesires.push(formData.customDesire);
 
-            await axios.post(`${API_URL}/api/feedback/survey`, {
+            await api.post('/api/feedback/survey', {
                 job: finalJob,
                 tools: finalTools,
                 desires: finalDesires.join('; ')
-            }, { headers: getAuthHeader() });
+            });
 
             toast.success('Cảm ơn bạn đã hoàn thành khảo sát!');
             onClose();
@@ -137,8 +130,8 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
                                         key={job}
                                         onClick={() => setFormData({ ...formData, job })}
                                         className={`flex items-center justify-between px-6 py-4 rounded-2xl border transition-all ${formData.job === job
-                                                ? 'bg-accent/10 border-accent text-accent'
-                                                : 'bg-page border-border text-primary hover:border-accent/50'
+                                            ? 'bg-accent/10 border-accent text-accent'
+                                            : 'bg-page border-border text-primary hover:border-accent/50'
                                             }`}
                                     >
                                         <span className="font-medium">{job}</span>
@@ -148,8 +141,8 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
                                 <button
                                     onClick={() => setFormData({ ...formData, job: 'Other' })}
                                     className={`flex items-center justify-between px-6 py-4 rounded-2xl border transition-all ${formData.job === 'Other'
-                                            ? 'bg-accent/10 border-accent text-accent'
-                                            : 'bg-page border-border text-primary hover:border-accent/50'
+                                        ? 'bg-accent/10 border-accent text-accent'
+                                        : 'bg-page border-border text-primary hover:border-accent/50'
                                         }`}
                                 >
                                     <span className="font-medium">Khác...</span>
@@ -185,8 +178,8 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
                                         key={tool}
                                         onClick={() => toggleTool(tool)}
                                         className={`flex items-center justify-between px-4 py-3 rounded-2xl border transition-all ${formData.tools.includes(tool)
-                                                ? 'bg-accent/10 border-accent text-accent'
-                                                : 'bg-page border-border text-primary hover:border-accent/50'
+                                            ? 'bg-accent/10 border-accent text-accent'
+                                            : 'bg-page border-border text-primary hover:border-accent/50'
                                             }`}
                                     >
                                         <span className="text-sm font-medium">{tool}</span>
@@ -220,8 +213,8 @@ export default function SurveyModal({ onClose }: SurveyModalProps) {
                                         key={desire}
                                         onClick={() => toggleDesire(desire)}
                                         className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-all text-left ${formData.desires.includes(desire)
-                                                ? 'bg-accent/10 border-accent text-accent'
-                                                : 'bg-page border-border text-primary hover:border-accent/50'
+                                            ? 'bg-accent/10 border-accent text-accent'
+                                            : 'bg-page border-border text-primary hover:border-accent/50'
                                             }`}
                                     >
                                         <span className="text-sm font-medium">{desire}</span>

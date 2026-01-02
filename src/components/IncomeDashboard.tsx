@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { ChartBarIcon, CurrencyDollarIcon, CheckCircleIcon, ShoppingBagIcon, BriefcaseIcon } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
+import api from '@/utils/api';
 
 interface IncomeStats {
     total_income: number;
@@ -43,17 +41,10 @@ export default function IncomeDashboard({ stats, loading, onRangeChange }: Incom
     const [salesStats, setSalesStats] = useState<SalesStats | null>(null);
     const [salesLoading, setSalesLoading] = useState(false);
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const fetchSalesStats = useCallback(async (period: string) => {
         setSalesLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/api/sales/stats?period=${period}`, {
-                headers: getAuthHeader()
-            });
+            const response = await api.get(`/api/sales/stats?period=${period}`);
             setSalesStats(response.data);
         } catch (error) {
             console.error('Failed to fetch sales stats:', error);
@@ -110,8 +101,8 @@ export default function IncomeDashboard({ stats, loading, onRangeChange }: Incom
                             key={tab.id}
                             onClick={() => setActiveSource(tab.id as any)}
                             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${activeSource === tab.id
-                                    ? 'bg-accent text-page shadow-sm'
-                                    : 'text-secondary hover:text-primary hover:bg-hover'
+                                ? 'bg-accent text-page shadow-sm'
+                                : 'text-secondary hover:text-primary hover:bg-hover'
                                 }`}
                         >
                             <tab.icon className="w-4 h-4" />
@@ -127,8 +118,8 @@ export default function IncomeDashboard({ stats, loading, onRangeChange }: Incom
                             key={p.id}
                             onClick={() => handlePeriodChange(p.id)}
                             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${activePeriod === p.id
-                                    ? 'bg-accent text-page'
-                                    : 'bg-surface border border-border text-secondary hover:text-primary'
+                                ? 'bg-accent text-page'
+                                : 'bg-surface border border-border text-secondary hover:text-primary'
                                 }`}
                         >
                             {p.label}

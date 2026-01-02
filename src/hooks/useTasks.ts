@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { Task } from '@/types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
+import api from '@/utils/api';
 
 interface TasksResponse {
     tasks: Task[];
@@ -26,11 +24,6 @@ export function useTasks() {
     const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
     const [filters, setFilters] = useState<TaskFilters>({ page: 1, per_page: 20 });
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const fetchTasks = useCallback(async (customFilters?: TaskFilters) => {
         try {
             setLoading(true);
@@ -42,9 +35,7 @@ export function useTasks() {
             if (activeFilters.page) params.append('page', activeFilters.page.toString());
             if (activeFilters.per_page) params.append('per_page', activeFilters.per_page.toString());
 
-            const response = await axios.get<TasksResponse>(`${API_URL}/api/tasks?${params}`, {
-                headers: getAuthHeader()
-            });
+            const response = await api.get<TasksResponse>(`/api/tasks?${params}`);
 
             setTasks(response.data.tasks || []);
             setPagination({
@@ -62,7 +53,7 @@ export function useTasks() {
 
     useEffect(() => {
         fetchTasks();
-    }, []);
+    }, [fetchTasks]);
 
     const applyFilters = (newFilters: TaskFilters) => {
         const updatedFilters = { ...filters, ...newFilters, page: 1 };
@@ -77,27 +68,21 @@ export function useTasks() {
     };
 
     const createTask = async (taskData: Partial<Task>) => {
-        const response = await axios.post(`${API_URL}/api/tasks`, taskData, {
-            headers: getAuthHeader()
-        });
+        const response = await api.post('/api/tasks', taskData);
         const newTask = response.data;
         setTasks(prev => [newTask, ...prev]);
         return newTask;
     };
 
     const updateTask = async (id: number, taskData: Partial<Task>) => {
-        const response = await axios.put(`${API_URL}/api/tasks/${id}`, taskData, {
-            headers: getAuthHeader()
-        });
+        const response = await api.put(`/api/tasks/${id}`, taskData);
         const updatedTask = response.data;
         setTasks(prev => prev.map(t => t.id === id ? updatedTask : t));
         return updatedTask;
     };
 
     const deleteTask = async (id: number) => {
-        await axios.delete(`${API_URL}/api/tasks/${id}`, {
-            headers: getAuthHeader()
-        });
+        await api.delete(`/api/tasks/${id}`);
         setTasks(prev => prev.filter(t => t.id !== id));
     };
 

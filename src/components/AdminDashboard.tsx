@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import PlanexLogo from './PlanexLogo';
 import {
     PresentationChartBarIcon,
@@ -17,8 +16,7 @@ import {
     MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+import api from '@/utils/api';
 
 interface AdminDashboardProps {
     token: string;
@@ -42,9 +40,9 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
         try {
             const config = { headers: { 'X-Admin-Token': token } };
             const [usersRes, surveysRes, reportsRes] = await Promise.all([
-                axios.get(`${API_URL}/api/feedback/admin/users`, config),
-                axios.get(`${API_URL}/api/feedback/admin/surveys`, config),
-                axios.get(`${API_URL}/api/feedback/admin/reports`, config)
+                api.get('/api/feedback/admin/users', config),
+                api.get('/api/feedback/admin/surveys', config),
+                api.get('/api/feedback/admin/reports', config)
             ]);
             setUsers(usersRes.data);
             setSurveys(surveysRes.data);
@@ -81,7 +79,7 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
     const handleLockUser = async () => {
         if (!selectedUser) return;
         try {
-            await axios.post(`${API_URL}/api/feedback/admin/users/${selectedUser.id}/lock`,
+            await api.post(`/api/feedback/admin/users/${selectedUser.id}/lock`,
                 { duration: lockDuration },
                 { headers: { 'X-Admin-Token': token } }
             );
@@ -95,7 +93,7 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
 
     const handleUnlockUser = async (user: any) => {
         try {
-            await axios.post(`${API_URL}/api/feedback/admin/users/${user.id}/unlock`,
+            await api.post(`/api/feedback/admin/users/${user.id}/unlock`,
                 {},
                 { headers: { 'X-Admin-Token': token } }
             );
@@ -109,7 +107,7 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
     const handleDeleteUser = async () => {
         if (!selectedUser) return;
         try {
-            await axios.delete(`${API_URL}/api/feedback/admin/users/${selectedUser.id}`,
+            await api.delete(`/api/feedback/admin/users/${selectedUser.id}`,
                 { headers: { 'X-Admin-Token': token } }
             );
             toast.success('Đã xoá tài khoản vĩnh viễn');

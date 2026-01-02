@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import api from '@/utils/api';
 import {
     ShoppingBagIcon,
     TagIcon,
@@ -16,8 +16,6 @@ import {
     PhotoIcon,
     MinusIcon,
 } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
 
 interface Category {
     id: number;
@@ -101,9 +99,8 @@ export default function SalesPage({ onBack }: SalesPageProps) {
             const formData = new FormData();
             formData.append('file', file);
 
-            const response = await axios.post(`${API_URL}/api/upload/image`, formData, {
+            const response = await api.post('/api/upload/image', formData, {
                 headers: {
-                    ...getAuthHeader(),
                     'Content-Type': 'multipart/form-data'
                 }
             });
@@ -117,14 +114,9 @@ export default function SalesPage({ onBack }: SalesPageProps) {
         }
     };
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const fetchCategories = useCallback(async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/categories`, { headers: getAuthHeader() });
+            const response = await api.get('/api/categories');
             setCategories(response.data);
         } catch (error) {
             console.error('Failed to fetch categories:', error);
@@ -133,13 +125,11 @@ export default function SalesPage({ onBack }: SalesPageProps) {
 
     const fetchProducts = useCallback(async () => {
         try {
-            let url = `${API_URL}/api/products`;
             const params = new URLSearchParams();
             if (filterCategory) params.append('category_id', filterCategory.toString());
             if (searchQuery) params.append('search', searchQuery);
-            if (params.toString()) url += `?${params.toString()}`;
 
-            const response = await axios.get(url, { headers: getAuthHeader() });
+            const response = await api.get(`/api/products${params.toString() ? `?${params.toString()}` : ''}`);
             setProducts(response.data);
         } catch (error) {
             console.error('Failed to fetch products:', error);
@@ -158,10 +148,10 @@ export default function SalesPage({ onBack }: SalesPageProps) {
         }
         try {
             if (editingCategory) {
-                await axios.put(`${API_URL}/api/categories/${editingCategory.id}`, categoryForm, { headers: getAuthHeader() });
+                await api.put(`/api/categories/${editingCategory.id}`, categoryForm);
                 toast.success('Đã cập nhật danh mục');
             } else {
-                await axios.post(`${API_URL}/api/categories`, categoryForm, { headers: getAuthHeader() });
+                await api.post('/api/categories', categoryForm);
                 toast.success('Đã thêm danh mục mới');
             }
             setShowCategoryModal(false);
@@ -176,7 +166,7 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     const handleDeleteCategory = async (id: number) => {
         if (!confirm('Xóa danh mục này sẽ xóa tất cả sản phẩm bên trong. Tiếp tục?')) return;
         try {
-            await axios.delete(`${API_URL}/api/categories/${id}`, { headers: getAuthHeader() });
+            await api.delete(`/api/categories/${id}`);
             toast.success('Đã xóa danh mục');
             fetchCategories();
             fetchProducts();
@@ -199,10 +189,10 @@ export default function SalesPage({ onBack }: SalesPageProps) {
                 image_url: productForm.image_url || null
             };
             if (editingProduct) {
-                await axios.put(`${API_URL}/api/products/${editingProduct.id}`, data, { headers: getAuthHeader() });
+                await api.put(`/api/products/${editingProduct.id}`, data);
                 toast.success('Đã cập nhật sản phẩm');
             } else {
-                await axios.post(`${API_URL}/api/products`, data, { headers: getAuthHeader() });
+                await api.post('/api/products', data);
                 toast.success('Đã thêm sản phẩm mới');
             }
             setShowProductModal(false);
@@ -217,7 +207,7 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     const handleDeleteProduct = async (id: number) => {
         if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
         try {
-            await axios.delete(`${API_URL}/api/products/${id}`, { headers: getAuthHeader() });
+            await api.delete(`/api/products/${id}`);
             toast.success('Đã xóa sản phẩm');
             fetchProducts();
         } catch (error) {
@@ -235,10 +225,10 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     const handleSellProduct = async () => {
         if (!sellingProduct || sellQuantity < 1) return;
         try {
-            await axios.post(`${API_URL}/api/sales`, {
+            await api.post('/api/sales', {
                 product_id: sellingProduct.id,
                 quantity: sellQuantity
-            }, { headers: getAuthHeader() });
+            });
             const total = sellingProduct.price * sellQuantity;
             toast.success(`+${total.toLocaleString('vi-VN')}đ từ ${sellingProduct.name} x${sellQuantity}`);
             setShowSellModal(false);
@@ -252,7 +242,7 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     // Quick sell (1 item)
     const handleQuickSell = async (product: Product) => {
         try {
-            await axios.post(`${API_URL}/api/sales`, { product_id: product.id, quantity: 1 }, { headers: getAuthHeader() });
+            await api.post('/api/sales', { product_id: product.id, quantity: 1 });
             toast.success(`+${product.price.toLocaleString('vi-VN')}đ từ ${product.name}`);
             fetchProducts();
         } catch (error) {

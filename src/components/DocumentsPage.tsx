@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import dynamic from 'next/dynamic';
 import {
     DocumentTextIcon,
@@ -26,8 +26,6 @@ const Editor = dynamic<any>(
     }
 ) as any;
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
-
 interface Document {
     id: number;
     title: string;
@@ -45,15 +43,10 @@ export default function DocumentsPage({ onBack }: { onBack: () => void }) {
     const [tinymceKey, setTinymceKey] = useState('no-api-key');
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     // Fetch TinyMCE config
     const fetchTinyConfig = useCallback(async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/content/config/tinymce`, { headers: getAuthHeader() });
+            const response = await api.get('/api/content/config/tinymce');
             if (response.data.api_key) {
                 setTinymceKey(response.data.api_key);
             }
@@ -66,7 +59,7 @@ export default function DocumentsPage({ onBack }: { onBack: () => void }) {
     const fetchDocs = useCallback(async () => {
         try {
             await fetchTinyConfig();
-            const response = await axios.get(`${API_URL}/api/content/documents`, { headers: getAuthHeader() });
+            const response = await api.get('/api/content/documents');
             setDocuments(response.data);
         } catch (error) {
             console.error('Failed to fetch documents:', error);
@@ -82,9 +75,8 @@ export default function DocumentsPage({ onBack }: { onBack: () => void }) {
     // Create new document
     const createDoc = async () => {
         try {
-            const response = await axios.post(`${API_URL}/api/content/documents`,
-                { title: 'Tài liệu mới', content: '' },
-                { headers: getAuthHeader() }
+            const response = await api.post('/api/content/documents',
+                { title: 'Tài liệu mới', content: '' }
             );
             setDocuments([response.data, ...documents]);
             setSelectedDoc(response.data);
@@ -107,9 +99,8 @@ export default function DocumentsPage({ onBack }: { onBack: () => void }) {
         saveTimeoutRef.current = setTimeout(async () => {
             setSaving(true);
             try {
-                await axios.put(`${API_URL}/api/content/documents/${selectedDoc.id}`,
-                    { title: selectedDoc.title, content },
-                    { headers: getAuthHeader() }
+                await api.put(`/api/content/documents/${selectedDoc.id}`,
+                    { title: selectedDoc.title, content }
                 );
             } catch (error) {
                 console.error('Failed to save:', error);
@@ -123,7 +114,7 @@ export default function DocumentsPage({ onBack }: { onBack: () => void }) {
     const deleteDoc = async (id: number) => {
         if (!confirm('Bạn có chắc muốn xóa tài liệu này?')) return;
         try {
-            await axios.delete(`${API_URL}/api/content/documents/${id}`, { headers: getAuthHeader() });
+            await api.delete(`/api/content/documents/${id}`);
             setDocuments(documents.filter(d => d.id !== id));
             if (selectedDoc?.id === id) {
                 setSelectedDoc(null);

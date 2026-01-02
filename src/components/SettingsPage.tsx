@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { User } from '@/types';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
+import api from '@/utils/api';
 import {
     UserCircleIcon,
     CameraIcon,
@@ -11,8 +11,6 @@ import {
     EnvelopeIcon,
     CheckIcon,
 } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
 
 interface SettingsPageProps {
     user: User | null;
@@ -35,18 +33,11 @@ export default function SettingsPage({ user, onUserUpdated }: SettingsPageProps)
         confirm_password: '',
     });
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const handleUpdateProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.put(`${API_URL}/api/users/me`, profileData, {
-                headers: getAuthHeader()
-            });
+            const response = await api.put('/api/users/me', profileData);
             onUserUpdated(response.data);
             toast.success('Cập nhật thành công!');
         } catch (error: any) {
@@ -65,17 +56,14 @@ export default function SettingsPage({ user, onUserUpdated }: SettingsPageProps)
 
         try {
             setLoading(true);
-            const response = await axios.post(`${API_URL}/api/users/avatar`, formData, {
+            await api.post('/api/users/avatar', formData, {
                 headers: {
-                    ...getAuthHeader(),
                     'Content-Type': 'multipart/form-data'
                 }
             });
             toast.success('Avatar đã cập nhật!');
             // Refresh user data
-            const userResponse = await axios.get(`${API_URL}/api/users/me`, {
-                headers: getAuthHeader()
-            });
+            const userResponse = await api.get('/api/users/me');
             onUserUpdated(userResponse.data);
         } catch (error: any) {
             toast.error(error.response?.data?.error || 'Không thể upload avatar');
@@ -97,10 +85,10 @@ export default function SettingsPage({ user, onUserUpdated }: SettingsPageProps)
 
         setLoading(true);
         try {
-            await axios.put(`${API_URL}/api/auth/change-password`, {
+            await api.put('/api/auth/change-password', {
                 current_password: passwordData.current_password,
                 new_password: passwordData.new_password
-            }, { headers: getAuthHeader() });
+            });
 
             toast.success('Đổi mật khẩu thành công!');
             setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
@@ -110,6 +98,9 @@ export default function SettingsPage({ user, onUserUpdated }: SettingsPageProps)
             setLoading(false);
         }
     };
+
+    // For avatar URL display, we still use the env variable for direct image linking
+    const BASE_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
 
     return (
         <div className="max-w-2xl mx-auto">
@@ -142,7 +133,7 @@ export default function SettingsPage({ user, onUserUpdated }: SettingsPageProps)
                         <div className="relative">
                             <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center text-2xl font-bold text-page overflow-hidden">
                                 {user?.avatar_url ? (
-                                    <img src={user.avatar_url.startsWith('http') ? user.avatar_url : `${API_URL}${user.avatar_url}`} alt="Avatar" className="w-full h-full object-cover" />
+                                    <img src={user.avatar_url.startsWith('http') ? user.avatar_url : `${BASE_API_URL}${user.avatar_url}`} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
                                     user?.username?.charAt(0).toUpperCase() || 'U'
                                 )}

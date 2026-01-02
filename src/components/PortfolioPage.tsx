@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import { BriefcaseIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
 
 interface Task {
     id: number;
@@ -20,10 +18,7 @@ export default function PortfolioPage({ onBack }: { onBack: () => void }) {
     useEffect(() => {
         const fetchPortfolio = async () => {
             try {
-                const token = sessionStorage.getItem('access_token');
-                const response = await axios.get(`${API_URL}/api/content/portfolio`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const response = await api.get('/api/content/portfolio');
                 setTasks(response.data);
             } catch (error) {
                 console.error('Failed to fetch portfolio', error);

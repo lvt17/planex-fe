@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import * as XLSX from 'xlsx';
+import api from '@/utils/api';
 import {
     TableCellsIcon,
     PlusIcon,
@@ -13,8 +13,6 @@ import {
     ArrowUpTrayIcon,
     ChevronDownIcon,
 } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
 
 interface Spreadsheet {
     id: number;
@@ -50,16 +48,9 @@ export default function SpreadsheetPage({ onBack }: SpreadsheetPageProps) {
     const [formulaBarValue, setFormulaBarValue] = useState('');
     const tableRef = useRef<HTMLDivElement>(null);
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const fetchSpreadsheets = useCallback(async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/content/spreadsheets`, {
-                headers: getAuthHeader()
-            });
+            const response = await api.get('/api/content/spreadsheets');
             setSpreadsheets(response.data);
         } catch (error) {
             console.error('Failed to fetch spreadsheets:', error);
@@ -140,9 +131,8 @@ export default function SpreadsheetPage({ onBack }: SpreadsheetPageProps) {
     const createSpreadsheet = async () => {
         if (!newSheetName.trim()) return;
         try {
-            const response = await axios.post(`${API_URL}/api/content/spreadsheets`,
-                { name: newSheetName, data: '{}' },
-                { headers: getAuthHeader() }
+            const response = await api.post('/api/content/spreadsheets',
+                { name: newSheetName, data: '{}' }
             );
             setSpreadsheets(prev => [...prev, response.data]);
             setNewSheetName('');
@@ -156,9 +146,8 @@ export default function SpreadsheetPage({ onBack }: SpreadsheetPageProps) {
     const saveSpreadsheet = async () => {
         if (!selectedSheet) return;
         try {
-            await axios.put(`${API_URL}/api/content/spreadsheets/${selectedSheet.id}`,
-                { name: selectedSheet.name, data: JSON.stringify(cells) },
-                { headers: getAuthHeader() }
+            await api.put(`/api/content/spreadsheets/${selectedSheet.id}`,
+                { name: selectedSheet.name, data: JSON.stringify(cells) }
             );
             toast.success('Đã lưu bảng tính!');
             fetchSpreadsheets();
@@ -170,9 +159,7 @@ export default function SpreadsheetPage({ onBack }: SpreadsheetPageProps) {
     const deleteSpreadsheet = async (id: number) => {
         if (!confirm('Bạn có chắc chắn muốn xóa?')) return;
         try {
-            await axios.delete(`${API_URL}/api/content/spreadsheets/${id}`, {
-                headers: getAuthHeader()
-            });
+            await api.delete(`/api/content/spreadsheets/${id}`);
             setSpreadsheets(spreadsheets.filter(s => s.id !== id));
             if (selectedSheet?.id === id) {
                 setSelectedSheet(null);

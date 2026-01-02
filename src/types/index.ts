@@ -40,7 +40,7 @@ export interface Whiteboard {
     user_id: number;
     name: string;
     description?: string;
-    data?: any;
+    data?: Record<string, unknown>;
     created_at: string;
     updated_at?: string;
 }

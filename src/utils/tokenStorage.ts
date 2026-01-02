@@ -53,7 +53,7 @@ export const tokenStorage = {
     },
 
     // Helper to get auth header
-    getAuthHeader: (): { Authorization: string } | {} => {
+    getAuthHeader: (): { Authorization: string } | Record<string, never> => {
         const token = tokenStorage.getAccessToken();
         return token ? { Authorization: `Bearer ${token}` } : {};
     }

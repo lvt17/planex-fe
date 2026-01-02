@@ -2,14 +2,12 @@
 
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
+import api from '@/utils/api';
 import {
     XMarkIcon,
     BugAntIcon,
     ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
 interface SupportModalProps {
     onClose: () => void;
@@ -22,11 +20,6 @@ export default function SupportModal({ onClose }: SupportModalProps) {
         description: ''
     });
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -37,7 +30,7 @@ export default function SupportModal({ onClose }: SupportModalProps) {
 
         setLoading(true);
         try {
-            await axios.post(`${API_URL}/api/feedback/report`, formData, { headers: getAuthHeader() });
+            await api.post(`/api/feedback/report`, formData);
             toast.success('Báo cáo lỗi đã được gửi. Cảm ơn sự đóng góp của bạn!');
             onClose();
         } catch (error) {

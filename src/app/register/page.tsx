@@ -3,12 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useAuth } from '@/hooks/useAuth';
 import PlanexLogo from '@/components/PlanexLogo';
 import { toast } from 'react-hot-toast';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -49,7 +47,7 @@ export default function RegisterPage() {
 
         setSubmitting(true);
         try {
-            const response = await axios.post(`${API_URL}/api/auth/register`, {
+            const response = await api.post('/api/auth/register', {
                 username,
                 email,
                 password,
@@ -76,13 +74,17 @@ export default function RegisterPage() {
 
         setSubmitting(true);
         try {
-            const response = await axios.post(`${API_URL}/api/auth/verify-otp`, {
+            const response = await api.post('/api/auth/verify-otp', {
                 email,
                 otp,
                 signup_token: signupToken
             });
 
-            localStorage.setItem('access_token', response.data.access_token);
+            // Note: Centralized api client will automatically use the token once it's in sessionStorage.
+            // However, the registration flow here seems to expect manual token storage.
+            // Standardizing to sessionStorage for consistency with api.ts
+            sessionStorage.setItem('access_token', response.data.access_token);
+
             toast.success('Đăng ký thành công! Vui lòng đăng nhập.');
             router.push('/login');
         } catch (error: any) {

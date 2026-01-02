@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { User } from '@/types';
-import axios from 'axios';
+import api from '@/utils/api';
 import PlanexLogo from './PlanexLogo';
 import {
     HomeIcon,
@@ -24,8 +24,6 @@ import {
     UserGroupIcon,
 } from '@heroicons/react/24/outline';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
-
 interface SidebarProps {
     activeView: 'tasks' | 'income' | 'settings' | 'storage' | 'whiteboard' | 'portfolio' | 'documents' | 'spreadsheets' | 'sales' | 'team' | 'chat';
     setActiveView: (view: 'tasks' | 'income' | 'settings' | 'storage' | 'whiteboard' | 'portfolio' | 'documents' | 'spreadsheets' | 'sales' | 'team' | 'chat') => void;
@@ -43,15 +41,10 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
     const [showCreateTeam, setShowCreateTeam] = useState(false);
     const [newTeamName, setNewTeamName] = useState('');
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     useEffect(() => {
         const fetchTeams = async () => {
             try {
-                const res = await axios.get(`${API_URL}/api/teams`, { headers: getAuthHeader() });
+                const res = await api.get('/api/teams');
                 setTeams(res.data);
             } catch (e) {
                 // Silent fail
@@ -63,7 +56,7 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
     const createTeam = async () => {
         if (!newTeamName.trim()) return;
         try {
-            const res = await axios.post(`${API_URL}/api/teams`, { name: newTeamName }, { headers: getAuthHeader() });
+            const res = await api.post('/api/teams', { name: newTeamName });
             setTeams(prev => [...prev, res.data]);
             setNewTeamName('');
             setShowCreateTeam(false);
@@ -193,7 +186,7 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
                     <div className="flex items-center gap-3 min-w-0">
                         {user?.avatar_url ? (
                             <img
-                                src={user.avatar_url.startsWith('http') ? user.avatar_url : `${API_URL}${user.avatar_url}`}
+                                src={user.avatar_url.startsWith('http') ? user.avatar_url : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}${user.avatar_url}`}
                                 alt={user.username}
                                 className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                             />

@@ -1,28 +1,19 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import axios from 'axios';
 import { Workspace } from '@/types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
+import api from '@/utils/api';
 
 export function useWorkspaces(taskId: number | null) {
     const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
     const [loading, setLoading] = useState(false);
-
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
 
     const fetchWorkspaces = useCallback(async () => {
         if (!taskId) return;
 
         try {
             setLoading(true);
-            const response = await axios.get(`${API_URL}/api/workspaces/tasks/${taskId}/workspaces`, {
-                headers: getAuthHeader()
-            });
+            const response = await api.get(`/api/workspaces/tasks/${taskId}/workspaces`);
             setWorkspaces(response.data || []);
         } catch (error) {
             console.error('Failed to fetch workspaces:', error);
@@ -35,10 +26,9 @@ export function useWorkspaces(taskId: number | null) {
     const createWorkspace = async (data: Partial<Workspace>) => {
         if (!taskId) return;
 
-        const response = await axios.post(
-            `${API_URL}/api/workspaces/tasks/${taskId}/workspaces`,
-            data,
-            { headers: getAuthHeader() }
+        const response = await api.post(
+            `/api/workspaces/tasks/${taskId}/workspaces`,
+            data
         );
         const newWorkspace = response.data;
         setWorkspaces(prev => [...prev, newWorkspace]);
@@ -46,10 +36,9 @@ export function useWorkspaces(taskId: number | null) {
     };
 
     const updateWorkspace = async (id: number, data: Partial<Workspace>) => {
-        const response = await axios.put(
-            `${API_URL}/api/workspaces/${id}`,
-            data,
-            { headers: getAuthHeader() }
+        const response = await api.put(
+            `/api/workspaces/${id}`,
+            data
         );
         const updatedWorkspace = response.data;
         setWorkspaces(prev => prev.map(ws => ws.id === id ? updatedWorkspace : ws));
@@ -57,9 +46,7 @@ export function useWorkspaces(taskId: number | null) {
     };
 
     const deleteWorkspace = async (id: number) => {
-        await axios.delete(`${API_URL}/api/workspaces/${id}`, {
-            headers: getAuthHeader()
-        });
+        await api.delete(`/api/workspaces/${id}`);
         setWorkspaces(prev => prev.filter(ws => ws.id !== id));
     };
 

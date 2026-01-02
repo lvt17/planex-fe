@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import api from '@/utils/api';
 import {
     BellIcon,
     XMarkIcon,
@@ -13,8 +13,6 @@ import {
     ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 import { requestNotificationPermission, showNotification } from '@/utils/notifications';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
 interface Notification {
     id: number;
@@ -38,14 +36,9 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
     const [loading, setLoading] = useState(false);
     const lastNotificationId = useRef<number>(0);
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     const fetchNotifications = useCallback(async () => {
         try {
-            const res = await axios.get(`${API_URL}/api/notifications`, { headers: getAuthHeader() });
+            const res = await api.get('/api/notifications');
             const newNotifications: Notification[] = res.data.notifications;
 
             // Show browser notifications for new unread items
@@ -81,7 +74,7 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
 
     const markAsRead = async (id: number) => {
         try {
-            await axios.post(`${API_URL}/api/notifications/${id}/read`, {}, { headers: getAuthHeader() });
+            await api.post(`/api/notifications/${id}/read`, {});
             setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
             setUnreadCount(prev => Math.max(0, prev - 1));
         } catch (error) {
@@ -91,7 +84,7 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
 
     const markAllAsRead = async () => {
         try {
-            await axios.post(`${API_URL}/api/notifications/read-all`, {}, { headers: getAuthHeader() });
+            await api.post('/api/notifications/read-all', {});
             setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
             setUnreadCount(0);
         } catch (error) {
@@ -102,7 +95,7 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
     const handleAcceptInvite = async (inviteId: number) => {
         setLoading(true);
         try {
-            await axios.post(`${API_URL}/api/notifications/team-invite/${inviteId}/accept`, {}, { headers: getAuthHeader() });
+            await api.post(`/api/notifications/team-invite/${inviteId}/accept`, {});
             toast.success('Đã tham gia team!');
             fetchNotifications();
             onTeamJoined?.();
@@ -116,7 +109,7 @@ export default function NotificationPanel({ onTeamJoined }: NotificationPanelPro
     const handleRejectInvite = async (inviteId: number) => {
         setLoading(true);
         try {
-            await axios.post(`${API_URL}/api/notifications/team-invite/${inviteId}/reject`, {}, { headers: getAuthHeader() });
+            await api.post(`/api/notifications/team-invite/${inviteId}/reject`, {});
             toast.success('Đã từ chối lời mời');
             fetchNotifications();
         } catch (error: any) {

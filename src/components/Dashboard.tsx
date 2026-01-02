@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useAuth } from '@/hooks/useAuth';
 import { useTasks } from '@/hooks/useTasks';
 import { useIncome } from '@/hooks/useIncome';
@@ -24,10 +23,10 @@ import ChatPage from './ChatPage';
 import NotificationPanel from './NotificationPanel';
 import { Task } from '@/types';
 import { toast } from 'react-hot-toast';
+import api from '@/utils/api';
 import {
     MagnifyingGlassIcon,
     PlusIcon,
-    BellIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
     FunnelIcon,
@@ -58,14 +57,8 @@ export default function Dashboard() {
     // Check survey status
     useEffect(() => {
         const checkSurvey = async () => {
-            const token = sessionStorage.getItem('access_token');
-            if (!token) return;
-
             try {
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
-                const response = await axios.get(`${API_URL}/api/feedback/survey/check`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const response = await api.get('/api/feedback/survey/check');
                 if (!response.data.completed) {
                     setIsSurveyOpen(true);
                 }
@@ -120,14 +113,10 @@ export default function Dashboard() {
     const handleTaskReceived = async (task: Task) => {
         try {
             // Add to income
-            const token = sessionStorage.getItem('access_token');
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
-            await axios.post(`${API_URL}/api/income/add`, {
+            await api.post('/api/income/add', {
                 name: task.name,
                 amount: task.price,
                 source: 'job'
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
 
             // Delete the task
@@ -381,16 +370,12 @@ export default function Dashboard() {
                                 setActiveView('chat');
                             }}
                         />
-                    ) : activeView === 'chat' ? (
+                    ) : activeView === 'chat' && chatTeamId ? (
                         <ChatPage
-                            initialTeamId={chatTeamId || undefined}
+                            teamId={chatTeamId}
                             onBack={() => {
-                                if (chatTeamId) {
-                                    setSelectedTeamId(chatTeamId);
-                                    setActiveView('team');
-                                } else {
-                                    setActiveView('tasks');
-                                }
+                                setSelectedTeamId(chatTeamId);
+                                setActiveView('team');
                             }}
                         />
                     ) : (

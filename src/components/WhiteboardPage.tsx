@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
 import dynamic from 'next/dynamic';
 import {
     PlusIcon,
@@ -10,6 +9,7 @@ import {
     ArrowLeftIcon,
     DocumentArrowDownIcon,
 } from '@heroicons/react/24/outline';
+import api from '@/utils/api';
 
 // Dynamic import tldraw to avoid SSR issues
 const Tldraw = dynamic(
@@ -19,8 +19,6 @@ const Tldraw = dynamic(
 
 // Import tldraw styles
 import 'tldraw/tldraw.css';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
 interface Whiteboard {
     id: number;
@@ -44,15 +42,10 @@ export default function WhiteboardPage({ onBack }: WhiteboardPageProps) {
     const [saving, setSaving] = useState(false);
     const nameSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const getAuthHeader = () => {
-        const token = sessionStorage.getItem('access_token');
-        return { Authorization: `Bearer ${token}` };
-    };
-
     // Fetch whiteboards list
     const fetchWhiteboards = useCallback(async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/content/whiteboards`, { headers: getAuthHeader() });
+            const response = await api.get('/api/content/whiteboards');
             if (Array.isArray(response.data)) {
                 setWhiteboards(response.data);
             } else if (response.data.whiteboards) {
@@ -73,9 +66,8 @@ export default function WhiteboardPage({ onBack }: WhiteboardPageProps) {
     const createWhiteboard = async () => {
         const defaultName = `Bảng trắng ${whiteboards.length + 1}`;
         try {
-            const response = await axios.post(`${API_URL}/api/content/whiteboards`,
-                { name: defaultName, data: {} },
-                { headers: getAuthHeader() }
+            const response = await api.post('/api/content/whiteboards',
+                { name: defaultName, data: {} }
             );
             setWhiteboards(prev => [response.data, ...prev]);
             setSelectedWhiteboard(response.data);
@@ -101,9 +93,8 @@ export default function WhiteboardPage({ onBack }: WhiteboardPageProps) {
 
         nameSaveTimeoutRef.current = setTimeout(async () => {
             try {
-                await axios.put(`${API_URL}/api/content/whiteboards/${selectedWhiteboard.id}`,
-                    { name: newName },
-                    { headers: getAuthHeader() }
+                await api.put(`/api/content/whiteboards/${selectedWhiteboard.id}`,
+                    { name: newName }
                 );
                 // Also update in the list
                 setWhiteboards(prev => prev.map(wb => wb.id === selectedWhiteboard.id ? { ...wb, name: newName } : wb));
@@ -117,7 +108,7 @@ export default function WhiteboardPage({ onBack }: WhiteboardPageProps) {
     const deleteWhiteboard = async (id: number) => {
         if (!confirm('Bạn có chắc muốn xóa whiteboard này?')) return;
         try {
-            await axios.delete(`${API_URL}/api/content/whiteboards/${id}`, { headers: getAuthHeader() });
+            await api.delete(`/api/content/whiteboards/${id}`);
             setWhiteboards(prev => prev.filter(wb => wb.id !== id));
             if (selectedWhiteboard?.id === id) {
                 setSelectedWhiteboard(null);
@@ -139,17 +130,14 @@ export default function WhiteboardPage({ onBack }: WhiteboardPageProps) {
 
         setSaving(true);
         try {
-            // In tldraw v2, getSnapshot is on the editor directly or store
-            // We use the safer standard editorInstance.getSnapshot()
             const snapshot = editorInstance.getSnapshot();
 
             if (!snapshot) {
                 throw new Error('Snapshot is empty');
             }
 
-            const res = await axios.put(`${API_URL}/api/content/whiteboards/${selectedWhiteboard.id}`,
-                { name: selectedWhiteboard.name, data: snapshot },
-                { headers: getAuthHeader() }
+            const res = await api.put(`/api/content/whiteboards/${selectedWhiteboard.id}`,
+                { name: selectedWhiteboard.name, data: snapshot }
             );
 
             if (res.data.updated_at) {

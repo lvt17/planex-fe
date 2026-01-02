@@ -2,11 +2,9 @@
 
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
+import api from '@/utils/api';
 import AdminDashboard from '@/components/AdminDashboard';
 import { LockClosedIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
 export default function SecretvtPage() {
     const [code, setCode] = useState('');
@@ -18,7 +16,7 @@ export default function SecretvtPage() {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post(`${API_URL}/api/feedback/admin/login`, { code });
+            const response = await api.post('/api/feedback/admin/login', { code });
             setAdminToken(response.data.token);
             setIsAuthenticated(true);
             toast.success('Admin Authenticated');

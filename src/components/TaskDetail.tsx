@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Task, Workspace } from '@/types';
 import { useWorkspaces } from '@/hooks/useWorkspaces';
 import { toast } from 'react-hot-toast';
+import api from '@/utils/api';
 import {
     XMarkIcon,
     CalendarIcon,
@@ -14,7 +15,6 @@ import {
     PlusIcon,
     UserIcon,
     DocumentArrowDownIcon,
-    BriefcaseIcon,
 } from '@heroicons/react/24/outline';
 
 interface TaskDetailProps {
@@ -116,14 +116,12 @@ export default function TaskDetail({ task, onTaskUpdated, onTaskDeleted, onClose
     };
 
     const handleExportWord = async () => {
-        const token = sessionStorage.getItem('access_token');
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001';
         try {
-            const response = await fetch(`${API_URL}/api/documents/task/${task.id}/export/word`, {
-                headers: { Authorization: `Bearer ${token}` }
+            const response = await api.get(`/api/documents/task/${task.id}/export/word`, {
+                responseType: 'blob'
             });
-            if (!response.ok) throw new Error('Export failed');
-            const blob = await response.blob();
+
+            const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
