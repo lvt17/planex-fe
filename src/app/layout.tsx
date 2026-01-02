@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Caveat, Playfair_Display } from "next/font/google";
+import { Inter, JetBrains_Mono, Nanum_Brush_Script, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
@@ -13,7 +13,8 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
-const caveat = Caveat({
+const caveat = Nanum_Brush_Script({
+  weight: "400",
   subsets: ["latin"],
   variable: "--font-handwriting",
 });

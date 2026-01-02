@@ -47,7 +47,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "sans-serif"],
         mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
-        handwriting: ["var(--font-handwriting)", "Caveat", "cursive"],
+        handwriting: ["var(--font-handwriting)", "Nanum Brush Script", "cursive"],
         elegant: ["var(--font-elegant)", "Playfair Display", "serif"],
       },
       animation: {

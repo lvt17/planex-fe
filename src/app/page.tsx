@@ -165,9 +165,10 @@ export default function HomePage() {
             <span className="font-handwriting text-accent">" </span>
             <span className="font-elegant">hành tinh của công việc</span>
             <span className="font-handwriting text-accent"> "</span>
-            <br />
-            <span className="font-sans">của riêng bạn</span>
           </h1>
+          <h2>
+            <span className="font-sans">của riêng bạn</span>
+          </h2>
           <p className="text-lg sm:text-xl text-secondary mb-4 max-w-2xl mx-auto">
             Mọi thứ cần thiết cho công việc của bạn đều ở một chỗ.
           </p>
