@@ -22,12 +22,16 @@ interface TaskFilters {
 export function useTasks() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
     const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
     const [filters, setFilters] = useState<TaskFilters>({ page: 1, per_page: 20 });
 
     const fetchTasks = useCallback(async (customFilters?: TaskFilters) => {
         try {
-            setLoading(true);
+            // Only show loading spinner on initial load to prevent flicker
+            if (isInitialLoad) {
+                setLoading(true);
+            }
             const params = new URLSearchParams();
             const activeFilters = customFilters || filters;
 
@@ -52,8 +56,9 @@ export function useTasks() {
             setTasks([]);
         } finally {
             setLoading(false);
+            setIsInitialLoad(false);
         }
-    }, [filters]);
+    }, [filters, isInitialLoad]);
 
     useEffect(() => {
         fetchTasks();

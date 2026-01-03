@@ -276,11 +276,58 @@ export default function Dashboard() {
                             </div>
                         ) : (
                             <>
+                                {/* Categories Tabs */}
+                                <div className="flex items-center gap-2 p-1 rounded-xl bg-elevated border border-border mb-6 w-fit">
+                                    <button
+                                        onClick={() => {
+                                            setProjectFilter('all');
+                                            const newFilters: any = {};
+                                            if (statusFilter !== 'all') newFilters.status = statusFilter;
+                                            if (deadlineFilter !== 'all') newFilters.deadline = deadlineFilter;
+                                            applyFilters(newFilters);
+                                        }}
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${projectFilter === 'all' ? 'bg-surface text-primary shadow-sm' : 'text-secondary hover:text-primary hover:bg-hover'}`}
+                                    >
+                                        Tất cả
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setProjectFilter('none');
+                                            const newFilters: any = { project_id: 0 };
+                                            if (statusFilter !== 'all') newFilters.status = statusFilter;
+                                            if (deadlineFilter !== 'all') newFilters.deadline = deadlineFilter;
+                                            applyFilters(newFilters);
+                                        }}
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${projectFilter === 'none' ? 'bg-surface text-primary shadow-sm' : 'text-secondary hover:text-primary hover:bg-hover'}`}
+                                    >
+                                        Task lẻ (Global)
+                                    </button>
+                                    <div className="h-4 w-[1px] bg-border mx-1"></div>
+                                    <select
+                                        value={projectFilter !== 'all' && projectFilter !== 'none' ? projectFilter : 'disabled'}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val === 'disabled') return;
+                                            setProjectFilter(val);
+                                            const newFilters: any = { project_id: parseInt(val) };
+                                            if (statusFilter !== 'all') newFilters.status = statusFilter;
+                                            if (deadlineFilter !== 'all') newFilters.deadline = deadlineFilter;
+                                            applyFilters(newFilters);
+                                        }}
+                                        className={`px-3 py-2 text-sm rounded-lg bg-transparent border-none text-primary cursor-pointer focus:outline-none font-medium ${projectFilter !== 'all' && projectFilter !== 'none' ? 'text-accent' : 'text-secondary'}`}
+                                    >
+                                        <option value="disabled" disabled>Chọn Dự án...</option>
+                                        {projects.map(p => (
+                                            <option key={p.id} value={p.id.toString()}>{p.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
                                 {/* Filters */}
                                 <div className="flex items-center gap-4 mb-6 flex-wrap">
                                     <div className="flex items-center gap-2">
                                         <FunnelIcon className="w-4 h-4 text-secondary" />
-                                        <span className="text-sm text-secondary">Lọc:</span>
+                                        <span className="text-sm text-secondary">Lọc nhanh:</span>
                                     </div>
 
                                     <select
@@ -288,7 +335,7 @@ export default function Dashboard() {
                                         onChange={(e) => setStatusFilter(e.target.value)}
                                         className="px-3 py-2 text-sm rounded-lg bg-surface border border-border text-primary cursor-pointer"
                                     >
-                                        <option value="all">Tất cả trạng thái</option>
+                                        <option value="all">Mọi trạng thái</option>
                                         <option value="pending">Chưa bắt đầu</option>
                                         <option value="in_progress">Đang làm</option>
                                         <option value="done">Hoàn thành</option>
@@ -299,39 +346,31 @@ export default function Dashboard() {
                                         onChange={(e) => setDeadlineFilter(e.target.value)}
                                         className="px-3 py-2 text-sm rounded-lg bg-surface border border-border text-primary cursor-pointer"
                                     >
-                                        <option value="all">Tất cả deadline</option>
+                                        <option value="all">Mọi deadline</option>
                                         <option value="today">Hôm nay</option>
                                         <option value="week">Tuần này</option>
                                         <option value="overdue">Quá hạn</option>
                                     </select>
 
-                                    {/* Project Filter */}
-                                    <select
-                                        value={projectFilter}
-                                        onChange={(e) => setProjectFilter(e.target.value)}
-                                        className="px-3 py-2 text-sm rounded-lg bg-surface border border-border text-primary cursor-pointer"
-                                    >
-                                        <option value="all">Tất cả project</option>
-                                        <option value="none">Không có project</option>
-                                        {projects.map(p => (
-                                            <option key={p.id} value={p.id.toString()}>{p.name}</option>
-                                        ))}
-                                    </select>
+                                    <div className="h-6 w-[1px] bg-border hidden sm:block"></div>
 
-                                    <button
-                                        onClick={() => setIsCreateProjectModalOpen(true)}
-                                        className="p-2 text-sm rounded-lg bg-surface border border-border text-primary hover:border-accent cursor-pointer"
-                                        title="Tạo Project mới"
-                                    >
-                                        <FolderPlusIcon className="w-5 h-5" />
-                                    </button>
+                                    {/* Action Buttons */}
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={handleApplyFilters}
+                                            className="px-4 py-2 text-sm rounded-lg bg-elevated border border-border text-primary font-medium hover:bg-hover cursor-pointer transition-colors"
+                                        >
+                                            Lọc
+                                        </button>
 
-                                    <button
-                                        onClick={handleApplyFilters}
-                                        className="px-4 py-2 text-sm rounded-lg bg-accent text-page font-medium hover:opacity-90 cursor-pointer"
-                                    >
-                                        Áp dụng
-                                    </button>
+                                        <button
+                                            onClick={() => setIsCreateProjectModalOpen(true)}
+                                            className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-accent/10 border border-accent/20 text-accent font-semibold hover:bg-accent/20 transition-all cursor-pointer shadow-sm active:scale-95"
+                                        >
+                                            <FolderPlusIcon className="w-5 h-5" />
+                                            <span>Tạo Project</span>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Stats Cards */}
