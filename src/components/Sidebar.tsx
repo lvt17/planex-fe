@@ -240,8 +240,19 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
                             )}
                             {!isCollapsed && (
                                 <div className="min-w-0">
-                                    <p className="text-sm font-medium text-primary truncate">{user?.full_name || user?.username || 'User'}</p>
-                                    <p className="text-xs text-muted truncate">{user?.email}</p>
+                                    <div className="flex flex-col">
+                                        <p className="text-sm font-medium text-primary truncate leading-tight">{user?.full_name || user?.username || 'User'}</p>
+                                        {user?.title && (
+                                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded mt-0.5 inline-block w-fit ${user.title === 'Trùm Planex' ? 'bg-accent/20 text-accent' :
+                                                    user.title === 'Planex-er' ? 'bg-syntax-purple/20 text-syntax-purple' :
+                                                        user.title === 'Thành viên gắn kết' ? 'bg-syntax-blue/20 text-syntax-blue' :
+                                                            'bg-secondary/20 text-secondary'
+                                                }`}>
+                                                {user.title}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-[10px] text-muted truncate mt-0.5">{user?.email}</p>
                                 </div>
                             )}
                         </div>

@@ -276,18 +276,32 @@ export default function Dashboard() {
                         {/* Notifications */}
                         <NotificationPanel />
 
-                        {/* Avatar */}
-                        {user?.avatar_url ? (
-                            <img
-                                src={user.avatar_url}
-                                alt={user.username}
-                                className="w-8 h-8 rounded-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center font-medium text-sm text-page">
-                                {user?.username?.charAt(0).toUpperCase() || 'U'}
+                        {/* Avatar & Title Badge */}
+                        <div className="flex items-center gap-2">
+                            <div className="hidden sm:flex flex-col items-end mr-1">
+                                <span className="text-xs font-bold text-primary">{user?.username}</span>
+                                {user?.title && (
+                                    <span className={`text-[9px] font-bold px-1 rounded ${user.title === 'Trùm Planex' ? 'text-accent' :
+                                            user.title === 'Planex-er' ? 'text-syntax-purple' :
+                                                user.title === 'Thành viên gắn kết' ? 'text-syntax-blue' :
+                                                    'text-secondary'
+                                        }`}>
+                                        {user.title}
+                                    </span>
+                                )}
                             </div>
-                        )}
+                            {user?.avatar_url ? (
+                                <img
+                                    src={user.avatar_url}
+                                    alt={user.username}
+                                    className="w-8 h-8 rounded-full object-cover border border-border"
+                                />
+                            ) : (
+                                <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center font-medium text-sm text-page">
+                                    {user?.username?.charAt(0).toUpperCase() || 'U'}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </header>
 

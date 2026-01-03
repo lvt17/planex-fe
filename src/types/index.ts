@@ -27,6 +27,8 @@ export interface User {
     full_name?: string;
     avatar_url?: string;
     created_at: string;
+    title?: string;
+    access_count?: number;
 }
 
 export interface Workspace {
