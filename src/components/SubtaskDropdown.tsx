@@ -20,12 +20,12 @@ interface SubtaskDropdownProps {
     isOpen: boolean;
     onToggle: () => void;
     onSubtaskChange?: () => void; // Callback to refresh parent task
+    initialSubtasks?: Subtask[]; // PERFORMANCE: Pass subtasks from parent to avoid API call
 }
 
-export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskChange }: SubtaskDropdownProps) {
-    const [subtasks, setSubtasks] = useState<Subtask[]>([]);
+export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskChange, initialSubtasks = [] }: SubtaskDropdownProps) {
+    const [subtasks, setSubtasks] = useState<Subtask[]>(initialSubtasks);
     const [newSubtaskTitle, setNewSubtaskTitle] = useState('');
-    const [loading, setLoading] = useState(false);
     const [adding, setAdding] = useState(false);
     const [confirmConfig, setConfirmConfig] = useState<{
         isOpen: boolean;
@@ -39,30 +39,10 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
         onConfirm: () => { },
     });
 
+    // Update subtasks when initialSubtasks changes
     useEffect(() => {
-        if (isOpen) {
-            fetchSubtasks();
-        }
-    }, [isOpen, taskId]);
-
-    const fetchSubtasks = async () => {
-        if (!taskId) {
-            console.error('TaskId is missing:', taskId);
-            return;
-        }
-
-        setLoading(true);
-        try {
-            console.log('Fetching subtasks for task:', taskId);
-            const res = await api.get(`/api/tasks/${taskId}/subtasks`);
-            setSubtasks(res.data);
-        } catch (error: any) {
-            console.error('Subtask fetch error:', error.response || error);
-            toast.error('Failed to load subtasks');
-        } finally {
-            setLoading(false);
-        }
-    };
+        setSubtasks(initialSubtasks);
+    }, [initialSubtasks]);
 
     const toggleSubtask = async (id: number) => {
         const subtask = subtasks.find(s => s.id === id);
