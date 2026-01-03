@@ -30,6 +30,7 @@ import { StarIcon as StarIconSolid, ArrowTopRightOnSquareIcon } from '@heroicons
 import { requestNotificationPermission, showNotification } from '@/utils/notifications';
 import { useAuth } from '@/hooks/useAuth';
 import api, { API_URL } from '@/utils/api';
+import ConfirmModal from './ConfirmModal';
 
 interface Team {
     id: number;
@@ -88,6 +89,18 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     const [isCreatingTask, setIsCreatingTask] = useState(false);
     const [viewingMemberTasks, setViewingMemberTasks] = useState<{ member: any, tasks: any[] } | null>(null);
     const [processingRequests, setProcessingRequests] = useState<Set<number>>(new Set());
+    const [confirmConfig, setConfirmConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+        isDanger?: boolean;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => { },
+    });
     const chatEndRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const lastMessageId = useRef<number>(0);
@@ -262,36 +275,57 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     };
 
     const leaveTeam = async () => {
-        if (!confirm('Bạn có chắc muốn rời team này?')) return;
-        try {
-            await api.post(`/api/teams/${teamId}/leave`);
-            toast.success('Đã rời team');
-            onBack();
-        } catch (error: any) {
-            toast.error(error.response?.data?.error || 'Không thể rời team');
-        }
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Rời Team',
+            message: 'Bạn có chắc chắn muốn rời team này?',
+            isDanger: true,
+            onConfirm: async () => {
+                try {
+                    await api.post(`/api/teams/${teamId}/leave`);
+                    toast.success('Đã rời team');
+                    onBack();
+                } catch (error: any) {
+                    toast.error(error.response?.data?.error || 'Không thể rời team');
+                }
+            }
+        });
     };
 
     const dissolveTeam = async () => {
-        if (!confirm('GIẢ TÁN TEAM? Thao tác này không thể hoàn tác!')) return;
-        try {
-            await api.post(`/api/teams/${teamId}/dissolve`);
-            toast.success('Đã giải tán team');
-            window.location.href = '/dashboard'; // Force reload to dashboard
-        } catch (error: any) {
-            toast.error(error.response?.data?.error || 'Không thể giải tán team');
-        }
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Giải tán Team',
+            message: 'GIẢ TÁN TEAM? Thao tác này không thể hoàn tác và toàn bộ dữ liệu sẽ bị mất!',
+            isDanger: true,
+            onConfirm: async () => {
+                try {
+                    await api.post(`/api/teams/${teamId}/dissolve`);
+                    toast.success('Đã giải tán team');
+                    window.location.href = '/dashboard'; // Force reload to dashboard
+                } catch (error: any) {
+                    toast.error(error.response?.data?.error || 'Không thể giải tán team');
+                }
+            }
+        });
     };
 
     const removeMember = async (memberId: number, username: string) => {
-        if (!confirm(`Bạn có chắc muốn xóa ${username} khỏi team?`)) return;
-        try {
-            await api.delete(`/api/teams/${teamId}/members/${memberId}`);
-            toast.success('Đã xóa thành viên');
-            fetchTeamData();
-        } catch (error: any) {
-            toast.error(error.response?.data?.error || 'Không thể xóa thành viên');
-        }
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Xóa thành viên',
+            message: `Bạn có chắc muốn xóa ${username} khỏi team?`,
+            isDanger: true,
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/api/teams/${teamId}/members/${memberId}`);
+                    toast.success('Đã xóa thành viên');
+                    fetchTeamData();
+                } catch (error: any) {
+                    toast.error(error.response?.data?.error || 'Không thể xóa thành viên');
+                }
+            }
+        });
     };
 
     const updateTeam = async () => {

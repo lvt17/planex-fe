@@ -12,6 +12,7 @@ import {
     ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
+import ConfirmModal from './ConfirmModal';
 
 // Dynamic import for TinyMCE to avoid SSR issues
 const Editor = dynamic<any>(
@@ -41,6 +42,17 @@ export default function DocumentsPage({ onBack }: { onBack: () => void }) {
     const [editorContent, setEditorContent] = useState('');
     const [saving, setSaving] = useState(false);
     const [tinymceKey, setTinymceKey] = useState('no-api-key');
+    const [confirmConfig, setConfirmConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => { },
+    });
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Fetch TinyMCE config
@@ -112,18 +124,24 @@ export default function DocumentsPage({ onBack }: { onBack: () => void }) {
 
     // Delete document
     const deleteDoc = async (id: number) => {
-        if (!confirm('Bạn có chắc muốn xóa tài liệu này?')) return;
-        try {
-            await api.delete(`/api/content/documents/${id}`);
-            setDocuments(documents.filter(d => d.id !== id));
-            if (selectedDoc?.id === id) {
-                setSelectedDoc(null);
-                setShowList(true);
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Xóa tài liệu',
+            message: 'Bạn có chắc chắn muốn xóa tài liệu này?',
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/api/content/documents/${id}`);
+                    setDocuments(documents.filter(d => d.id !== id));
+                    if (selectedDoc?.id === id) {
+                        setSelectedDoc(null);
+                        setShowList(true);
+                    }
+                    toast.success('Đã xóa tài liệu');
+                } catch (error) {
+                    toast.error('Không thể xóa tài liệu');
+                }
             }
-            toast.success('Đã xóa tài liệu');
-        } catch (error) {
-            toast.error('Không thể xóa tài liệu');
-        }
+        });
     };
 
     // Update title
@@ -367,6 +385,15 @@ export default function DocumentsPage({ onBack }: { onBack: () => void }) {
                     </div>
                 </>
             )}
+
+            <ConfirmModal
+                isOpen={confirmConfig.isOpen}
+                title={confirmConfig.title}
+                message={confirmConfig.message}
+                onConfirm={confirmConfig.onConfirm}
+                onClose={() => setConfirmConfig({ ...confirmConfig, isOpen: false })}
+                isDanger={true}
+            />
         </div>
     );
 }

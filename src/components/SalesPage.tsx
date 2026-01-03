@@ -16,6 +16,7 @@ import {
     PhotoIcon,
     MinusIcon,
 } from '@heroicons/react/24/outline';
+import ConfirmModal from './ConfirmModal';
 
 interface Category {
     id: number;
@@ -76,6 +77,17 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     const [productForm, setProductForm] = useState({ name: '', price: '', category_id: '', image_url: '' });
     const [uploading, setUploading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [confirmConfig, setConfirmConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => { },
+    });
 
     // Handle image upload to Cloudinary
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,15 +177,21 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     };
 
     const handleDeleteCategory = async (id: number) => {
-        if (!confirm('Xóa danh mục này sẽ xóa tất cả sản phẩm bên trong. Tiếp tục?')) return;
-        try {
-            await api.delete(`/api/categories/${id}`);
-            toast.success('Đã xóa danh mục');
-            fetchCategories();
-            fetchProducts();
-        } catch (error) {
-            toast.error('Lỗi khi xóa danh mục');
-        }
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Xóa danh mục',
+            message: 'Xóa danh mục này sẽ xóa tất cả sản phẩm bên trong. Bạn có chắc chắn muốn tiếp tục?',
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/api/categories/${id}`);
+                    toast.success('Đã xóa danh mục');
+                    fetchCategories();
+                    fetchProducts();
+                } catch (error) {
+                    toast.error('Lỗi khi xóa danh mục');
+                }
+            }
+        });
     };
 
     // Product CRUD
@@ -210,14 +228,20 @@ export default function SalesPage({ onBack }: SalesPageProps) {
     };
 
     const handleDeleteProduct = async (id: number) => {
-        if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
-        try {
-            await api.delete(`/api/products/${id}`);
-            toast.success('Đã xóa sản phẩm');
-            fetchProducts();
-        } catch (error) {
-            toast.error('Lỗi khi xóa sản phẩm');
-        }
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Xóa sản phẩm',
+            message: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/api/products/${id}`);
+                    toast.success('Đã xóa sản phẩm');
+                    fetchProducts();
+                } catch (error) {
+                    toast.error('Lỗi khi xóa sản phẩm');
+                }
+            }
+        });
     };
 
     // Sell product with quantity
@@ -760,6 +784,14 @@ export default function SalesPage({ onBack }: SalesPageProps) {
                     </div>
                 </div>
             )}
+            <ConfirmModal
+                isOpen={confirmConfig.isOpen}
+                title={confirmConfig.title}
+                message={confirmConfig.message}
+                onConfirm={confirmConfig.onConfirm}
+                onClose={() => setConfirmConfig({ ...confirmConfig, isOpen: false })}
+                isDanger={true}
+            />
         </div>
     );
 }

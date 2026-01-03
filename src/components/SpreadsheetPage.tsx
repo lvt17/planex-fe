@@ -13,6 +13,7 @@ import {
     ArrowUpTrayIcon,
     ChevronDownIcon,
 } from '@heroicons/react/24/outline';
+import ConfirmModal from './ConfirmModal';
 
 interface Spreadsheet {
     id: number;
@@ -46,6 +47,17 @@ export default function SpreadsheetPage({ onBack }: SpreadsheetPageProps) {
     const [selectedCell, setSelectedCell] = useState<string | null>(null);
     const [editingCell, setEditingCell] = useState<string | null>(null);
     const [formulaBarValue, setFormulaBarValue] = useState('');
+    const [confirmConfig, setConfirmConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => { },
+    });
     const tableRef = useRef<HTMLDivElement>(null);
 
     const fetchSpreadsheets = useCallback(async () => {
@@ -157,17 +169,23 @@ export default function SpreadsheetPage({ onBack }: SpreadsheetPageProps) {
     };
 
     const deleteSpreadsheet = async (id: number) => {
-        if (!confirm('Bạn có chắc chắn muốn xóa?')) return;
-        try {
-            await api.delete(`/api/content/spreadsheets/${id}`);
-            setSpreadsheets(spreadsheets.filter(s => s.id !== id));
-            if (selectedSheet?.id === id) {
-                setSelectedSheet(null);
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Xóa bảng tính',
+            message: 'Bạn có chắc chắn muốn xóa bảng tính này?',
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/api/content/spreadsheets/${id}`);
+                    setSpreadsheets(spreadsheets.filter(s => s.id !== id));
+                    if (selectedSheet?.id === id) {
+                        setSelectedSheet(null);
+                    }
+                    toast.success('Đã xóa');
+                } catch (error) {
+                    toast.error('Lỗi khi xóa');
+                }
             }
-            toast.success('Đã xóa');
-        } catch (error) {
-            toast.error('Lỗi khi xóa');
-        }
+        });
     };
 
     // Parse cell range (A1:B3 -> array of cell IDs)
@@ -396,9 +414,14 @@ export default function SpreadsheetPage({ onBack }: SpreadsheetPageProps) {
                 </div>
             </div>
 
-            <p className="mt-12 text-muted text-xs font-medium tracking-widest uppercase">
-                Planex Engine v2.0-Alpha
-            </p>
+            <ConfirmModal
+                isOpen={confirmConfig.isOpen}
+                title={confirmConfig.title}
+                message={confirmConfig.message}
+                onConfirm={confirmConfig.onConfirm}
+                onClose={() => setConfirmConfig({ ...confirmConfig, isOpen: false })}
+                isDanger={true}
+            />
         </div>
     );
 }

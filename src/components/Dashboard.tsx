@@ -22,6 +22,7 @@ import SupportModal from './SupportModal';
 import TeamPage from './TeamPage';
 import ChatPage from './ChatPage';
 import NotificationPanel from './NotificationPanel';
+import ConfirmModal from './ConfirmModal';
 import { Task } from '@/types';
 import { toast } from 'react-hot-toast';
 import api from '@/utils/api';
@@ -57,6 +58,18 @@ export default function Dashboard() {
     const [chatTeamId, setChatTeamId] = useState<number | null>(null);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+    const [confirmConfig, setConfirmConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+        isDanger?: boolean;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => { },
+    });
 
     useEffect(() => {
         if (activeView === 'income') {
@@ -282,10 +295,8 @@ export default function Dashboard() {
                                     <button
                                         onClick={() => {
                                             setProjectFilter('all');
-                                            const newFilters: any = {};
-                                            if (statusFilter !== 'all') newFilters.status = statusFilter;
-                                            if (deadlineFilter !== 'all') newFilters.deadline = deadlineFilter;
-                                            applyFilters(newFilters);
+                                            setStatusFilter('all'); // Reset status to all to show everything
+                                            applyFilters({ project_id: undefined, status: undefined });
                                         }}
                                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${projectFilter === 'all' ? 'bg-surface text-primary shadow-sm' : 'text-secondary hover:text-primary hover:bg-hover'}`}
                                     >
@@ -294,10 +305,8 @@ export default function Dashboard() {
                                     <button
                                         onClick={() => {
                                             setProjectFilter('none');
-                                            const newFilters: any = { project_id: 0 };
-                                            if (statusFilter !== 'all') newFilters.status = statusFilter;
-                                            if (deadlineFilter !== 'all') newFilters.deadline = deadlineFilter;
-                                            applyFilters(newFilters);
+                                            setStatusFilter('all'); // Reset status to all to show everything
+                                            applyFilters({ project_id: 0, status: undefined });
                                         }}
                                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${projectFilter === 'none' ? 'bg-surface text-primary shadow-sm' : 'text-secondary hover:text-primary hover:bg-hover'}`}
                                     >
@@ -310,10 +319,8 @@ export default function Dashboard() {
                                             const val = e.target.value;
                                             if (val === 'disabled') return;
                                             setProjectFilter(val);
-                                            const newFilters: any = { project_id: parseInt(val) };
-                                            if (statusFilter !== 'all') newFilters.status = statusFilter;
-                                            if (deadlineFilter !== 'all') newFilters.deadline = deadlineFilter;
-                                            applyFilters(newFilters);
+                                            setStatusFilter('all'); // Reset status to all to show everything
+                                            applyFilters({ project_id: parseInt(val), status: undefined });
                                         }}
                                         className={`px-3 py-2 text-sm rounded-lg bg-transparent border-none text-primary cursor-pointer focus:outline-none font-medium ${projectFilter !== 'all' && projectFilter !== 'none' ? 'text-accent' : 'text-secondary'}`}
                                     >
@@ -326,12 +333,18 @@ export default function Dashboard() {
                                     {/* Delete Project Button */}
                                     {projectFilter !== 'all' && projectFilter !== 'none' && (
                                         <button
-                                            onClick={async () => {
-                                                if (window.confirm('Bạn có chắc chắn muốn xóa project này? Các task sẽ không bị xóa nhưng sẽ không còn thuộc project nào.')) {
-                                                    await deleteProject(parseInt(projectFilter));
-                                                    setProjectFilter('all');
-                                                    applyFilters({});
-                                                }
+                                            onClick={() => {
+                                                setConfirmConfig({
+                                                    isOpen: true,
+                                                    title: 'Xóa Project',
+                                                    message: 'Bạn có chắc chắn muốn xóa project này? Các task sẽ không bị xóa nhưng sẽ không còn thuộc project nào.',
+                                                    isDanger: true,
+                                                    onConfirm: async () => {
+                                                        await deleteProject(parseInt(projectFilter));
+                                                        setProjectFilter('all');
+                                                        applyFilters({ status: undefined });
+                                                    }
+                                                });
                                             }}
                                             className="p-1.5 rounded-lg text-secondary hover:text-syntax-red hover:bg-syntax-red/10 transition-colors cursor-pointer mr-1"
                                             title="Xóa Project này"
@@ -508,85 +521,104 @@ export default function Dashboard() {
                         <SettingsPage user={user} onUserUpdated={(updated) => window.location.reload()} />
                     )}
                 </div>
-            </main>
+            </main >
 
             {/* Mobile Search Modal */}
-            {isSearchModalOpen && (
-                <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 px-4 bg-black/50 backdrop-blur-sm" onClick={() => setIsSearchModalOpen(false)}>
-                    <div className="w-full max-w-md bg-surface border border-border rounded-2xl shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-4">
-                            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-page border border-border">
-                                <MagnifyingGlassIcon className="w-5 h-5 text-secondary flex-shrink-0" />
-                                <input
-                                    type="text"
-                                    placeholder="Tìm kiếm tasks..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="flex-1 bg-transparent border-none outline-none text-base text-primary placeholder:text-muted"
-                                    autoFocus
-                                />
+            {
+                isSearchModalOpen && (
+                    <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 px-4 bg-black/50 backdrop-blur-sm" onClick={() => setIsSearchModalOpen(false)}>
+                        <div className="w-full max-w-md bg-surface border border-border rounded-2xl shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                            <div className="p-4">
+                                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-page border border-border">
+                                    <MagnifyingGlassIcon className="w-5 h-5 text-secondary flex-shrink-0" />
+                                    <input
+                                        type="text"
+                                        placeholder="Tìm kiếm tasks..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="flex-1 bg-transparent border-none outline-none text-base text-primary placeholder:text-muted"
+                                        autoFocus
+                                    />
+                                </div>
+                                <button
+                                    onClick={() => setIsSearchModalOpen(false)}
+                                    className="w-full mt-3 py-2 text-sm text-secondary hover:text-primary transition-colors"
+                                >
+                                    Đóng
+                                </button>
                             </div>
-                            <button
-                                onClick={() => setIsSearchModalOpen(false)}
-                                className="w-full mt-3 py-2 text-sm text-secondary hover:text-primary transition-colors"
-                            >
-                                Đóng
-                            </button>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Create Task Modal */}
-            {isCreateModalOpen && (
-                <CreateTaskModal
-                    onClose={() => setIsCreateModalOpen(false)}
-                    onTaskCreated={handleTaskCreated}
-                    projects={projects}
-                />
-            )}
+            {
+                isCreateModalOpen && (
+                    <CreateTaskModal
+                        onClose={() => setIsCreateModalOpen(false)}
+                        onTaskCreated={handleTaskCreated}
+                        projects={projects}
+                    />
+                )
+            }
 
             {/* Create Project Modal */}
-            {isCreateProjectModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-                    <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-6">
-                        <h2 className="text-lg font-bold text-primary mb-4">Tạo Project mới</h2>
-                        <input
-                            type="text"
-                            value={newProjectName}
-                            onChange={(e) => setNewProjectName(e.target.value)}
-                            placeholder="Tên project..."
-                            className="w-full px-4 py-3 rounded-lg bg-page border border-border text-primary placeholder:text-muted focus:border-accent focus:outline-none mb-4"
-                            autoFocus
-                            onKeyDown={(e) => e.key === 'Enter' && handleCreateProject()}
-                        />
-                        <div className="flex gap-3 justify-end">
-                            <button
-                                onClick={() => { setIsCreateProjectModalOpen(false); setNewProjectName(''); }}
-                                className="px-4 py-2 rounded-lg bg-page border border-border text-secondary hover:text-primary cursor-pointer"
-                            >
-                                Hủy
-                            </button>
-                            <button
-                                onClick={handleCreateProject}
-                                className="px-4 py-2 rounded-lg bg-accent text-page font-medium hover:opacity-90 cursor-pointer"
-                            >
-                                Tạo Project
-                            </button>
+            {
+                isCreateProjectModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+                        <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-6">
+                            <h2 className="text-lg font-bold text-primary mb-4">Tạo Project mới</h2>
+                            <input
+                                type="text"
+                                value={newProjectName}
+                                onChange={(e) => setNewProjectName(e.target.value)}
+                                placeholder="Tên project..."
+                                className="w-full px-4 py-3 rounded-lg bg-page border border-border text-primary placeholder:text-muted focus:border-accent focus:outline-none mb-4"
+                                autoFocus
+                                onKeyDown={(e) => e.key === 'Enter' && handleCreateProject()}
+                            />
+                            <div className="flex gap-3 justify-end">
+                                <button
+                                    onClick={() => { setIsCreateProjectModalOpen(false); setNewProjectName(''); }}
+                                    className="px-4 py-2 rounded-lg bg-page border border-border text-secondary hover:text-primary cursor-pointer"
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    onClick={handleCreateProject}
+                                    className="px-4 py-2 rounded-lg bg-accent text-page font-medium hover:opacity-90 cursor-pointer"
+                                >
+                                    Tạo Project
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* User Survey Modal */}
-            {isSurveyOpen && (
-                <SurveyModal onClose={() => setIsSurveyOpen(false)} />
-            )}
+            {
+                isSurveyOpen && (
+                    <SurveyModal onClose={() => setIsSurveyOpen(false)} />
+                )
+            }
 
             {/* Support/Bug Report Modal */}
-            {isSupportOpen && (
-                <SupportModal onClose={() => setIsSupportOpen(false)} />
-            )}
-        </div>
+            {
+                isSupportOpen && (
+                    <SupportModal onClose={() => setIsSupportOpen(false)} />
+                )
+            }
+
+            <ConfirmModal
+                isOpen={confirmConfig.isOpen}
+                title={confirmConfig.title}
+                message={confirmConfig.message}
+                onConfirm={confirmConfig.onConfirm}
+                onClose={() => setConfirmConfig({ ...confirmConfig, isOpen: false })}
+                isDanger={confirmConfig.isDanger}
+            />
+        </div >
     );
 }

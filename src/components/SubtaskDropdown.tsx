@@ -5,6 +5,7 @@ import { ChevronDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import SubtaskItem from './SubtaskItem';
 import api from '@/utils/api';
 import { toast } from 'react-hot-toast';
+import ConfirmModal from './ConfirmModal';
 
 interface Subtask {
     id: number;
@@ -26,6 +27,17 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
     const [newSubtaskTitle, setNewSubtaskTitle] = useState('');
     const [loading, setLoading] = useState(false);
     const [adding, setAdding] = useState(false);
+    const [confirmConfig, setConfirmConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => { },
+    });
 
     useEffect(() => {
         if (isOpen) {
@@ -96,23 +108,28 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
     };
 
     const deleteSubtask = async (id: number) => {
-        if (!confirm('Delete this subtask?')) return;
-
-        // Optimistic delete
-        const deletedSubtask = subtasks.find(s => s.id === id);
-        setSubtasks(prev => prev.filter(s => s.id !== id));
-        onSubtaskChange?.();
-
-        try {
-            await api.delete(`/api/subtasks/${id}`);
-        } catch (error) {
-            // Rollback on error
-            if (deletedSubtask) {
-                setSubtasks(prev => [...prev, deletedSubtask]);
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Xóa Subtask',
+            message: 'Bạn có chắc chắn muốn xóa subtask này?',
+            onConfirm: async () => {
+                // Optimistic delete
+                const deletedSubtask = subtasks.find(s => s.id === id);
+                setSubtasks(prev => prev.filter(s => s.id !== id));
                 onSubtaskChange?.();
+
+                try {
+                    await api.delete(`/api/subtasks/${id}`);
+                } catch (error) {
+                    // Rollback on error
+                    if (deletedSubtask) {
+                        setSubtasks(prev => [...prev, deletedSubtask]);
+                        onSubtaskChange?.();
+                    }
+                    console.error('Failed to delete subtask:', error);
+                }
             }
-            console.error('Failed to delete subtask:', error);
-        }
+        });
     };
 
     const completedCount = subtasks.filter(s => s.is_completed).length;
@@ -168,6 +185,15 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
                     )}
                 </div>
             )}
+
+            <ConfirmModal
+                isOpen={confirmConfig.isOpen}
+                title={confirmConfig.title}
+                message={confirmConfig.message}
+                onConfirm={confirmConfig.onConfirm}
+                onClose={() => setConfirmConfig({ ...confirmConfig, isOpen: false })}
+                isDanger={true}
+            />
         </div>
     );
 }

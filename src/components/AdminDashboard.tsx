@@ -25,10 +25,11 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({ token, onLogout }: AdminDashboardProps) {
-    const [activeTab, setActiveTab] = useState<'users' | 'surveys' | 'reports'>('users');
+    const [activeTab, setActiveTab] = useState<'users' | 'surveys' | 'reports' | 'ranking'>('users');
     const [users, setUsers] = useState<any[]>([]);
     const [surveys, setSurveys] = useState<any[]>([]);
     const [reports, setReports] = useState<any[]>([]);
+    const [ranking, setRanking] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -40,14 +41,16 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
         setLoading(true);
         try {
             const config = { headers: { 'X-Admin-Token': token } };
-            const [usersRes, surveysRes, reportsRes] = await Promise.all([
+            const [usersRes, surveysRes, reportsRes, rankingRes] = await Promise.all([
                 api.get('/api/feedback/admin/users', config),
                 api.get('/api/feedback/admin/surveys', config),
-                api.get('/api/feedback/admin/reports', config)
+                api.get('/api/feedback/admin/reports', config),
+                api.get('/api/feedback/admin/ranking', config)
             ]);
             setUsers(usersRes.data);
             setSurveys(surveysRes.data);
             setReports(reportsRes.data);
+            setRanking(rankingRes.data);
         } catch (error) {
             console.error('Failed to fetch admin data', error);
         } finally {
@@ -173,6 +176,7 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                 <nav className="flex items-center gap-1 px-4 sm:px-6 pb-3 overflow-x-auto">
                     {[
                         { id: 'users', label: 'Người dùng', icon: UsersIcon },
+                        { id: 'ranking', label: 'Xếp hạng', icon: PresentationChartBarIcon },
                         { id: 'surveys', label: 'Khảo sát', icon: ClipboardDocumentCheckIcon },
                         { id: 'reports', label: 'Báo cáo', icon: BugAntIcon }
                     ].map(tab => (
@@ -468,6 +472,78 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'ranking' && (
+                    <div className="max-w-4xl mx-auto animate-fade-in">
+                        <div className="flex items-center justify-between mb-8">
+                            <h2 className="text-2xl font-bold text-primary flex items-center gap-3">
+                                <PresentationChartBarIcon className="w-8 h-8 text-accent" />
+                                Bảng xếp hạng User hoạt động
+                            </h2>
+                            <span className="text-xs text-secondary italic">Cập nhật theo số lần đăng nhập</span>
+                        </div>
+
+                        <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
+                            <table className="w-full text-left">
+                                <thead className="bg-page/50 border-b border-border">
+                                    <tr>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider w-20">Hạng</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Người dùng</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider text-center">Số lần truy cập</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider text-right">Danh hiệu</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-border">
+                                    {ranking.map((u, idx) => (
+                                        <tr key={u.id} className="hover:bg-page/30 transition-colors group">
+                                            <td className="px-6 py-4">
+                                                {idx === 0 ? (
+                                                    <span className="text-2xl">🥇</span>
+                                                ) : idx === 1 ? (
+                                                    <span className="text-2xl">🥈</span>
+                                                ) : idx === 2 ? (
+                                                    <span className="text-2xl">🥉</span>
+                                                ) : (
+                                                    <span className="text-lg font-bold text-muted ml-1">#{idx + 1}</span>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-xs font-bold text-page">
+                                                        {u.username[0].toUpperCase()}
+                                                    </div>
+                                                    <span className="font-bold text-primary group-hover:text-accent transition-colors">{u.username}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-center">
+                                                <span className="px-3 py-1 rounded-lg bg-page font-mono font-bold text-accent border border-accent/20">
+                                                    {u.access_count}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 text-right">
+                                                <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${u.access_count > 50
+                                                        ? 'bg-syntax-purple/10 text-syntax-purple border-syntax-purple/20'
+                                                        : u.access_count > 20
+                                                            ? 'bg-syntax-blue/10 text-syntax-blue border-syntax-blue/20'
+                                                            : 'bg-secondary/10 text-secondary border-secondary/20'
+                                                    }`}>
+                                                    {u.access_count > 50 ? 'Gia bảo Planex' : u.access_count > 20 ? 'Thành viên gắn kết' : 'Người dùng mới'}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {ranking.length === 0 && (
+                                        <tr>
+                                            <td colSpan={4} className="px-6 py-20 text-center text-secondary">
+                                                Chưa có dữ liệu xếp hạng.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 )}
