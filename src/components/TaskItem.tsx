@@ -215,6 +215,7 @@ export default function TaskItem({ task, isSelected, onSelect, onUpdated, onDele
                                 taskId={task.id}
                                 isOpen={showSubtasks}
                                 onToggle={() => setShowSubtasks(!showSubtasks)}
+                                initialSubtasks={task.subtasks || []}
                                 onSubtaskChange={async () => {
                                     // Fetch updated task data to get new progress
                                     try {
