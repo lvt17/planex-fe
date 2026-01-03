@@ -77,6 +77,14 @@ export function useSupabaseRealtime({
                     timestamp: Date.now()
                 });
             })
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
+                console.log('Supabase: New notification', payload);
+                onEvent?.({
+                    type: 'notification_received',
+                    data: payload.new,
+                    timestamp: Date.now()
+                });
+            })
             // 2. Listen to Manual Broadcasts (if needed)
             .on('broadcast', { event: 'custom_event' }, ({ payload }) => {
                 console.log('Supabase: Custom event', payload);
