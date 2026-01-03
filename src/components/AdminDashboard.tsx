@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSSE } from '@/hooks/useSSE';
 import PlanexLogo from './PlanexLogo';
 import {
     PresentationChartBarIcon,
@@ -86,13 +87,7 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
 
     useEffect(() => {
         fetchData();
-
-        // Auto-refresh every 10 seconds for real-time updates
-        const interval = setInterval(() => {
-            fetchData();
-        }, 10000);
-
-        return () => clearInterval(interval);
+        // Removed polling - now using SSE for realtime updates
     }, [token]);
 
     const getGroupedSurveys = () => {
@@ -147,6 +142,46 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
             toast.error('Failed to delete user');
         }
     };
+
+    // SSE connection for realtime updates
+    const { isConnected: sseConnected } = useSSE({
+        url: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/events/stream`,
+        token: token,
+        onEvent: (event) => {
+            console.log('Admin SSE event:', event);
+
+            // Handle different event types
+            switch (event.type) {
+                case 'user_updated':
+                    // Update user in list
+                    setUsers(prev => prev.map(u =>
+                        u.id === event.data.id ? event.data : u
+                    ));
+                    break;
+
+                case 'user_deleted':
+                    // Remove user from list
+                    setUsers(prev => prev.filter(u => u.id !== event.data.id));
+                    break;
+
+                case 'survey_submitted':
+                    // Add new survey to list
+                    setSurveys(prev => [event.data, ...prev]);
+                    break;
+
+                case 'report_submitted':
+                    // Add new report to list
+                    setReports(prev => [event.data, ...prev]);
+                    break;
+            }
+        },
+        onConnect: () => {
+            console.log('Admin SSE connected');
+        },
+        onDisconnect: () => {
+            console.log('Admin SSE disconnected');
+        }
+    });
 
     return (
         <div className="flex flex-col h-screen bg-page">
@@ -525,10 +560,10 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${u.access_count > 50
-                                                        ? 'bg-syntax-purple/10 text-syntax-purple border-syntax-purple/20'
-                                                        : u.access_count > 20
-                                                            ? 'bg-syntax-blue/10 text-syntax-blue border-syntax-blue/20'
-                                                            : 'bg-secondary/10 text-secondary border-secondary/20'
+                                                    ? 'bg-syntax-purple/10 text-syntax-purple border-syntax-purple/20'
+                                                    : u.access_count > 20
+                                                        ? 'bg-syntax-blue/10 text-syntax-blue border-syntax-blue/20'
+                                                        : 'bg-secondary/10 text-secondary border-secondary/20'
                                                     }`}>
                                                     {u.access_count > 50 ? 'Gia bảo Planex' : u.access_count > 20 ? 'Thành viên gắn kết' : 'Người dùng mới'}
                                                 </span>
