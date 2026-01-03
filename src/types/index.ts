@@ -46,3 +46,14 @@ export interface Whiteboard {
     created_at: string;
     updated_at?: string;
 }
+
+export interface Project {
+    id: number;
+    name: string;
+    description?: string;
+    user_id?: number;
+    team_id?: number;
+    team_name?: string;
+    created_at: string;
+    task_count: number;
+}

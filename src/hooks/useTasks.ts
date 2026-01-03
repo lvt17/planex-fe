@@ -14,6 +14,7 @@ interface TasksResponse {
 interface TaskFilters {
     status?: 'pending' | 'in_progress' | 'done';
     deadline?: 'today' | 'week' | 'overdue';
+    project_id?: number | null; // null = no filter, 0 = tasks without project
     page?: number;
     per_page?: number;
 }
@@ -32,6 +33,9 @@ export function useTasks() {
 
             if (activeFilters.status) params.append('status', activeFilters.status);
             if (activeFilters.deadline) params.append('deadline', activeFilters.deadline);
+            if (activeFilters.project_id !== undefined && activeFilters.project_id !== null) {
+                params.append('project_id', activeFilters.project_id.toString());
+            }
             if (activeFilters.page) params.append('page', activeFilters.page.toString());
             if (activeFilters.per_page) params.append('per_page', activeFilters.per_page.toString());
 
