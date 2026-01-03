@@ -7,6 +7,7 @@ import { useTasks } from '@/hooks/useTasks';
 import { useIncome } from '@/hooks/useIncome';
 import { useProjects } from '@/hooks/useProjects';
 import Sidebar from './Sidebar';
+import Badge from './Badge';
 import TaskList from './TaskList';
 import TaskDetail from './TaskDetail';
 import CreateTaskModal from './CreateTaskModal';
@@ -279,16 +280,10 @@ export default function Dashboard() {
                         {/* Avatar & Title Badge */}
                         <div className="flex items-center gap-2">
                             <div className="hidden sm:flex flex-col items-end mr-1">
-                                <span className="text-xs font-bold text-primary">{user?.username}</span>
-                                {user?.title && (
-                                    <span className={`text-[9px] font-bold px-1 rounded ${user.title === 'Trùm Planex' ? 'text-accent' :
-                                            user.title === 'Planex-er' ? 'text-syntax-purple' :
-                                                user.title === 'Thành viên gắn kết' ? 'text-syntax-blue' :
-                                                    'text-secondary'
-                                        }`}>
-                                        {user.title}
-                                    </span>
-                                )}
+                                <span className="text-xs font-bold text-primary leading-tight">{user?.username}</span>
+                                <div className="mt-0.5 scale-90 origin-right">
+                                    <Badge title={user?.title} size="sm" />
+                                </div>
                             </div>
                             {user?.avatar_url ? (
                                 <img

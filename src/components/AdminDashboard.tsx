@@ -18,6 +18,7 @@ import {
     DocumentArrowDownIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
+import Badge from './Badge';
 import api from '@/utils/api';
 
 interface AdminDashboardProps {
@@ -553,15 +554,8 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                                                     {u.access_count}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${u.access_count > 50
-                                                    ? 'bg-syntax-purple/10 text-syntax-purple border-syntax-purple/20'
-                                                    : u.access_count > 20
-                                                        ? 'bg-syntax-blue/10 text-syntax-blue border-syntax-blue/20'
-                                                        : 'bg-secondary/10 text-secondary border-secondary/20'
-                                                    }`}>
-                                                    {u.email == 'lieutoan7788a@gmail.com' ? 'Trùm planex' : u.access_count > 50 ? 'Planex-er' : u.access_count > 20 ? 'Thành viên gắn kết' : 'Người dùng mới'}
-                                                </span>
+                                            <td className="px-6 py-4 flex justify-end">
+                                                <Badge title={u.title} size="md" />
                                             </td>
                                         </tr>
                                     ))}

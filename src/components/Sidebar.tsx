@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { User } from '@/types';
 import api from '@/utils/api';
 import PlanexLogo from './PlanexLogo';
+import Badge from './Badge';
 import {
     HomeIcon,
     ChartBarIcon,
@@ -242,15 +243,9 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
                                 <div className="min-w-0">
                                     <div className="flex flex-col">
                                         <p className="text-sm font-medium text-primary truncate leading-tight">{user?.full_name || user?.username || 'User'}</p>
-                                        {user?.title && (
-                                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded mt-0.5 inline-block w-fit ${user.title === 'Trùm Planex' ? 'bg-accent/20 text-accent' :
-                                                    user.title === 'Planex-er' ? 'bg-syntax-purple/20 text-syntax-purple' :
-                                                        user.title === 'Thành viên gắn kết' ? 'bg-syntax-blue/20 text-syntax-blue' :
-                                                            'bg-secondary/20 text-secondary'
-                                                }`}>
-                                                {user.title}
-                                            </span>
-                                        )}
+                                        <div className="mt-1">
+                                            <Badge title={user?.title} size="sm" />
+                                        </div>
                                     </div>
                                     <p className="text-[10px] text-muted truncate mt-0.5">{user?.email}</p>
                                 </div>

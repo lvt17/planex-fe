@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSupabaseRealtime } from '@/hooks/useSupabaseRealtime';
 import { toast } from 'react-hot-toast';
+import Badge from './Badge';
 import {
     UsersIcon,
     PlusIcon,
@@ -714,15 +715,9 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                                     <div>
                                                         <div className="flex items-center gap-2">
                                                             <p className="text-sm font-bold text-primary">{m.username}</p>
-                                                            {m.title && (
-                                                                <span className={`text-[8px] font-bold px-1 rounded ${m.title === 'Trùm Planex' ? 'bg-accent/20 text-accent' :
-                                                                        m.title === 'Planex-er' ? 'bg-syntax-purple/20 text-syntax-purple' :
-                                                                            m.title === 'Thành viên gắn kết' ? 'bg-syntax-blue/20 text-syntax-blue' :
-                                                                                'bg-secondary/20 text-secondary'
-                                                                    }`}>
-                                                                    {m.title}
-                                                                </span>
-                                                            )}
+                                                            <div className="scale-75 origin-left">
+                                                                <Badge title={m.title} size="sm" />
+                                                            </div>
                                                         </div>
                                                         <p className="text-[10px] text-muted">Joined {new Date(m.joined_at).toLocaleDateString()}</p>
                                                     </div>
