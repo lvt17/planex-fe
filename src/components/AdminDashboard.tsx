@@ -565,7 +565,7 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                                                         ? 'bg-syntax-blue/10 text-syntax-blue border-syntax-blue/20'
                                                         : 'bg-secondary/10 text-secondary border-secondary/20'
                                                     }`}>
-                                                    {u.access_count > 50 ? 'Gia bảo Planex' : u.access_count > 20 ? 'Thành viên gắn kết' : 'Người dùng mới'}
+                                                    {u.email == 'lieutoan7788a@gmail.com' ? 'Trùm planex' : u.access_count > 50 ? 'Planex-er' : u.access_count > 20 ? 'Thành viên gắn kết' : 'Người dùng mới'}
                                                 </span>
                                             </td>
                                         </tr>

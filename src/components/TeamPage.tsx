@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useSSE } from '@/hooks/useSSE';
 import { toast } from 'react-hot-toast';
 import {
     UsersIcon,
@@ -133,34 +134,39 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
     useEffect(() => {
         fetchTeamData();
         requestNotificationPermission();
+        // Removed polling - now using SSE for realtime chat
+    }, [fetchTeamData]);
 
-        const pollInterval = setInterval(async () => {
-            if (lastMessageId.current === 0) return;
-            try {
-                const res = await api.get(`/api/teams/${teamId}/chat?after=${lastMessageId.current}`);
-                if (res.data.length > 0) {
-                    setMessages(prev => {
-                        const existingIds = new Set(prev.map((m: any) => m.id));
-                        const newMessages = res.data.filter((m: any) => !existingIds.has(m.id));
-                        if (newMessages.length === 0) return prev;
+    // SSE connection for realtime chat updates
+    const { isConnected: sseConnected } = useSSE({
+        url: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/events/stream`,
+        token: localStorage.getItem('token'),
+        onEvent: (event) => {
+            console.log('TeamPage SSE event:', event);
 
-                        // Show notifications for new messages from others
-                        if (newMessages.some((m: any) => m.user_id !== currentUser?.id)) {
-                            const lastMsg = newMessages[newMessages.length - 1];
-                            showNotification(`Tin nhắn mới từ ${lastMsg.username}`, {
-                                body: lastMsg.content,
-                                tag: `team-chat-${teamId}`
-                            });
-                        }
+            // Handle chat message events
+            if (event.type === 'chat_message' && event.data.team_id === teamId) {
+                setMessages(prev => {
+                    // Check if message already exists
+                    if (prev.some((m: any) => m.id === event.data.id)) {
+                        return prev;
+                    }
 
-                        return [...prev, ...newMessages];
-                    });
-                    lastMessageId.current = res.data[res.data.length - 1].id;
-                }
-            } catch (e) { }
-        }, 3000);
-        return () => clearInterval(pollInterval);
-    }, [teamId, fetchTeamData, currentUser?.id]);
+                    // Show notification for messages from others
+                    if (event.data.user_id !== currentUser?.id) {
+                        showNotification(`Tin nhắn mới từ ${event.data.username}`, {
+                            body: event.data.content || '[Hình ảnh]',
+                            icon: '/logo.png'
+                        });
+                    }
+
+                    // Add new message and update lastMessageId
+                    lastMessageId.current = event.data.id;
+                    return [...prev, event.data];
+                });
+            }
+        }
+    });
 
     // Scroll to bottom only when user sends a new message (not on initial load or polling)
     const scrollToBottom = () => {
