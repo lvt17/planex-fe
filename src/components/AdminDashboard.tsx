@@ -148,56 +148,53 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
     return (
         <div className="flex flex-col h-screen bg-page">
             {/* Header */}
-            <header className="h-16 bg-surface border-b border-border flex items-center justify-between px-6 shrink-0">
-                <div className="flex items-center gap-4">
-                    <PlanexLogo size="md" />
-                    <div className="h-4 w-px bg-border" />
-                    <nav className="flex items-center gap-1">
-                        {[
-                            { id: 'users', label: 'Người dùng', icon: UsersIcon },
-                            { id: 'surveys', label: 'Khảo sát', icon: ClipboardDocumentCheckIcon },
-                            { id: 'reports', label: 'Báo cáo lỗi', icon: BugAntIcon }
-                        ].map(tab => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
-                                className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-accent text-page' : 'text-secondary hover:text-primary hover:bg-hover'
-                                    }`}
-                            >
-                                <tab.icon className="w-4 h-4" />
-                                {tab.label}
-                            </button>
-                        ))}
-                    </nav>
+            <header className="bg-surface border-b border-border shrink-0">
+                <div className="flex items-center justify-between px-4 sm:px-6 py-3">
+                    <PlanexLogo size="sm" />
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        <button
+                            onClick={fetchData}
+                            className="p-2 text-secondary hover:text-primary transition-colors cursor-pointer"
+                            title="Tải lại dữ liệu"
+                        >
+                            <svg className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </button>
+                        <button
+                            onClick={onLogout}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-syntax-red/10 text-syntax-red text-sm font-bold hover:bg-syntax-red/20 transition-all cursor-pointer"
+                        >
+                            <ArrowLeftOnRectangleIcon className="w-4 h-4" />
+                            <span className="hidden sm:inline">Thoát</span>
+                        </button>
+                    </div>
                 </div>
-
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={fetchData}
-                        className="p-2 text-secondary hover:text-primary transition-colors cursor-pointer"
-                        title="Tải lại dữ liệu"
-                    >
-                        <svg className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                    </button>
-                    <button
-                        onClick={onLogout}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-syntax-red/10 text-syntax-red text-sm font-bold hover:bg-syntax-red/20 transition-all cursor-pointer"
-                    >
-                        <ArrowLeftOnRectangleIcon className="w-4 h-4" />
-                        Thoát
-                    </button>
-                </div>
+                <nav className="flex items-center gap-1 px-4 sm:px-6 pb-3 overflow-x-auto">
+                    {[
+                        { id: 'users', label: 'Người dùng', icon: UsersIcon },
+                        { id: 'surveys', label: 'Khảo sát', icon: ClipboardDocumentCheckIcon },
+                        { id: 'reports', label: 'Báo cáo', icon: BugAntIcon }
+                    ].map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id as any)}
+                            className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === tab.id ? 'bg-accent text-page' : 'text-secondary hover:text-primary hover:bg-hover'}`}
+                        >
+                            <tab.icon className="w-4 h-4" />
+                            <span className="hidden sm:inline">{tab.label}</span>
+                        </button>
+                    ))}
+                </nav>
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-auto p-8">
+            <main className="flex-1 overflow-auto p-4 sm:p-8">
                 {activeTab === 'users' && (
                     <div className="max-w-6xl mx-auto animate-fade-in">
-                        <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-2xl font-bold text-primary">Quản lý người dùng ({users.length})</h2>
-                            <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-surface border border-border w-80">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+                            <h2 className="text-xl sm:text-2xl font-bold text-primary">Quản lý người dùng ({users.length})</h2>
+                            <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-surface border border-border w-full sm:w-80">
                                 <MagnifyingGlassIcon className="w-5 h-5 text-secondary" />
                                 <input
                                     type="text"
@@ -210,77 +207,79 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                         </div>
 
                         <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
-                            <table className="w-full text-left">
-                                <thead className="bg-page/50 border-b border-border">
-                                    <tr>
-                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">User</th>
-                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Email</th>
-                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Ngày tham gia</th>
-                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Trạng thái</th>
-                                        <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider text-right">Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-border">
-                                    {users.filter(u => u.username.includes(searchQuery) || u.email.includes(searchQuery)).map(u => (
-                                        <tr key={u.id} className="hover:bg-page/30 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-xs font-bold text-page">
-                                                        {u.username[0].toUpperCase()}
-                                                    </div>
-                                                    <span className="font-medium text-primary">{u.username}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-sm text-secondary">{u.email}</td>
-                                            <td className="px-6 py-4 text-sm text-secondary">{new Date(u.created_at).toLocaleDateString()}</td>
-                                            <td className="px-6 py-4">
-                                                {u.is_locked ? (
-                                                    <div className="flex flex-col">
-                                                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-syntax-red/10 text-syntax-red border border-syntax-red/20 inline-block w-fit">
-                                                            Locked
-                                                        </span>
-                                                        <span className="text-[9px] text-muted mt-1 whitespace-nowrap">
-                                                            Đến: {new Date(u.locked_until).toLocaleString()}
-                                                        </span>
-                                                    </div>
-                                                ) : (
-                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-syntax-green/10 text-syntax-green border border-syntax-green/20">
-                                                        Active
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    {u.is_locked ? (
-                                                        <button
-                                                            onClick={() => handleUnlockUser(u)}
-                                                            className="p-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-all cursor-pointer"
-                                                            title="Mở khoá"
-                                                        >
-                                                            <LockOpenIcon className="w-4 h-4" />
-                                                        </button>
-                                                    ) : (
-                                                        <button
-                                                            onClick={() => { setSelectedUser(u); setShowLockModal(true); }}
-                                                            className="p-1.5 rounded-lg bg-syntax-red/10 text-syntax-red hover:bg-syntax-red/20 transition-all cursor-pointer"
-                                                            title="Khoá tài khoản"
-                                                        >
-                                                            <LockClosedIcon className="w-4 h-4" />
-                                                        </button>
-                                                    )}
-                                                    <button
-                                                        onClick={() => { setSelectedUser(u); setShowDeleteConfirm(true); }}
-                                                        className="p-1.5 rounded-lg bg-page hover:bg-syntax-red/10 text-muted hover:text-syntax-red transition-all cursor-pointer border border-border"
-                                                        title="Xoá vĩnh viễn"
-                                                    >
-                                                        <TrashIcon className="w-4 h-4" />
-                                                    </button>
-                                                </div>
-                                            </td>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left min-w-[600px]">
+                                    <thead className="bg-page/50 border-b border-border">
+                                        <tr>
+                                            <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">User</th>
+                                            <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Email</th>
+                                            <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Ngày tham gia</th>
+                                            <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider">Trạng thái</th>
+                                            <th className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider text-right">Thao tác</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="divide-y divide-border">
+                                        {users.filter(u => u.username.includes(searchQuery) || u.email.includes(searchQuery)).map(u => (
+                                            <tr key={u.id} className="hover:bg-page/30 transition-colors">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-xs font-bold text-page">
+                                                            {u.username[0].toUpperCase()}
+                                                        </div>
+                                                        <span className="font-medium text-primary">{u.username}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-secondary">{u.email}</td>
+                                                <td className="px-6 py-4 text-sm text-secondary">{new Date(u.created_at).toLocaleDateString()}</td>
+                                                <td className="px-6 py-4">
+                                                    {u.is_locked ? (
+                                                        <div className="flex flex-col">
+                                                            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-syntax-red/10 text-syntax-red border border-syntax-red/20 inline-block w-fit">
+                                                                Locked
+                                                            </span>
+                                                            <span className="text-[9px] text-muted mt-1 whitespace-nowrap">
+                                                                Đến: {new Date(u.locked_until).toLocaleString()}
+                                                            </span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-syntax-green/10 text-syntax-green border border-syntax-green/20">
+                                                            Active
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        {u.is_locked ? (
+                                                            <button
+                                                                onClick={() => handleUnlockUser(u)}
+                                                                className="p-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-all cursor-pointer"
+                                                                title="Mở khoá"
+                                                            >
+                                                                <LockOpenIcon className="w-4 h-4" />
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                onClick={() => { setSelectedUser(u); setShowLockModal(true); }}
+                                                                className="p-1.5 rounded-lg bg-syntax-red/10 text-syntax-red hover:bg-syntax-red/20 transition-all cursor-pointer"
+                                                                title="Khoá tài khoản"
+                                                            >
+                                                                <LockClosedIcon className="w-4 h-4" />
+                                                            </button>
+                                                        )}
+                                                        <button
+                                                            onClick={() => { setSelectedUser(u); setShowDeleteConfirm(true); }}
+                                                            className="p-1.5 rounded-lg bg-page hover:bg-syntax-red/10 text-muted hover:text-syntax-red transition-all cursor-pointer border border-border"
+                                                            title="Xoá vĩnh viễn"
+                                                        >
+                                                            <TrashIcon className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 )}

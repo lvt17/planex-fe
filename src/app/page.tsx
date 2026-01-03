@@ -22,6 +22,7 @@ import {
   LinkIcon,
   EnvelopeIcon,
   CircleStackIcon,
+  FolderIcon,
 } from '@heroicons/react/24/outline';
 
 export default function HomePage() {
@@ -73,6 +74,11 @@ export default function HomePage() {
       title: 'Spreadsheets',
       description: 'Bảng tính với đầy đủ công thức. Quản lý data, track ngân sách, tính toán.',
       icon: TableCellsIcon,
+    },
+    {
+      title: 'Projects',
+      description: 'Tạo các project cá nhân hoặc team để phân chia tasks và subtasks theo từng dự án riêng biệt.',
+      icon: FolderIcon,
     },
 
   ];
