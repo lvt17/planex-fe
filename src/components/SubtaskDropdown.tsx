@@ -130,7 +130,7 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
             </button>
 
             {isOpen && (
-                <div className="mt-2 space-y-1 animate-fade-in">
+                <div className="mt-2 space-y-1">
                     {loading ? (
                         <div className="text-center py-4">
                             <div className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />

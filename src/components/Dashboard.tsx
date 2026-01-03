@@ -495,7 +495,7 @@ export default function Dashboard() {
             {/* Mobile Search Modal */}
             {isSearchModalOpen && (
                 <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 px-4 bg-black/50 backdrop-blur-sm" onClick={() => setIsSearchModalOpen(false)}>
-                    <div className="w-full max-w-md bg-surface border border-border rounded-2xl shadow-2xl animate-fade-in" onClick={(e) => e.stopPropagation()}>
+                    <div className="w-full max-w-md bg-surface border border-border rounded-2xl shadow-2xl" onClick={(e) => e.stopPropagation()}>
                         <div className="p-4">
                             <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-page border border-border">
                                 <MagnifyingGlassIcon className="w-5 h-5 text-secondary flex-shrink-0" />
@@ -531,7 +531,7 @@ export default function Dashboard() {
             {/* Create Project Modal */}
             {isCreateProjectModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-                    <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-6 animate-fade-in">
+                    <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-6">
                         <h2 className="text-lg font-bold text-primary mb-4">Tạo Project mới</h2>
                         <input
                             type="text"

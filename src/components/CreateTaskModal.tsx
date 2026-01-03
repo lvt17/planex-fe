@@ -54,7 +54,7 @@ export default function CreateTaskModal({ onClose, onTaskCreated, projects = [] 
             onClick={onClose}
         >
             <div
-                className="w-full max-w-md rounded-xl overflow-hidden animate-fade-in bg-surface border border-border"
+                className="w-full max-w-md rounded-xl overflow-hidden bg-surface border border-border"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}

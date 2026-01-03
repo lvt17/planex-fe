@@ -19,7 +19,7 @@ export default function TaskList({ tasks, onSelectTask, selectedTaskId, onTaskUp
     const doneTasks = tasks.filter(t => t.is_done);
 
     const TaskGroup = ({ title, taskList, color, count }: { title: string; taskList: Task[]; color: string; count: number }) => (
-        <div className="mb-6 animate-fade-in">
+        <div className="mb-6">
             <div className="flex items-center gap-3 mb-3">
                 <div className="w-3 h-3 rounded-full" style={{ background: color }}></div>
                 <h3 className="text-sm font-semibold text-primary">{title}</h3>
@@ -29,7 +29,7 @@ export default function TaskList({ tasks, onSelectTask, selectedTaskId, onTaskUp
             </div>
             <div className="space-y-2">
                 {taskList.map((task) => (
-                    <div key={task.id} className="animate-slide-in">
+                    <div key={task.id}>
                         <TaskItem
                             task={task}
                             isSelected={selectedTaskId === task.id}
