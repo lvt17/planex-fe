@@ -128,41 +128,33 @@ export default function SubtaskDropdown({ taskId, isOpen, onToggle, onSubtaskCha
 
             {isOpen && (
                 <div className="mt-2 space-y-1">
-                    {loading ? (
-                        <div className="text-center py-4">
-                            <div className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
-                        </div>
-                    ) : (
-                        <>
-                            {subtasks.map(subtask => (
-                                <SubtaskItem
-                                    key={subtask.id}
-                                    subtask={subtask}
-                                    onToggle={toggleSubtask}
-                                    onDelete={deleteSubtask}
-                                />
-                            ))}
+                    {subtasks.map(subtask => (
+                        <SubtaskItem
+                            key={subtask.id}
+                            subtask={subtask}
+                            onToggle={toggleSubtask}
+                            onDelete={deleteSubtask}
+                        />
+                    ))}
 
-                            <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border">
-                                <input
-                                    type="text"
-                                    value={newSubtaskTitle}
-                                    onChange={(e) => setNewSubtaskTitle(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && addSubtask()}
-                                    placeholder="Add new subtask..."
-                                    className="flex-1 px-3 py-1.5 text-sm bg-surface border border-border rounded-lg text-primary placeholder-muted focus:border-accent focus:outline-none"
-                                    disabled={adding}
-                                />
-                                <button
-                                    onClick={addSubtask}
-                                    disabled={adding || !newSubtaskTitle.trim()}
-                                    className="p-1.5 bg-accent text-page rounded-lg hover:opacity-90 disabled:opacity-50 transition-all cursor-pointer"
-                                >
-                                    <PlusIcon className="w-4 h-4" />
-                                </button>
-                            </div>
-                        </>
-                    )}
+                    <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border">
+                        <input
+                            type="text"
+                            value={newSubtaskTitle}
+                            onChange={(e) => setNewSubtaskTitle(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && addSubtask()}
+                            placeholder="Add new subtask..."
+                            className="flex-1 px-3 py-1.5 text-sm bg-surface border border-border rounded-lg text-primary placeholder-muted focus:border-accent focus:outline-none"
+                            disabled={adding}
+                        />
+                        <button
+                            onClick={addSubtask}
+                            disabled={adding || !newSubtaskTitle.trim()}
+                            className="p-1.5 bg-accent text-page rounded-lg hover:opacity-90 disabled:opacity-50 transition-all cursor-pointer"
+                        >
+                            <PlusIcon className="w-4 h-4" />
+                        </button>
+                    </div>
                 </div>
             )}
 
