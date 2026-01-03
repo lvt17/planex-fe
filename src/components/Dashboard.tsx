@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useTasks } from '@/hooks/useTasks';
 import { useIncome } from '@/hooks/useIncome';
+import { useProjects } from '@/hooks/useProjects';
 import Sidebar from './Sidebar';
 import TaskList from './TaskList';
 import TaskDetail from './TaskDetail';
@@ -31,12 +32,14 @@ import {
     ChevronRightIcon,
     FunnelIcon,
     Bars3Icon,
+    FolderPlusIcon,
 } from '@heroicons/react/24/outline';
 
 export default function Dashboard() {
     const { user, logout } = useAuth();
     const { tasks, loading, pagination, filters, fetchTasks, applyFilters, goToPage, createTask, updateTask, deleteTask, stats } = useTasks();
     const { stats: incomeStats, loading: incomeLoading, fetchStats: fetchIncome } = useIncome();
+    const { projects, createProject, deleteProject, fetchProjects } = useProjects();
 
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -44,6 +47,9 @@ export default function Dashboard() {
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<string>('all');
     const [deadlineFilter, setDeadlineFilter] = useState<string>('all');
+    const [projectFilter, setProjectFilter] = useState<string>('all');
+    const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] = useState(false);
+    const [newProjectName, setNewProjectName] = useState('');
     const [isSurveyOpen, setIsSurveyOpen] = useState(false);
     const [isSupportOpen, setIsSupportOpen] = useState(false);
     const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
@@ -77,7 +83,24 @@ export default function Dashboard() {
         const newFilters: any = {};
         if (statusFilter !== 'all') newFilters.status = statusFilter;
         if (deadlineFilter !== 'all') newFilters.deadline = deadlineFilter;
+        if (projectFilter !== 'all') {
+            newFilters.project_id = projectFilter === 'none' ? 0 : parseInt(projectFilter);
+        }
         applyFilters(newFilters);
+    };
+
+    const handleCreateProject = async () => {
+        if (!newProjectName.trim()) {
+            toast.error('Vui lòng nhập tên project');
+            return;
+        }
+        try {
+            await createProject(newProjectName);
+            setNewProjectName('');
+            setIsCreateProjectModalOpen(false);
+        } catch (error) {
+            // Error already handled in hook
+        }
     };
 
     const handleTaskCreated = async (taskData: Partial<Task>) => {
@@ -282,6 +305,27 @@ export default function Dashboard() {
                                         <option value="overdue">Quá hạn</option>
                                     </select>
 
+                                    {/* Project Filter */}
+                                    <select
+                                        value={projectFilter}
+                                        onChange={(e) => setProjectFilter(e.target.value)}
+                                        className="px-3 py-2 text-sm rounded-lg bg-surface border border-border text-primary cursor-pointer"
+                                    >
+                                        <option value="all">Tất cả project</option>
+                                        <option value="none">Không có project</option>
+                                        {projects.map(p => (
+                                            <option key={p.id} value={p.id.toString()}>{p.name}</option>
+                                        ))}
+                                    </select>
+
+                                    <button
+                                        onClick={() => setIsCreateProjectModalOpen(true)}
+                                        className="p-2 text-sm rounded-lg bg-surface border border-border text-primary hover:border-accent cursor-pointer"
+                                        title="Tạo Project mới"
+                                    >
+                                        <FolderPlusIcon className="w-5 h-5" />
+                                    </button>
+
                                     <button
                                         onClick={handleApplyFilters}
                                         className="px-4 py-2 text-sm rounded-lg bg-accent text-page font-medium hover:opacity-90 cursor-pointer"
@@ -441,7 +485,40 @@ export default function Dashboard() {
                 <CreateTaskModal
                     onClose={() => setIsCreateModalOpen(false)}
                     onTaskCreated={handleTaskCreated}
+                    projects={projects}
                 />
+            )}
+
+            {/* Create Project Modal */}
+            {isCreateProjectModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+                    <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-6 animate-fade-in">
+                        <h2 className="text-lg font-bold text-primary mb-4">Tạo Project mới</h2>
+                        <input
+                            type="text"
+                            value={newProjectName}
+                            onChange={(e) => setNewProjectName(e.target.value)}
+                            placeholder="Tên project..."
+                            className="w-full px-4 py-3 rounded-lg bg-page border border-border text-primary placeholder:text-muted focus:border-accent focus:outline-none mb-4"
+                            autoFocus
+                            onKeyDown={(e) => e.key === 'Enter' && handleCreateProject()}
+                        />
+                        <div className="flex gap-3 justify-end">
+                            <button
+                                onClick={() => { setIsCreateProjectModalOpen(false); setNewProjectName(''); }}
+                                className="px-4 py-2 rounded-lg bg-page border border-border text-secondary hover:text-primary cursor-pointer"
+                            >
+                                Hủy
+                            </button>
+                            <button
+                                onClick={handleCreateProject}
+                                className="px-4 py-2 rounded-lg bg-accent text-page font-medium hover:opacity-90 cursor-pointer"
+                            >
+                                Tạo Project
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
 
             {/* User Survey Modal */}

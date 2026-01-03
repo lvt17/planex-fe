@@ -1,16 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Task } from '@/types';
+import { Task, Project } from '@/types';
 import { toast } from 'react-hot-toast';
-import { XMarkIcon, CalendarIcon, CurrencyDollarIcon, UserIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, CalendarIcon, CurrencyDollarIcon, UserIcon, FolderIcon } from '@heroicons/react/24/outline';
 
 interface CreateTaskModalProps {
     onClose: () => void;
     onTaskCreated: (data: Partial<Task>) => void;
+    projects?: Project[];
 }
 
-export default function CreateTaskModal({ onClose, onTaskCreated }: CreateTaskModalProps) {
+export default function CreateTaskModal({ onClose, onTaskCreated, projects = [] }: CreateTaskModalProps) {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -18,7 +19,8 @@ export default function CreateTaskModal({ onClose, onTaskCreated }: CreateTaskMo
         deadline: '',
         price: '',
         client_mail: '',
-        client_num: ''
+        client_num: '',
+        project_id: ''
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -38,6 +40,7 @@ export default function CreateTaskModal({ onClose, onTaskCreated }: CreateTaskMo
                 price: formData.price ? Math.round(parseFloat(formData.price)) : 0,
                 client_mail: formData.client_mail || undefined,
                 client_num: formData.client_num || undefined,
+                project_id: formData.project_id ? parseInt(formData.project_id) : undefined,
             });
         } finally {
             setLoading(false);
@@ -89,6 +92,26 @@ export default function CreateTaskModal({ onClose, onTaskCreated }: CreateTaskMo
                                     rows={3}
                                 />
                             </div>
+
+                            {/* Project Selector */}
+                            {projects.length > 0 && (
+                                <div>
+                                    <label className="text-sm font-medium mb-2 flex items-center gap-2 text-primary">
+                                        <FolderIcon className="w-4 h-4 text-syntax-orange" />
+                                        Project
+                                    </label>
+                                    <select
+                                        value={formData.project_id}
+                                        onChange={(e) => setFormData({ ...formData, project_id: e.target.value })}
+                                        className="w-full px-3 py-2.5 rounded-lg text-sm bg-page border border-border text-primary focus:border-accent focus:outline-none transition-colors mt-2 cursor-pointer"
+                                    >
+                                        <option value="">Không có project</option>
+                                        {projects.map(p => (
+                                            <option key={p.id} value={p.id.toString()}>{p.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
