@@ -12,6 +12,7 @@
     "@fortune-sheet/core": "^1.0.4",
     "@fortune-sheet/react": "^1.0.4",
     "@heroicons/react": "^2.2.0",
+    "@supabase/supabase-js": "^2.89.0",
     "@tinymce/tinymce-react": "^6.3.0",
     "axios": "^1.13.2",
     "lucide-react": "^0.562.0",

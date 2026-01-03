@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSSE } from '@/hooks/useSSE';
+import { useSupabaseRealtime } from '@/hooks/useSupabaseRealtime';
 import PlanexLogo from './PlanexLogo';
 import {
     PresentationChartBarIcon,
@@ -143,12 +143,10 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
         }
     };
 
-    // SSE connection for realtime updates
-    const { isConnected: sseConnected } = useSSE({
-        url: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/events/stream`,
-        token: token,
+    // Supabase Realtime for instant updates
+    const { isConnected: sseConnected } = useSupabaseRealtime({
         onEvent: (event) => {
-            console.log('Admin SSE event:', event);
+            console.log('Admin Realtime event:', event);
 
             // Handle different event types
             switch (event.type) {
@@ -176,10 +174,7 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
             }
         },
         onConnect: () => {
-            console.log('Admin SSE connected');
-        },
-        onDisconnect: () => {
-            console.log('Admin SSE disconnected');
+            console.log('Admin Realtime connected');
         }
     });
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSSE } from '@/hooks/useSSE';
+import { useSupabaseRealtime } from '@/hooks/useSupabaseRealtime';
 import { useAuth } from '@/hooks/useAuth';
 import { useTasks } from '@/hooks/useTasks';
 import { useIncome } from '@/hooks/useIncome';
@@ -94,12 +94,10 @@ export default function Dashboard() {
         checkSurvey();
     }, []);
 
-    // SSE connection for realtime task updates
-    const { isConnected: sseConnected } = useSSE({
-        url: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/events/stream`,
-        token: localStorage.getItem('token'),
+    // Supabase Realtime for instant task updates
+    const { isConnected: sseConnected } = useSupabaseRealtime({
         onEvent: (event) => {
-            console.log('Dashboard SSE event:', event);
+            console.log('Dashboard Realtime event:', event);
 
             // Handle task events - refresh tasks to get latest data
             if (event.type === 'task_created' || event.type === 'task_updated' || event.type === 'task_deleted') {

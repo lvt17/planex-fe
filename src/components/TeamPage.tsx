@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSSE } from '@/hooks/useSSE';
+import { useSupabaseRealtime } from '@/hooks/useSupabaseRealtime';
 import { toast } from 'react-hot-toast';
 import {
     UsersIcon,
@@ -137,12 +137,10 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
         // Removed polling - now using SSE for realtime chat
     }, [fetchTeamData]);
 
-    // SSE connection for realtime chat updates
-    const { isConnected: sseConnected } = useSSE({
-        url: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/events/stream`,
-        token: localStorage.getItem('token'),
+    // Supabase Realtime for realtime chat updates
+    const { isConnected: sseConnected } = useSupabaseRealtime({
         onEvent: (event) => {
-            console.log('TeamPage SSE event:', event);
+            console.log('TeamPage Realtime event:', event);
 
             // Handle chat message events
             if (event.type === 'chat_message' && event.data.team_id === teamId) {
