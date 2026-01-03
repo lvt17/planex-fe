@@ -33,6 +33,7 @@ import {
     FunnelIcon,
     Bars3Icon,
     FolderPlusIcon,
+    TrashIcon,
 } from '@heroicons/react/24/outline';
 
 export default function Dashboard() {
@@ -321,6 +322,23 @@ export default function Dashboard() {
                                             <option key={p.id} value={p.id.toString()}>{p.name}</option>
                                         ))}
                                     </select>
+
+                                    {/* Delete Project Button */}
+                                    {projectFilter !== 'all' && projectFilter !== 'none' && (
+                                        <button
+                                            onClick={async () => {
+                                                if (window.confirm('Bạn có chắc chắn muốn xóa project này? Các task sẽ không bị xóa nhưng sẽ không còn thuộc project nào.')) {
+                                                    await deleteProject(parseInt(projectFilter));
+                                                    setProjectFilter('all');
+                                                    applyFilters({});
+                                                }
+                                            }}
+                                            className="p-1.5 rounded-lg text-secondary hover:text-syntax-red hover:bg-syntax-red/10 transition-colors cursor-pointer mr-1"
+                                            title="Xóa Project này"
+                                        >
+                                            <TrashIcon className="w-4 h-4" />
+                                        </button>
+                                    )}
                                 </div>
 
                                 {/* Filters */}
