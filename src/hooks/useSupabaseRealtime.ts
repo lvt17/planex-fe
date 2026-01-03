@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { supabase } from '@/utils/supabase';
+import { supabase, isSupabaseConfigured } from '@/utils/supabase';
 import { RealtimeChannel } from '@supabase/supabase-js';
 
 interface RealtimeEvent {
@@ -27,6 +27,8 @@ export function useSupabaseRealtime({
     const channelRef = useRef<RealtimeChannel | null>(null);
 
     const subscribe = useCallback(() => {
+        if (!isSupabaseConfigured) return null;
+
         // Clean up existing channel
         if (channelRef.current) {
             channelRef.current.unsubscribe();
@@ -105,9 +107,10 @@ export function useSupabaseRealtime({
     }, [onEvent, onConnect, onDisconnect, channelName]);
 
     useEffect(() => {
+        if (!isSupabaseConfigured) return;
         const channel = subscribe();
         return () => {
-            channel.unsubscribe();
+            if (channel) channel.unsubscribe();
         };
     }, [subscribe]);
 

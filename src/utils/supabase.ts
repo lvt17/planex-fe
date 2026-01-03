@@ -3,6 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
+export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey && !supabaseUrl.includes('placeholder'));
+
 // Avoid error during build time if credentials are missing. 
 // We provide a dummy URL that won't throw an error during the 'next build' static generation phase.
 export const supabase = createClient(
@@ -10,6 +12,6 @@ export const supabase = createClient(
     supabaseAnonKey || 'placeholder'
 );
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn('Supabase credentials missing. Realtime features will be disabled.');
+if (!isSupabaseConfigured) {
+    console.warn('Supabase Realtime: Not configured. Realtime updates will be unavailable.');
 }
