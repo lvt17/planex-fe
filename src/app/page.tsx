@@ -47,7 +47,7 @@ export default function HomePage() {
   const features = [
     {
       title: 'Quản lý Tasks',
-      description: 'Tạo task, chia nhỏ thành subtasks, theo dõi tiến độ. Hệ thống tự động tính phần trăm hoàn thành dựa trên subtasks.',
+      description: 'Tạo Projects cá nhân hoặc team, tạo task, chia nhỏ thành subtasks, theo dõi tiến độ. Hệ thống tự động tính phần trăm hoàn thành dựa trên subtasks.',
       icon: CheckCircleIcon,
     },
     {
@@ -75,11 +75,7 @@ export default function HomePage() {
       description: 'Bảng tính với đầy đủ công thức. Quản lý data, track ngân sách, tính toán.',
       icon: TableCellsIcon,
     },
-    {
-      title: 'Projects',
-      description: 'Tạo các project cá nhân hoặc team để phân chia tasks và subtasks theo từng dự án riêng biệt.',
-      icon: FolderIcon,
-    },
+
 
   ];
 
