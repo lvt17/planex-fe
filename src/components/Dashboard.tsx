@@ -283,11 +283,16 @@ export default function Dashboard() {
                                 <span className="text-xs font-bold text-primary leading-tight">{user?.username}</span>
                                 <div className="mt-0.5 flex flex-wrap gap-1 justify-end scale-90 origin-right">
                                     {user?.badges && user.badges.length > 0 ? (
-                                        user.badges.map((badge, idx) => (
-                                            <Badge key={idx} title={badge} size="sm" />
-                                        ))
+                                        user.badges
+                                            .filter(b => b !== 'Planex Leader' && b !== 'The Best Member')
+                                            .slice(0, 3)
+                                            .map((badge, idx) => (
+                                                <Badge key={idx} title={badge} size="sm" />
+                                            ))
                                     ) : (
-                                        <Badge title={user?.title} size="sm" />
+                                        user?.title && user.title !== 'Planex Leader' && user.title !== 'The Best Member' && (
+                                            <Badge title={user.title} size="sm" />
+                                        )
                                     )}
                                 </div>
                             </div>

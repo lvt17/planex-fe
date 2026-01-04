@@ -31,7 +31,9 @@ api.interceptors.response.use(
         if (error.response?.status === 401) {
             // Token expired or invalid
             tokenStorage.clearTokens();
-            if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+            if (typeof window !== 'undefined' &&
+                !window.location.pathname.includes('/login') &&
+                !window.location.pathname.includes('/secretvt')) {
                 window.location.href = '/login';
             }
         }

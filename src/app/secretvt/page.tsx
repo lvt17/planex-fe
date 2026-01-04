@@ -33,7 +33,7 @@ export default function SecretvtPage() {
 
     return (
         <div className="min-h-screen bg-page flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-surface border border-border rounded-3xl p-8 shadow-2xl animate-fade-in">
+            <div className="w-full max-w-md bg-surface border border-border rounded-3xl p-6 sm:p-8 shadow-2xl animate-fade-in">
                 <div className="text-center mb-10">
                     <div className="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
                         <LockClosedIcon className="w-10 h-10 text-accent" />
@@ -49,7 +49,7 @@ export default function SecretvtPage() {
                             required
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
-                            className="w-full px-6 py-4 rounded-2xl bg-page border border-border text-primary text-center text-2xl tracking-[1em] focus:border-accent focus:outline-none transition-all placeholder:tracking-normal placeholder:text-lg"
+                            className="w-full px-6 py-4 rounded-2xl bg-page border border-border text-primary text-center text-2xl tracking-[0.5em] sm:tracking-[1em] focus:border-accent focus:outline-none transition-all placeholder:tracking-normal placeholder:text-lg"
                             placeholder="••••••••"
                             autoFocus
                         />

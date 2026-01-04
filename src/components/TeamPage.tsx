@@ -557,8 +557,19 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                                 m.username[0].toUpperCase()
                                             )}
                                         </div>
-                                        <div>
-                                            <p className="text-sm font-medium text-primary">{m.username}</p>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-sm font-medium text-primary truncate">{m.username}</p>
+                                                <div className="flex flex-wrap gap-1 scale-75 origin-left">
+                                                    {m.badges && m.badges.length > 0 ? (
+                                                        m.badges.slice(0, 3).map((badge: string, idx: number) => (
+                                                            <Badge key={idx} title={badge} size="sm" />
+                                                        ))
+                                                    ) : (
+                                                        <Badge title={m.title} size="sm" />
+                                                    )}
+                                                </div>
+                                            </div>
                                             <p className="text-[10px] text-muted uppercase">{m.role}</p>
                                         </div>
                                         {(team?.my_role === 'owner' || team?.my_role === 'admin') && m.user_id !== team.owner_id && (
@@ -717,7 +728,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                                             <p className="text-sm font-bold text-primary">{m.username}</p>
                                                             <div className="flex flex-wrap gap-1 scale-75 origin-left">
                                                                 {m.badges && m.badges.length > 0 ? (
-                                                                    m.badges.map((badge: string, idx: number) => (
+                                                                    m.badges.slice(0, 3).map((badge: string, idx: number) => (
                                                                         <Badge key={idx} title={badge} size="sm" />
                                                                     ))
                                                                 ) : (

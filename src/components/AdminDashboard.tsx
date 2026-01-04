@@ -580,11 +580,16 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                                             </td>
                                             <td className="px-6 py-4 flex justify-end gap-1">
                                                 {u.badges && u.badges.length > 0 ? (
-                                                    u.badges.map((badge: string, idx: number) => (
-                                                        <Badge key={idx} title={badge} size="md" />
-                                                    ))
+                                                    u.badges
+                                                        .filter((b: string) => b !== 'Planex Leader' && b !== 'The Best Member')
+                                                        .slice(0, 3)
+                                                        .map((badge: string, idx: number) => (
+                                                            <Badge key={idx} title={badge} size="md" />
+                                                        ))
                                                 ) : (
-                                                    <Badge title={u.title} size="md" />
+                                                    u.title && u.title !== 'Planex Leader' && u.title !== 'The Best Member' && (
+                                                        <Badge title={u.title} size="md" />
+                                                    )
                                                 )}
                                             </td>
                                         </tr>
