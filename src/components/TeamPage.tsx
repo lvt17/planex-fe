@@ -1286,7 +1286,7 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
             {
                 selectedUserProfile && (
                     <div className="fixed inset-0 bg-page/80 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
-                        <div className="w-full max-w-sm bg-surface border border-border rounded-3xl p-8 shadow-2xl animate-fade-in text-center relative overflow-hidden">
+                        <div className="w-full max-w-md bg-surface border border-border rounded-3xl p-8 shadow-2xl animate-fade-in text-center relative overflow-hidden">
                             {/* Background Decor */}
                             <div className="absolute top-0 left-0 w-full h-24 bg-accent/10 -z-10" />
 
@@ -1303,19 +1303,56 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                             </div>
 
                             <h2 className="text-xl font-bold text-primary mb-1">{selectedUserProfile.full_name || 'Chưa đặt tên'}</h2>
-                            <p className="text-sm text-accent font-medium mb-6">@{selectedUserProfile.username}</p>
+                            <p className="text-sm text-accent font-medium mb-2">@{selectedUserProfile.username}</p>
+                            {selectedUserProfile.email && (
+                                <p className="text-xs text-muted mb-4">{selectedUserProfile.email}</p>
+                            )}
 
-                            <div className="space-y-3 pt-6 border-t border-border/50 text-left">
-                                <div className="flex items-center gap-3 text-secondary">
+                            {/* Team Badges Section */}
+                            {selectedUserProfile.badges && selectedUserProfile.badges.length > 0 && (
+                                <div className="mb-4 p-4 bg-page/50 rounded-xl border border-border/50">
+                                    <h3 className="text-xs font-bold text-muted uppercase mb-3 text-left">Thành tích trong team</h3>
+                                    <div className="flex flex-wrap gap-2 justify-center">
+                                        {selectedUserProfile.badges.map((badge: string, idx: number) => (
+                                            <Badge key={idx} title={badge} size="md" />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Global Badges Section - would need API endpoint to fetch */}
+                            <div className="mb-4 p-4 bg-page/50 rounded-xl border border-border/50">
+                                <h3 className="text-xs font-bold text-muted uppercase mb-3 text-left">Thành tích toàn cục</h3>
+                                <div className="flex flex-wrap gap-2 justify-center">
+                                    {selectedUserProfile.title && (
+                                        <Badge title={selectedUserProfile.title} size="md" />
+                                    )}
+                                    <p className="text-xs text-muted w-full mt-2">Xem profile để biết thêm chi tiết</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-4 border-t border-border/50 text-left">
+                                {selectedUserProfile.role && (
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-muted">Vai trò:</span>
+                                        <span className="text-primary font-medium uppercase">{selectedUserProfile.role}</span>
+                                    </div>
+                                )}
+                                {selectedUserProfile.joined_at && (
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-muted">Tham gia:</span>
+                                        <span className="text-primary">{new Date(selectedUserProfile.joined_at).toLocaleDateString('vi-VN')}</span>
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-3 text-secondary justify-center pt-2">
                                     <div className="w-2 h-2 rounded-full bg-syntax-green" />
                                     <span className="text-sm">Đang hoạt động</span>
                                 </div>
-                                {/* You could add more info like joined date here if available */}
                             </div>
 
                             <button
                                 onClick={() => setSelectedUserProfile(null)}
-                                className="w-full mt-8 py-3 bg-accent text-page font-bold rounded-2xl hover:opacity-90 transition-all cursor-pointer"
+                                className="w-full mt-6 py-3 bg-accent text-page font-bold rounded-2xl hover:opacity-90 transition-all cursor-pointer"
                             >
                                 Đóng
                             </button>
