@@ -38,6 +38,18 @@ const badgeConfigs: Record<string, { icon: string; color: string; glow: string; 
         color: 'from-emerald-400 to-emerald-600',
         glow: 'shadow-none',
         border: 'border-emerald-300/20'
+    },
+    'Planex Leader': {
+        icon: '/badges/leader.png',
+        color: 'from-rose-500 to-red-700',
+        glow: 'shadow-[0_0_12px_rgba(244,63,94,0.3)]',
+        border: 'border-rose-400/40'
+    },
+    'The Best Member': {
+        icon: '/badges/best_membership.png',
+        color: 'from-amber-200 via-yellow-400 to-orange-500',
+        glow: 'shadow-[0_0_15px_rgba(252,211,77,0.4)]',
+        border: 'border-yellow-300/50'
     }
 };
 

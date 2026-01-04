@@ -281,8 +281,14 @@ export default function Dashboard() {
                         <div className="flex items-center gap-2">
                             <div className="hidden sm:flex flex-col items-end mr-1">
                                 <span className="text-xs font-bold text-primary leading-tight">{user?.username}</span>
-                                <div className="mt-0.5 scale-90 origin-right">
-                                    <Badge title={user?.title} size="sm" />
+                                <div className="mt-0.5 flex flex-wrap gap-1 justify-end scale-90 origin-right">
+                                    {user?.badges && user.badges.length > 0 ? (
+                                        user.badges.map((badge, idx) => (
+                                            <Badge key={idx} title={badge} size="sm" />
+                                        ))
+                                    ) : (
+                                        <Badge title={user?.title} size="sm" />
+                                    )}
                                 </div>
                             </div>
                             {user?.avatar_url ? (

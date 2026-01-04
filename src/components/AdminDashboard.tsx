@@ -554,8 +554,14 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                                                     {u.access_count}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 flex justify-end">
-                                                <Badge title={u.title} size="md" />
+                                            <td className="px-6 py-4 flex justify-end gap-1">
+                                                {u.badges && u.badges.length > 0 ? (
+                                                    u.badges.map((badge: string, idx: number) => (
+                                                        <Badge key={idx} title={badge} size="md" />
+                                                    ))
+                                                ) : (
+                                                    <Badge title={u.title} size="md" />
+                                                )}
                                             </td>
                                         </tr>
                                     ))}

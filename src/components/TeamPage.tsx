@@ -715,8 +715,14 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                                     <div>
                                                         <div className="flex items-center gap-2">
                                                             <p className="text-sm font-bold text-primary">{m.username}</p>
-                                                            <div className="scale-75 origin-left">
-                                                                <Badge title={m.title} size="sm" />
+                                                            <div className="flex flex-wrap gap-1 scale-75 origin-left">
+                                                                {m.badges && m.badges.length > 0 ? (
+                                                                    m.badges.map((badge: string, idx: number) => (
+                                                                        <Badge key={idx} title={badge} size="sm" />
+                                                                    ))
+                                                                ) : (
+                                                                    <Badge title={m.title} size="sm" />
+                                                                )}
                                                             </div>
                                                         </div>
                                                         <p className="text-[10px] text-muted">Joined {new Date(m.joined_at).toLocaleDateString()}</p>

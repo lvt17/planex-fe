@@ -28,6 +28,7 @@ export interface User {
     avatar_url?: string;
     created_at: string;
     title?: string;
+    badges?: string[];
     access_count?: number;
 }
 

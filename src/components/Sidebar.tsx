@@ -243,8 +243,14 @@ export default function Sidebar({ activeView, setActiveView, onLogout, onNewTask
                                 <div className="min-w-0">
                                     <div className="flex flex-col">
                                         <p className="text-sm font-medium text-primary truncate leading-tight">{user?.full_name || user?.username || 'User'}</p>
-                                        <div className="mt-1">
-                                            <Badge title={user?.title} size="sm" />
+                                        <div className="mt-1 flex flex-wrap gap-1">
+                                            {user?.badges && user.badges.length > 0 ? (
+                                                user.badges.map((badge, idx) => (
+                                                    <Badge key={idx} title={badge} size="sm" />
+                                                ))
+                                            ) : (
+                                                <Badge title={user?.title} size="sm" />
+                                            )}
                                         </div>
                                     </div>
                                     <p className="text-[10px] text-muted truncate mt-0.5">{user?.email}</p>
