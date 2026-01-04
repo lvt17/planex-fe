@@ -1322,12 +1322,12 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
 
                             {/* Global Badges Section - would need API endpoint to fetch */}
                             <div className="mb-4 p-4 bg-page/50 rounded-xl border border-border/50">
-                                <h3 className="text-xs font-bold text-muted uppercase mb-3 text-left">Thành tích toàn cục</h3>
+                                <h3 className="text-xs font-bold text-muted uppercase mb-3 text-left"></h3>
                                 <div className="flex flex-wrap gap-2 justify-center">
                                     {selectedUserProfile.title && (
                                         <Badge title={selectedUserProfile.title} size="md" />
                                     )}
-                                    <p className="text-xs text-muted w-full mt-2">Xem profile để biết thêm chi tiết</p>
+                                    <p className="text-xs text-muted w-full mt-2"></p>
                                 </div>
                             </div>
 
