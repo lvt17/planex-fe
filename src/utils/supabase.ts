@@ -12,6 +12,5 @@ export const supabase = createClient(
     supabaseAnonKey || 'placeholder'
 );
 
-if (!isSupabaseConfigured) {
-    console.warn('Supabase Realtime: Not configured. Realtime updates will be unavailable.');
-}
+// Note: Supabase Realtime is optional. The app uses SSE for real-time chat updates.
+// If you want to enable Supabase Realtime, set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
