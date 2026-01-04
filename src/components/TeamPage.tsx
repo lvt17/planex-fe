@@ -279,6 +279,29 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
         }
     };
 
+    const handleRemoveMember = async (memberId: number, memberName: string) => {
+        if (team?.my_role !== 'owner') {
+            toast.error('Chỉ owner mới có thể xóa thành viên');
+            return;
+        }
+
+        setConfirmConfig({
+            isOpen: true,
+            title: 'Xóa thành viên',
+            message: `Bạn có chắc muốn xóa ${memberName} khỏi team?`,
+            isDanger: true,
+            onConfirm: async () => {
+                try {
+                    await api.delete(`/api/teams/${teamId}/members/${memberId}`);
+                    toast.success('Đã xóa thành viên khỏi team');
+                    fetchTeamData();
+                } catch (error: any) {
+                    toast.error(error.response?.data?.error || 'Không thể xóa thành viên');
+                }
+            }
+        });
+    };
+
     const leaveTeam = async () => {
         setConfirmConfig({
             isOpen: true,
@@ -573,20 +596,31 @@ export default function TeamPage({ teamId, onBack, onOpenChat }: TeamPageProps) 
                                             <p className="text-[10px] text-muted uppercase">{m.role}</p>
                                         </div>
                                         {(team?.my_role === 'owner' || team?.my_role === 'admin') && m.user_id !== team.owner_id && (
-                                            <button
-                                                onClick={async () => {
-                                                    try {
-                                                        const res = await api.get(`/api/teams/${teamId}/members/${m.user_id}/tasks`);
-                                                        setViewingMemberTasks({ member: m, tasks: res.data });
-                                                    } catch (e) {
-                                                        toast.error('Không thể tải tasks');
-                                                    }
-                                                }}
-                                                className="ml-auto p-1.5 rounded-lg text-muted hover:text-accent hover:bg-accent/10 transition-all cursor-pointer"
-                                                title="Xem tasks"
-                                            >
-                                                <EyeIcon className="w-4 h-4" />
-                                            </button>
+                                            <>
+                                                <button
+                                                    onClick={async () => {
+                                                        try {
+                                                            const res = await api.get(`/api/teams/${teamId}/members/${m.user_id}/tasks`);
+                                                            setViewingMemberTasks({ member: m, tasks: res.data });
+                                                        } catch (e) {
+                                                            toast.error('Không thể tải tasks');
+                                                        }
+                                                    }}
+                                                    className="ml-auto p-1.5 rounded-lg text-muted hover:text-accent hover:bg-accent/10 transition-all cursor-pointer"
+                                                    title="Xem tasks"
+                                                >
+                                                    <EyeIcon className="w-4 h-4" />
+                                                </button>
+                                                {team?.my_role === 'owner' && (
+                                                    <button
+                                                        onClick={() => handleRemoveMember(m.user_id, m.username)}
+                                                        className="p-1.5 rounded-lg text-muted hover:text-red-500 hover:bg-red-500/10 transition-all cursor-pointer"
+                                                        title="Xóa khỏi team"
+                                                    >
+                                                        <TrashIcon className="w-4 h-4" />
+                                                    </button>
+                                                )}
+                                            </>
                                         )}
                                     </div>
                                 ))}
