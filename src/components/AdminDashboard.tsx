@@ -15,7 +15,10 @@ import {
     BugAntIcon,
     ArrowLeftOnRectangleIcon,
     MagnifyingGlassIcon,
-    DocumentArrowDownIcon
+    DocumentArrowDownIcon,
+    AcademicCapIcon,
+    PlusIcon,
+    IdentificationIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 import Badge from './Badge';
@@ -27,11 +30,12 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({ token, onLogout }: AdminDashboardProps) {
-    const [activeTab, setActiveTab] = useState<'users' | 'surveys' | 'reports' | 'ranking'>('users');
+    const [activeTab, setActiveTab] = useState<'users' | 'surveys' | 'reports' | 'ranking' | 'badges'>('users');
     const [users, setUsers] = useState<any[]>([]);
     const [surveys, setSurveys] = useState<any[]>([]);
     const [reports, setReports] = useState<any[]>([]);
     const [ranking, setRanking] = useState<any[]>([]);
+    const [badgeDefinitions, setBadgeDefinitions] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -39,20 +43,39 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [lockDuration, setLockDuration] = useState<'hour' | 'day' | 'permanent'>('hour');
 
+    // Badge State
+    const [isCreateBadgeOpen, setIsCreateBadgeOpen] = useState(false);
+    const [isAssignBadgeOpen, setIsAssignBadgeOpen] = useState(false);
+    const [newBadge, setNewBadge] = useState({
+        name: '',
+        icon_url: '',
+        frame_style: '',
+        description: '',
+        condition_type: 'manual',
+        condition_value: 0
+    });
+    const [assignForm, setAssignForm] = useState({
+        user_identifier: '',
+        badge_id: '',
+        expires_in_days: ''
+    });
+
     const fetchData = async () => {
         setLoading(true);
         try {
             const config = { headers: { 'X-Admin-Token': token } };
-            const [usersRes, surveysRes, reportsRes, rankingRes] = await Promise.all([
+            const [usersRes, surveysRes, reportsRes, rankingRes, badgeRes] = await Promise.all([
                 api.get('/api/feedback/admin/users', config),
                 api.get('/api/feedback/admin/surveys', config),
                 api.get('/api/feedback/admin/reports', config),
-                api.get('/api/feedback/admin/ranking', config)
+                api.get('/api/feedback/admin/ranking', config),
+                api.get('/api/admin/badges/definitions', config)
             ]);
             setUsers(usersRes.data);
             setSurveys(surveysRes.data);
             setReports(reportsRes.data);
             setRanking(rankingRes.data);
+            setBadgeDefinitions(badgeRes.data);
         } catch (error) {
             console.error('Failed to fetch admin data', error);
         } finally {
@@ -208,6 +231,7 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                     {[
                         { id: 'users', label: 'Người dùng', icon: UsersIcon },
                         { id: 'ranking', label: 'Xếp hạng', icon: PresentationChartBarIcon },
+                        { id: 'badges', label: 'Danh hiệu', icon: AcademicCapIcon },
                         { id: 'surveys', label: 'Khảo sát', icon: ClipboardDocumentCheckIcon },
                         { id: 'reports', label: 'Báo cáo', icon: BugAntIcon }
                     ].map(tab => (
@@ -575,6 +599,205 @@ export default function AdminDashboard({ token, onLogout }: AdminDashboardProps)
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                )}
+                {activeTab === 'badges' && (
+                    <div className="max-w-6xl mx-auto animate-fade-in space-y-8 pb-20">
+                        {/* Summary Stats */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="bg-surface border border-border p-6 rounded-2xl">
+                                <p className="text-secondary text-sm mb-1">Tổng danh hiệu</p>
+                                <p className="text-2xl font-bold text-primary">{badgeDefinitions.length}</p>
+                            </div>
+                            <button
+                                onClick={() => setIsCreateBadgeOpen(true)}
+                                className="bg-accent/10 hover:bg-accent/20 border border-accent/20 p-6 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all group cursor-pointer"
+                            >
+                                <PlusIcon className="w-6 h-6 text-accent group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-bold text-accent">Tạo danh hiệu mới</span>
+                            </button>
+                            <button
+                                onClick={() => setIsAssignBadgeOpen(true)}
+                                className="bg-syntax-purple/10 hover:bg-syntax-purple/20 border border-syntax-purple/20 p-6 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all group cursor-pointer"
+                            >
+                                <IdentificationIcon className="w-6 h-6 text-syntax-purple group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-bold text-syntax-purple">Cấp danh hiệu cho User</span>
+                            </button>
+                        </div>
+
+                        {/* Badge Definitions List */}
+                        <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
+                            <div className="px-6 py-4 border-b border-border bg-page/30 flex justify-between items-center">
+                                <h3 className="font-bold text-primary">Danh sách danh hiệu hệ thống</h3>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left">
+                                    <thead className="bg-page/50 border-b border-border">
+                                        <tr>
+                                            <th className="px-6 py-3 text-xs font-bold text-secondary uppercase">Danh hiệu</th>
+                                            <th className="px-6 py-3 text-xs font-bold text-secondary uppercase">Khung</th>
+                                            <th className="px-6 py-3 text-xs font-bold text-secondary uppercase">Điều kiện</th>
+                                            <th className="px-6 py-3 text-xs font-bold text-secondary uppercase text-right">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-border">
+                                        {badgeDefinitions.map(b => (
+                                            <tr key={b.id} className="hover:bg-page/20 transition-colors">
+                                                <td className="px-6 py-4">
+                                                    <Badge title={b.name} size="md" frame={b.frame_style} />
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-secondary">{b.frame_style || 'Mặc định'}</td>
+                                                <td className="px-6 py-4 text-sm text-secondary">
+                                                    {b.condition_type === 'manual' ? 'Cấp thủ công' : `${b.condition_type} >= ${b.condition_value}`}
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <button
+                                                        onClick={async () => {
+                                                            if (confirm('Xoá danh hiệu này?')) {
+                                                                await api.delete(`/api/admin/badges/definitions/${b.id}`, { headers: { 'X-Admin-Token': token } });
+                                                                toast.success('Đã xoá');
+                                                                fetchData();
+                                                            }
+                                                        }}
+                                                        className="text-muted hover:text-syntax-red transition-colors cursor-pointer"
+                                                    >
+                                                        <TrashIcon className="w-4 h-4" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Create/Edit Modal (Simplified Overlay for now) */}
+                        {isCreateBadgeOpen && (
+                            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-page/80 backdrop-blur-sm animate-in fade-in duration-200">
+                                <div className="bg-surface border border-border w-full max-w-lg rounded-3xl p-6 shadow-2xl">
+                                    <div className="flex justify-between items-center mb-6">
+                                        <h3 className="text-xl font-bold text-primary">Tạo danh hiệu mới</h3>
+                                        <button onClick={() => setIsCreateBadgeOpen(false)} className="cursor-pointer"><XMarkIcon className="w-6 h-6 text-secondary" /></button>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-xs font-bold text-secondary uppercase mb-1.5 ml-1">Tên danh hiệu</label>
+                                            <input
+                                                type="text"
+                                                className="w-full bg-page border border-border rounded-xl px-4 py-2.5 text-primary outline-none focus:border-accent"
+                                                placeholder="VD: Star of the Week"
+                                                value={newBadge.name}
+                                                onChange={e => setNewBadge({ ...newBadge, name: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-bold text-secondary uppercase mb-1.5 ml-1">Kiểu Khung</label>
+                                                <select
+                                                    className="w-full bg-page border border-border rounded-xl px-4 py-2.5 text-primary outline-none"
+                                                    value={newBadge.frame_style}
+                                                    onChange={e => setNewBadge({ ...newBadge, frame_style: e.target.value })}
+                                                >
+                                                    <option value="">Không có khung</option>
+                                                    {['Neon Blue', 'Solar Gold', 'Cyber Punk', 'Holographic', 'Emerald Guard', 'Void Void', 'Royal Silver', 'Vivid Flame'].map(f => (
+                                                        <option key={f} value={f}>{f}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-secondary uppercase mb-1.5 ml-1">Điều kiện</label>
+                                                <select
+                                                    className="w-full bg-page border border-border rounded-xl px-4 py-2.5 text-primary outline-none"
+                                                    value={newBadge.condition_type}
+                                                    onChange={e => setNewBadge({ ...newBadge, condition_type: e.target.value })}
+                                                >
+                                                    <option value="manual">Cấp thủ công</option>
+                                                    <option value="tasks_week">Task hoàn thành/Tuần</option>
+                                                    <option value="tasks_month">Task hoàn thành/Tháng</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={async () => {
+                                                await api.post('/api/admin/badges/definitions', newBadge, { headers: { 'X-Admin-Token': token } });
+                                                toast.success('Đã tạo danh hiệu!');
+                                                setIsCreateBadgeOpen(false);
+                                                fetchData();
+                                            }}
+                                            className="w-full py-3 bg-accent text-page font-bold rounded-xl mt-4 cursor-pointer hover:bg-accent/90 transition-all"
+                                        >
+                                            Tạo ngay
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Assign Badge Modal */}
+                        {isAssignBadgeOpen && (
+                            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-page/80 backdrop-blur-sm animate-in fade-in duration-200">
+                                <div className="bg-surface border border-border w-full max-w-lg rounded-3xl p-6 shadow-2xl">
+                                    <div className="flex justify-between items-center mb-6">
+                                        <h3 className="text-xl font-bold text-primary">Cấp danh hiệu cho User</h3>
+                                        <button onClick={() => setIsAssignBadgeOpen(false)} className="cursor-pointer"><XMarkIcon className="w-6 h-6 text-secondary" /></button>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-xs font-bold text-secondary uppercase mb-1.5 ml-1">Username hoặc Email</label>
+                                            <input
+                                                type="text"
+                                                className="w-full bg-page border border-border rounded-xl px-4 py-2.5 text-primary outline-none focus:border-syntax-purple"
+                                                placeholder="VD: lieutoan7788a@gmail.com"
+                                                value={assignForm.user_identifier}
+                                                onChange={e => setAssignForm({ ...assignForm, user_identifier: e.target.value })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-secondary uppercase mb-1.5 ml-1">Chọn danh hiệu</label>
+                                            <select
+                                                className="w-full bg-page border border-border rounded-xl px-4 py-2.5 text-primary outline-none"
+                                                value={assignForm.badge_id}
+                                                onChange={e => setAssignForm({ ...assignForm, badge_id: e.target.value })}
+                                            >
+                                                <option value="">-- Chọn danh hiệu --</option>
+                                                {badgeDefinitions.map(b => (
+                                                    <option key={b.id} value={b.id}>{b.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-secondary uppercase mb-1.5 ml-1">Hết hạn sau (ngày) - để trống nếu vĩnh viễn</label>
+                                            <input
+                                                type="number"
+                                                className="w-full bg-page border border-border rounded-xl px-4 py-2.5 text-primary outline-none"
+                                                placeholder="VD: 7"
+                                                value={assignForm.expires_in_days}
+                                                onChange={e => setAssignForm({ ...assignForm, expires_in_days: e.target.value })}
+                                            />
+                                        </div>
+                                        <button
+                                            onClick={async () => {
+                                                try {
+                                                    await api.post('/api/admin/badges/assign', {
+                                                        user_identifier: assignForm.user_identifier,
+                                                        badge_id: parseInt(assignForm.badge_id),
+                                                        expires_in_days: assignForm.expires_in_days ? parseInt(assignForm.expires_in_days) : null
+                                                    }, { headers: { 'X-Admin-Token': token } });
+                                                    toast.success('Đã cấp danh hiệu thành công!');
+                                                    setIsAssignBadgeOpen(false);
+                                                    fetchData();
+                                                } catch (err: any) {
+                                                    toast.error(err.response?.data?.error || 'Lỗi cấp danh hiệu');
+                                                }
+                                            }}
+                                            className="w-full py-3 bg-syntax-purple text-page font-bold rounded-xl mt-4 cursor-pointer hover:bg-syntax-purple/90 transition-all"
+                                        >
+                                            Phê duyệt cấp
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </main>

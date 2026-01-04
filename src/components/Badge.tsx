@@ -6,6 +6,7 @@ interface BadgeProps {
     title: string | undefined;
     size?: 'sm' | 'md' | 'lg';
     showIconOnly?: boolean;
+    frame?: string; // Optional frame style: Neon Blue, Solar Gold, Cyber Punk, Holographic, Emerald Guard, Void Void, Royal Silver, Vivid Flame
 }
 
 const badgeConfigs: Record<string, { icon: string; color: string; glow: string; border: string }> = {
@@ -50,13 +51,41 @@ const badgeConfigs: Record<string, { icon: string; color: string; glow: string; 
         color: 'from-amber-200 via-yellow-400 to-orange-500',
         glow: 'shadow-[0_0_15px_rgba(252,211,77,0.4)]',
         border: 'border-yellow-300/50'
+    },
+    'Star of the Week': {
+        icon: '/badges/master.png',
+        color: 'from-cyan-400 to-blue-500',
+        glow: 'shadow-[0_0_12px_rgba(34,211,238,0.4)]',
+        border: 'border-cyan-300/40'
+    },
+    'Star of the Month': {
+        icon: '/badges/legend.png',
+        color: 'from-purple-400 to-pink-500',
+        glow: 'shadow-[0_0_15px_rgba(192,38,211,0.4)]',
+        border: 'border-purple-300/50'
     }
 };
 
-export default function Badge({ title, size = 'md', showIconOnly = false }: BadgeProps) {
-    if (!title || !badgeConfigs[title]) return null;
+const frameConfigs: Record<string, string> = {
+    'Neon Blue': 'ring-1 ring-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]',
+    'Solar Gold': 'ring-1 ring-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.7)] animate-pulse',
+    'Cyber Punk': 'ring-1 ring-fuchsia-500 border-cyan-400 shadow-[0_0_10px_rgba(192,38,211,0.6)]',
+    'Holographic': 'ring-1 ring-indigo-400 shadow-[0_0_10px_rgba(129,140,248,0.6)] bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-teal-500/10',
+    'Emerald Guard': 'ring-1 ring-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]',
+    'Void Void': 'ring-1 ring-slate-800 shadow-[0_0_10px_rgba(30,41,59,0.9)] bg-slate-950/20',
+    'Royal Silver': 'ring-1 ring-slate-300 shadow-[0_0_8px_rgba(203,213,225,0.5)]',
+    'Vivid Flame': 'ring-1 ring-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.7)]'
+};
 
-    const config = badgeConfigs[title];
+export default function Badge({ title, size = 'md', showIconOnly = false, frame }: BadgeProps) {
+    if (!title) return null;
+
+    const config = badgeConfigs[title] || {
+        icon: '/badges/newbie.png',
+        color: 'from-secondary to-muted',
+        glow: 'shadow-none',
+        border: 'border-secondary/20'
+    };
 
     const sizeClasses = {
         sm: 'h-4 px-1 text-[8px]',
@@ -70,14 +99,23 @@ export default function Badge({ title, size = 'md', showIconOnly = false }: Badg
         lg: 'w-4 h-4'
     };
 
+    const premiumTitles = [
+        'Planex Ghost', 'Planex Legend', 'Planex Master',
+        'The Best Member', 'Star of the Month', 'Star of the Week'
+    ];
+
+    const isPremium = premiumTitles.includes(title);
+    const frameClass = frame ? frameConfigs[frame] || '' : '';
+
     return (
         <div className={`
             relative flex items-center gap-1 font-bold uppercase tracking-wider rounded-md
             bg-surface/40 backdrop-blur-md border ${config.border} ${config.glow} ${sizeClasses[size]}
+            ${frameClass}
             transition-all duration-300 hover:scale-105 group overflow-hidden
         `}>
-            {/* Shimmer Effect for Legend & Master */}
-            {(title === 'Planex Legend' || title === 'Planex Master') && (
+            {/* Shimmer Effect for Premium Badges */}
+            {isPremium && (
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
             )}
 
