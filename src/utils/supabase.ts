@@ -3,6 +3,14 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
+// Debug: Log env vars to help troubleshoot (will be replaced at build time)
+console.log('Supabase Config Debug:', {
+    hasUrl: !!supabaseUrl,
+    hasKey: !!supabaseAnonKey,
+    urlPrefix: supabaseUrl.substring(0, 20),
+    isPlaceholder: supabaseUrl.includes('placeholder')
+});
+
 export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey && !supabaseUrl.includes('placeholder'));
 
 // Avoid error during build time if credentials are missing. 
@@ -12,5 +20,7 @@ export const supabase = createClient(
     supabaseAnonKey || 'placeholder'
 );
 
-// Note: Supabase Realtime is optional. The app uses SSE for real-time chat updates.
-// If you want to enable Supabase Realtime, set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+if (!isSupabaseConfigured) {
+    console.warn('Supabase Realtime: Not configured. Realtime updates will be unavailable.');
+    console.warn('Make sure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in Vercel and rebuild was triggered.');
+}
