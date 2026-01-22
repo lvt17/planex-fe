@@ -1,0 +1,1008 @@
+
+> frontend@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 5.5s
+ ○ Compiling /login ...
+ ✓ Compiled / in 13.6s (758 modules)
+ HEAD / 200 in 7740ms
+ GET /login 200 in 14046ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /favicon.ico in 914ms (747 modules)
+ ✓ Compiled (779 modules)
+ GET /favicon.ico 200 in 1058ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1756ms
+ GET / 200 in 80ms
+ GET /favicon.ico 200 in 52ms
+ ✓ Compiled /register in 417ms (785 modules)
+ GET /login 200 in 205ms
+ GET /apple-touch-icon-precomposed.png 404 in 30ms
+ GET /apple-touch-icon.png 404 in 13ms
+ GET /favicon.ico 200 in 33ms
+ GET /register 200 in 102ms
+ GET /favicon.ico 200 in 16ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 20.5s (2767 modules)
+ GET /login 200 in 194ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1294ms (1454 modules)
+ GET /favicon.ico 200 in 1905ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.9s (1461 modules)
+ GET / 200 in 1340ms
+ GET /login 200 in 41ms
+ ✓ Compiled in 2.8s (2774 modules)
+ ✓ Compiled in 994ms (2774 modules)
+ GET /login 200 in 156ms
+ GET /login 200 in 63ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /favicon.ico in 6.4s (2795 modules)
+ GET /favicon.ico 200 in 6872ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 8739ms
+ GET /register 200 in 411ms
+ GET /login 200 in 148ms
+ ✓ Compiled in 2.4s (2774 modules)
+ ✓ Compiled in 755ms (2774 modules)
+ GET /login 200 in 249ms
+ GET / 200 in 132ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 2.9s (1461 modules)
+ GET /favicon.ico 200 in 5243ms
+   Reload env: .env.local
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 22.1s (2805 modules)
+ GET /dashboard 200 in 8966ms
+ ✓ Compiled /favicon.ico in 366ms (1461 modules)
+ GET /favicon.ico 200 in 606ms
+   Reload env: .env.local
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 10s (2837 modules)
+ GET /dashboard 200 in 5217ms
+ GET /favicon.ico 200 in 50ms
+ ✓ Compiled in 1046ms (2806 modules)
+ ✓ Compiled in 913ms (2806 modules)
+ ✓ Compiled in 1678ms (2774 modules)
+ ✓ Compiled in 504ms (2774 modules)
+ ✓ Compiled in 866ms (2774 modules)
+ ✓ Compiled in 2.9s (2774 modules)
+ GET /dashboard 200 in 483ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1290ms (1461 modules)
+ GET /favicon.ico 200 in 1542ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 752ms (2795 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 853ms
+ ✓ Compiled in 829ms (2777 modules)
+ GET /login 200 in 297ms
+ GET /register 200 in 299ms
+ GET /login 200 in 74ms
+ GET /login 200 in 40ms
+ GET /login 200 in 107ms
+ GET /dashboard 200 in 109ms
+ GET /login 200 in 168ms
+ GET /login 200 in 196ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 848ms (1462 modules)
+ GET /favicon.ico 200 in 997ms
+ GET /login 200 in 259ms
+ GET /login 200 in 87ms
+ GET /dashboard 200 in 392ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 242ms
+ GET /favicon.ico 200 in 30ms
+ ✓ Compiled in 4.5s (2774 modules)
+ GET /login 200 in 196ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1282ms (1461 modules)
+ GET /favicon.ico 200 in 1942ms
+ GET /login 200 in 621ms
+ GET /register 200 in 299ms
+ GET /login 200 in 182ms
+ ✓ Compiled in 9.6s (2774 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1332ms (2763 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1493ms
+   Reload env: .env.local
+ ✓ Compiled in 7.6s (2760 modules)
+ ✓ Compiled in 1730ms (2774 modules)
+ ⨯ ./src/components/CreateTaskModal.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/mymac/tasks-mangement/frontend/src/components/CreateTaskModal.tsx[0m:51:1]
+ [2m51[0m |     };
+ [2m52[0m | 
+ [2m53[0m |     return (
+ [2m54[0m |         <div
+    : [31;1m         ^^^[0m
+ [2m55[0m |             className="fixed inset-0 flex items-center justify-center z-50 p-4"
+ [2m56[0m |             style={{ background: 'rgba(1, 4, 9, 0.8)' }}
+ [2m57[0m |             onClick={onClose}
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/CreateTaskModal.tsx
+./src/components/Dashboard.tsx
+./src/app/dashboard/page.tsx
+ ⨯ ./src/components/CreateTaskModal.tsx
+Error: 
+  [31mx[0m 'import', and 'export' cannot be used outside of module code
+    ,-[[36;1;4m/Users/mymac/tasks-mangement/frontend/src/components/CreateTaskModal.tsx[0m:11:1]
+ [2m11[0m | }
+ [2m12[0m | 
+ [2m13[0m | export default function CreateTaskModal({ onClose, onTaskCreated }: CreateTaskModalProps) {
+ [2m14[0m |     export default function CreateTaskModal({ onClose, onTaskCreated }: CreateTaskModalProps) {
+    : [31;1m    ^^^^^^[0m
+ [2m15[0m |         const [loading, setLoading] = useState(false);
+ [2m16[0m |         const [formData, setFormData] = useState({
+ [2m17[0m |             name: '',
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/CreateTaskModal.tsx
+./src/components/Dashboard.tsx
+./src/app/dashboard/page.tsx
+ ✓ Compiled in 3.1s (2774 modules)
+ ✓ Compiled in 931ms (1345 modules)
+ ✓ Compiled in 359ms (1345 modules)
+ ✓ Compiled in 3.3s (2780 modules)
+ ✓ Compiled in 357ms (1348 modules)
+ ✓ Compiled in 379ms (1348 modules)
+ ✓ Compiled in 960ms (2780 modules)
+ ✓ Compiled in 1229ms (2788 modules)
+ ✓ Compiled in 1239ms (2788 modules)
+ ✓ Compiled in 418ms (1352 modules)
+ ✓ Compiled in 499ms (1352 modules)
+ ✓ Compiled in 575ms (1352 modules)
+ GET /login 200 in 1237ms
+ GET /register 200 in 1214ms
+ GET /login 200 in 47ms
+ GET /login 200 in 44ms
+ GET /login 200 in 36ms
+ GET /login 200 in 19ms
+ GET /login 200 in 152ms
+ GET /register 200 in 153ms
+ GET /login 200 in 204ms
+ GET /login 200 in 149ms
+ GET /login 200 in 133ms
+ GET /login 200 in 250ms
+ ○ Compiling /secretvt ...
+ ✓ Compiled /secretvt in 3.8s (2794 modules)
+ GET /secretvt 200 in 4162ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 2.6s (1479 modules)
+ GET /favicon.ico 200 in 4035ms
+ GET / 200 in 792ms
+ ✓ Compiled in 2.7s (2808 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1691ms (2797 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 2229ms
+ GET /secretvt 200 in 197ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 20ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1125ms (1480 modules)
+ GET /favicon.ico 200 in 1400ms
+ ✓ Compiled in 2.3s (2806 modules)
+ GET /secretvt 200 in 131ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1655ms (1478 modules)
+ GET /favicon.ico 200 in 1959ms
+ ✓ Compiled in 4.2s (2806 modules)
+ ✓ Compiled in 2.4s (2806 modules)
+ ✓ Compiled in 886ms (1360 modules)
+ ✓ Compiled in 228ms (1360 modules)
+ ✓ Compiled in 1658ms (2808 modules)
+ ✓ Compiled in 1661ms (2808 modules)
+ ✓ Compiled in 2.5s (2816 modules)
+ GET /secretvt 200 in 511ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1138ms (1483 modules)
+ GET /favicon.ico 200 in 1429ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 696ms (2837 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 910ms
+ GET / 200 in 165ms
+ GET /favicon.ico 200 in 57ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 22ms
+ GET /login 200 in 158ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 20ms
+ GET /favicon.ico 200 in 34ms
+ GET /secretvt 200 in 56ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 41ms
+ GET /favicon.ico 200 in 25ms
+ GET /dashboard 200 in 682ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 39ms
+ GET /favicon.ico 200 in 12ms
+ GET / 200 in 156ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 111ms
+ GET /favicon.ico 200 in 104ms
+ GET /secretvt 200 in 66ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 33ms
+ GET /favicon.ico 200 in 268ms
+ GET / 200 in 207ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 46ms
+ GET /favicon.ico 200 in 46ms
+ ✓ Compiled in 3.6s (2820 modules)
+ ✓ Compiled in 2.1s (1367 modules)
+ ✓ Compiled in 662ms (1367 modules)
+ ✓ Compiled in 3s (2828 modules)
+ ✓ Compiled in 1793ms (2828 modules)
+ ✓ Compiled in 839ms (2828 modules)
+ ✓ Compiled in 831ms (2828 modules)
+ GET /secretvt 200 in 295ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1739ms (2849 modules)
+ GET /favicon.ico 200 in 2088ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 2486ms
+ GET /login 200 in 74ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 15ms
+ GET /favicon.ico 200 in 73ms
+ GET /login 200 in 50ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 20ms
+ GET /favicon.ico 200 in 6ms
+ GET /secretvt 200 in 66ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 32ms
+ GET /favicon.ico 200 in 131ms
+ GET /login 200 in 204ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 124ms
+ GET /favicon.ico 200 in 42ms
+ GET /dashboard 200 in 787ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 35ms
+ GET /favicon.ico 200 in 140ms
+ GET / 200 in 201ms
+ GET /favicon.ico 200 in 24ms
+ GET / 200 in 58ms
+ GET /favicon.ico 200 in 76ms
+ GET /secretvt 200 in 106ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 116ms
+ GET /favicon.ico 200 in 25ms
+ GET /secretvt 200 in 86ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 91ms
+ GET /favicon.ico 200 in 76ms
+ ✓ Compiled in 4.3s (2828 modules)
+ ✓ Compiled in 4.8s (2836 modules)
+ ✓ Compiled in 1399ms (2836 modules)
+ ✓ Compiled in 1656ms (2836 modules)
+ GET /dashboard 200 in 561ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /favicon.ico in 1669ms (2857 modules)
+ GET /favicon.ico 200 in 2028ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 2719ms
+ GET / 200 in 101ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 37ms
+ GET /favicon.ico 200 in 44ms
+ GET /dashboard 200 in 106ms
+ GET /favicon.ico 200 in 19ms
+ GET / 200 in 29ms
+ GET /favicon.ico 200 in 22ms
+ GET /dashboard 200 in 23ms
+ GET /favicon.ico 200 in 34ms
+ ✓ Compiled in 1974ms (2836 modules)
+ ✓ Compiled in 2.2s (2836 modules)
+ GET /dashboard 200 in 1114ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /favicon.ico in 2.3s (2857 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 3113ms
+ GET /favicon.ico 200 in 2833ms
+ GET / 200 in 177ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 31ms
+ GET /favicon.ico 200 in 26ms
+ ✓ Compiled in 1550ms (2871 modules)
+ ✓ Compiled in 836ms (2871 modules)
+ ✓ Compiled in 2.1s (2824 modules)
+ ✓ Compiled in 5.5s (2838 modules)
+ ✓ Compiled in 2.1s (2838 modules)
+ ✓ Compiled in 2.5s (2838 modules)
+ GET /dashboard 200 in 1515ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 943ms (1494 modules)
+ GET /favicon.ico 200 in 1300ms
+ GET /dashboard 200 in 225ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1165ms (2859 modules)
+ GET /favicon.ico 200 in 1151ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1951ms
+ GET /dashboard 200 in 90ms
+ GET /favicon.ico 200 in 32ms
+ GET /dashboard 200 in 47ms
+ GET /favicon.ico 200 in 39ms
+ ✓ Compiled in 3.4s (2870 modules)
+ ⨯ ./src/components/TeamPage.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/mymac/tasks-mangement/frontend/src/components/TeamPage.tsx[0m:310:1]
+ [2m310[0m |     }
+ [2m311[0m | 
+ [2m312[0m |     return (
+ [2m313[0m |         <div className="h-full flex flex-col">
+     : [31;1m         ^^^[0m
+ [2m314[0m |             {/* Header */}
+ [2m315[0m |             <div className="flex items-center justify-between mb-6">
+ [2m316[0m |                 <div className="flex items-center gap-4">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/TeamPage.tsx
+./src/components/Dashboard.tsx
+./src/app/dashboard/page.tsx
+ ✓ Compiled in 5.2s (2838 modules)
+ ⨯ ./src/components/TaskItem.tsx
+Error: 
+  [31mx[0m the name `PencilIcon` is defined multiple times
+    ,-[[36;1;4m/Users/mymac/tasks-mangement/frontend/src/components/TaskItem.tsx[0m:7:1]
+ [2m 7[0m |     CalendarIcon,
+ [2m 8[0m |     EllipsisHorizontalIcon,
+ [2m 9[0m |     TrashIcon,
+ [2m10[0m |     PencilIcon,
+    : [31;1m    ^^^^^|^^^^[0m
+    :          [31;1m`-- [31;1mprevious definition of `PencilIcon` here[0m[0m
+ [2m11[0m |     PencilIcon,
+    : [33;1m    ^^^^^|^^^^[0m
+    :          [33;1m`-- [33;1m`PencilIcon` redefined here[0m[0m
+ [2m12[0m |     BanknotesIcon,
+ [2m13[0m |     UsersIcon,
+ [2m14[0m | } from '@heroicons/react/24/outline';
+    `----
+
+Import trace for requested module:
+./src/components/TaskItem.tsx
+./src/components/TaskList.tsx
+./src/components/Dashboard.tsx
+./src/app/dashboard/page.tsx
+ ✓ Compiled in 1521ms (2838 modules)
+ ✓ Compiled in 803ms (2840 modules)
+ ✓ Compiled in 669ms (2840 modules)
+ GET /dashboard 200 in 527ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /favicon.ico in 2.3s (2861 modules)
+ GET /favicon.ico 200 in 2264ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 3213ms
+ ✓ Compiled in 2.6s (2840 modules)
+ GET /secretvt 200 in 146ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /favicon.ico in 3.5s (2829 modules)
+ ✓ Compiled in 1ms (1496 modules)
+ ✓ Compiled in 1570ms (2861 modules)
+ GET /favicon.ico 200 in 5628ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 7114ms
+ GET /dashboard 200 in 3599ms
+ GET /dashboard 200 in 28ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 27ms
+ GET /favicon.ico 200 in 6ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 6.9s (2838 modules)
+ GET /secretvt 200 in 2215ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 659ms (2827 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 973ms
+ ✓ Compiled /favicon.ico in 313ms (1495 modules)
+ GET /favicon.ico 200 in 661ms
+ ✓ Compiled in 1639ms (2877 modules)
+ ✓ Compiled in 2.1s (2877 modules)
+ GET /dashboard 200 in 1334ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 138ms
+ GET /favicon.ico 200 in 58ms
+ GET /dashboard 200 in 41ms
+ GET /favicon.ico 200 in 7ms
+ GET /secretvt 200 in 151ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 189ms
+ GET /favicon.ico 200 in 189ms
+ GET /dashboard 200 in 149ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 162ms
+ GET /favicon.ico 200 in 138ms
+ ✓ Compiled in 8.1s (2842 modules)
+ GET /dashboard 200 in 209ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /favicon.ico in 1413ms (2831 modules)
+ ✓ Compiled (2863 modules)
+ GET /favicon.ico 200 in 1978ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 2770ms
+ ✓ Compiled in 3s (2842 modules)
+ GET /dashboard 200 in 385ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /favicon.ico in 1549ms (2831 modules)
+ ✓ Compiled (2863 modules)
+ GET /favicon.ico 200 in 1536ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 2371ms
+ GET /favicon.ico 200 in 11ms
+ GET /dashboard 200 in 848ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 37ms
+ GET /favicon.ico 200 in 14ms
+ GET /login 200 in 212ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 70ms
+ GET /favicon.ico 200 in 181ms
+ GET /login 200 in 418ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 109ms
+ GET /favicon.ico 200 in 168ms
+ ✓ Compiled in 11.9s (2842 modules)
+ GET /dashboard 200 in 527ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1682ms (1496 modules)
+ GET /favicon.ico 200 in 2324ms
+ ✓ Compiled in 3.2s (2842 modules)
+ ✓ Compiled in 4.1s (2842 modules)
+ ✓ Compiled in 725ms (2842 modules)
+ ✓ Compiled in 829ms (2842 modules)
+ ✓ Compiled in 2.1s (1378 modules)
+ ✓ Compiled in 814ms (1378 modules)
+ ✓ Compiled in 4.4s (2844 modules)
+ ✓ Compiled in 3.8s (2848 modules)
+ ✓ Compiled in 4.2s (2850 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 896ms (2839 modules)
+ GET /_next/static/css/app/dashboard/page.css?v=1767340172020 404 in 1122ms
+ GET /_next/static/css/app/layout.css?v=1767340172020 404 in 1138ms
+ GET /_next/static/css/app/layout.css?v=1767340172063 404 in 978ms
+ GET /_next/static/css/app/dashboard/page.css?v=1767340172063 404 in 955ms
+ ✓ Compiled in 857ms (2853 modules)
+ GET /_next/static/css/app/dashboard/page.css?v=1767340219022 404 in 78ms
+ GET /_next/static/css/app/dashboard/page.css?v=1767340219061 404 in 34ms
+ ✓ Compiled in 2.2s (2850 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 774ms (2839 modules)
+ GET /_next/static/css/app/dashboard/page.css?v=1767340326050 404 in 976ms
+ GET /_next/static/css/app/dashboard/page.css?v=1767340326102 404 in 956ms
+ ✓ Compiled in 3.2s (2850 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 619ms (2839 modules)
+ GET /_next/static/css/app/dashboard/page.css?v=1767340421753 404 in 734ms
+ GET /_next/static/css/app/dashboard/page.css?v=1767340421785 404 in 690ms
+ GET /static/chat_images/32d808935aec404cb0d7f1891834687c.png 404 in 105ms
+ GET /static/chat_images/32d808935aec404cb0d7f1891834687c.png 404 in 376ms
+ ⨯ ./src/components/TeamPage.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/mymac/tasks-mangement/frontend/src/components/TeamPage.tsx[0m:335:1]
+ [2m335[0m |     }
+ [2m336[0m | 
+ [2m337[0m |     return (
+ [2m338[0m |         <div className="h-full flex flex-col">
+     : [31;1m         ^^^[0m
+ [2m339[0m |             {/* Header */}
+ [2m340[0m |             <div className="flex items-center justify-between mb-6">
+ [2m341[0m |                 <div className="flex items-center gap-4">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/TeamPage.tsx
+./src/components/Dashboard.tsx
+./src/app/dashboard/page.tsx
+ ○ Compiling /_error ...
+ ⨯ ./src/components/TeamPage.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/mymac/tasks-mangement/frontend/src/components/TeamPage.tsx[0m:335:1]
+ [2m335[0m |     }
+ [2m336[0m | 
+ [2m337[0m |     return (
+ [2m338[0m |         <div className="h-full flex flex-col">
+     : [31;1m         ^^^[0m
+ [2m339[0m |             {/* Header */}
+ [2m340[0m |             <div className="flex items-center justify-between mb-6">
+ [2m341[0m |                 <div className="flex items-center gap-4">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/TeamPage.tsx
+./src/components/Dashboard.tsx
+./src/app/dashboard/page.tsx
+ GET /static/chat_images/32d808935aec404cb0d7f1891834687c.png 500 in 11630ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/@swc.js'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/@swc' in /Users/mymac/tasks-mangement/frontend/.next/server for build dependencies doesn't lead to expected result '/Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/@swc.js', but to 'Error: Can't resolve './vendor-chunks/@swc' in '/Users/mymac/tasks-mangement/frontend/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/@swc (expected /Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/@swc.js)
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/.next/server/webpack-runtime.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/.next/server/app/favicon.ico/route.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/.next/server/app/favicon.ico/route.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/goober' in /Users/mymac/tasks-mangement/frontend/.next/server for build dependencies doesn't lead to expected result '/Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/goober.js', but to 'Error: Can't resolve './vendor-chunks/goober' in '/Users/mymac/tasks-mangement/frontend/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/goober (expected /Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/goober.js)
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/.next/server/webpack-runtime.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/.next/server/app/favicon.ico/route.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/.next/server/app/favicon.ico/route.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/react-hot-toast' in /Users/mymac/tasks-mangement/frontend/.next/server for build dependencies doesn't lead to expected result '/Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/react-hot-toast.js', but to 'Error: Can't resolve './vendor-chunks/react-hot-toast' in '/Users/mymac/tasks-mangement/frontend/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/react-hot-toast (expected /Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/react-hot-toast.js)
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/.next/server/webpack-runtime.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/.next/server/app/favicon.ico/route.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/.next/server/app/favicon.ico/route.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/next' in /Users/mymac/tasks-mangement/frontend/.next/server for build dependencies doesn't lead to expected result '/Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/next.js', but to 'Error: Can't resolve './vendor-chunks/next' in '/Users/mymac/tasks-mangement/frontend/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/next (expected /Users/mymac/tasks-mangement/frontend/.next/server/vendor-chunks/next.js)
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/.next/server/webpack-runtime.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/.next/server/app/favicon.ico/route.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/.next/server/app/favicon.ico/route.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+ GET /dashboard 500 in 38ms
+ GET /dashboard 500 in 11ms
+ ✓ Compiled /_error in 6s (3079 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/24950f5ce7e711b3.webpack.hot-update.json 404 in 652ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/24950f5ce7e711b3.webpack.hot-update.json 404 in 16ms
+ GET /dashboard 200 in 767ms
+ GET /dashboard 200 in 137ms
+ GET /_next/static/css/app/dashboard/page.css?v=1767340855454 404 in 70ms
+ GET /_next/static/chunks/main-app.js?v=1767340855454 404 in 36ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 38ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1900ms (3097 modules)
+ GET /_next/static/css/app/dashboard/page.css?v=1767340855097 404 in 1764ms
+ GET /favicon.ico 200 in 2105ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 1682ms
+ GET /_next/static/chunks/main-app.js?v=1767340855097 404 in 1811ms
+ GET /favicon.ico 200 in 16ms
+ GET /favicon.ico 200 in 7ms
+ GET /favicon.ico 200 in 5ms
+ GET /dashboard 200 in 254ms
+ GET /_next/static/css/app/dashboard/page.css?v=1767340915809 404 in 55ms
+ GET /_next/static/chunks/main-app.js?v=1767340915809 404 in 32ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 31ms
+ GET /favicon.ico 200 in 39ms
+ ✓ Compiled in 4.1s (3076 modules)
+ ✓ Compiled in 3.1s (3076 modules)
+ ✓ Compiled in 2.3s (3080 modules)
+ ✓ Compiled in 713ms (3080 modules)
+ ✓ Compiled in 601ms (3080 modules)
+ ✓ Compiled in 573ms (3080 modules)
+ ✓ Compiled in 527ms (3080 modules)
+ ✓ Compiled in 744ms (3080 modules)
+ ✓ Compiled in 1689ms (3080 modules)
+ GET /dashboard 200 in 664ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 2.5s (3069 modules)
+ GET /_next/static/css/app/dashboard/page.css?v=1767341812040 404 in 2752ms
+ GET /_next/static/chunks/main-app.js?v=1767341812040 404 in 1873ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 1863ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 859ms (1543 modules)
+ GET /favicon.ico 200 in 983ms
+ GET /favicon.ico 200 in 227ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1304ms
+ GET /_next/static/css/app/dashboard/page.css?v=1767341812040 404 in 1294ms
+ ✓ Compiled in 4.3s (3083 modules)
+ ✓ Compiled in 1254ms (3080 modules)
+[Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/server-development/12.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/server-development/12.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/server-development/12.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/server-development/12.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/server-development/12.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/server-development/12.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/server-development/12.pack.gz'
+[Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/3.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/3.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/3.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/3.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/3.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/3.pack.gz'
+}
+[Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/13.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/13.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/13.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/13.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/13.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/13.pack.gz'
+}
+[Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/14.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/14.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/14.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/14.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/14.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/14.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/mymac/tasks-mangement/frontend/.next/cache/webpack/client-development/3.pack.gz'
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 706ms (3069 modules)
+ ⨯ Error: Cannot find module '/Users/mymac/tasks-mangement/frontend/.next/server/pages/_document.js'
+Require stack:
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1421:15)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1504:12)
+    at mod.require (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js:109:84)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /dashboard 500 in 769ms
+ ⨯ Error: Cannot find module '/Users/mymac/tasks-mangement/frontend/.next/server/pages/_document.js'
+Require stack:
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1421:15)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1504:12)
+    at mod.require (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js:109:84)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module '/Users/mymac/tasks-mangement/frontend/.next/server/pages/_document.js'
+Require stack:
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1421:15)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1504:12)
+    at mod.require (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js:109:84)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module '/Users/mymac/tasks-mangement/frontend/.next/server/pages/_document.js'
+Require stack:
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1421:15)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1504:12)
+    at mod.require (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js:109:84)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module '/Users/mymac/tasks-mangement/frontend/.next/server/pages/_document.js'
+Require stack:
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1421:15)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1504:12)
+    at mod.require (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js:109:84)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /.well-known/appspecific/com.chrome.devtools.json 500 in 73ms
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 75ms
+ GET /_next/static/chunks/fallback/main.js 500 in 81ms
+ GET /_next/static/chunks/fallback/webpack.js 500 in 315ms
+ ⨯ Error: Cannot find module '/Users/mymac/tasks-mangement/frontend/.next/server/pages/_document.js'
+Require stack:
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1421:15)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1504:12)
+    at mod.require (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js:109:84)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module '/Users/mymac/tasks-mangement/frontend/.next/server/pages/_document.js'
+Require stack:
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js
+- /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1421:15)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1504:12)
+    at mod.require (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:152:16)
+    at requirePage (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js:109:84)
+    at /Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/require.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/load-components.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/build/utils.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/mymac/tasks-mangement/frontend/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/chunks/fallback/pages/_app.js 500 in 24ms
+ GET /_next/static/chunks/fallback/pages/_error.js 500 in 24ms

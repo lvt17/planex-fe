@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Developer Tools Dark Mode Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Dark Mode Background Colors */
+  --bg-page: #0D1117;
+  --bg-surface: #161B22;
+  --bg-elevated: #21262D;
+  --bg-hover: #30363D;
+
+  /* Borders */
+  --border: #30363D;
+  --border-light: #21262D;
+  --border-focus: #58A6FF;
+
+  /* Text Colors */
+  --text-primary: #E6EDF3;
+  --text-secondary: #8B949E;
+  --text-muted: #6E7681;
+
+  /* Accent Colors */
+  --accent-blue: #58A6FF;
+  --accent-blue-hover: #79C0FF;
+
+  /* Syntax Highlighting Colors */
+  --syntax-green: #7EE787;
+  --syntax-purple: #D2A8FF;
+  --syntax-orange: #FFA657;
+  --syntax-cyan: #79C0FF;
+  --syntax-red: #FF7B72;
+  --syntax-yellow: #E3B341;
+  --syntax-pink: #FF9ECE;
+
+  /* Semantic Colors */
+  --success: #7EE787;
+  --warning: #FFA657;
+  --danger: #FF7B72;
+  --info: #79C0FF;
+
+  /* Legacy */
+  --background: #0D1117;
+  --foreground: #E6EDF3;
+}
+
+/* Light Mode */
+html:not(.dark) {
+  --bg-page: #FFFFFF;
+  --bg-surface: #F6F8FA;
+  --bg-elevated: #FFFFFF;
+  --bg-hover: #F3F4F6;
+
+  --border: #D0D7DE;
+  --border-light: #E1E4E8;
+  --border-focus: #0969DA;
+
+  --text-primary: #24292F;
+  --text-secondary: #57606A;
+  --text-muted: #8C959F;
+
+  --accent-blue: #0969DA;
+  --accent-blue-hover: #0550AE;
+
+  --syntax-green: #1A7F37;
+  --syntax-purple: #8250DF;
+  --syntax-orange: #BC4C00;
+  --syntax-cyan: #0550AE;
+  --syntax-red: #CF222E;
+  --syntax-yellow: #9A6700;
+  --syntax-pink: #BF3989;
+
+  --success: #1A7F37;
+  --warning: #BC4C00;
+  --danger: #CF222E;
+  --info: #0550AE;
+
+  --background: #FFFFFF;
+  --foreground: #24292F;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Code blocks */
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Utility classes for syntax colors */
+.text-syntax-green {
+  color: var(--syntax-green);
+}
+
+.text-syntax-purple {
+  color: var(--syntax-purple);
+}
+
+.text-syntax-orange {
+  color: var(--syntax-orange);
+}
+
+.text-syntax-cyan {
+  color: var(--syntax-cyan);
+}
+
+.text-syntax-red {
+  color: var(--syntax-red);
+}
+
+.text-syntax-yellow {
+  color: var(--syntax-yellow);
+}
+
+.bg-syntax-green {
+  background-color: var(--syntax-green);
+}
+
+.bg-syntax-purple {
+  background-color: var(--syntax-purple);
+}
+
+.bg-syntax-orange {
+  background-color: var(--syntax-orange);
+}
+
+.bg-syntax-cyan {
+  background-color: var(--syntax-cyan);
+}
+
+.bg-syntax-red {
+  background-color: var(--syntax-red);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(22, 27, 34, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Hide TinyMCE Branding & Promotion */
+.tox-promotion,
+.tox-statusbar__branding,
+.tox-promotion-button {
+  display: none !important;
+}
