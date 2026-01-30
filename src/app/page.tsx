@@ -31,13 +31,6 @@ export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Redirect to maintenance page
-    window.location.href = '/Maintenance.html';
-  }, []);
-
-  if (true) return null; // Prevent rendering anything else while redirecting
-
-  useEffect(() => {
     if (!loading && user) {
       router.push('/dashboard');
     }
